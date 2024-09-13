@@ -1,0 +1,85 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+}
+
+android {
+    namespace 'com.example.connectus'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.connectus"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    viewBinding {
+        enabled = true
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx.v1101
+    implementation libs.androidx.appcompat.v161
+    implementation libs.material.v190
+    implementation libs.androidx.constraintlayout
+    implementation libs.firebase.auth.ktx
+    implementation libs.firebase.firestore.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.annotation
+    implementation libs.androidx.lifecycle.livedata.ktx
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit.v115
+    androidTestImplementation libs.androidx.espresso.core.v351
+
+    //Dagger - Hilt
+    implementation libs.hilt.android
+    ksp libs.hilt.android.compiler
+    ksp libs.androidx.hilt.compiler
+    implementation libs.androidx.fragment.ktx
+
+    // Kotlin Extensions and Coroutines support for Room
+    implementation libs.androidx.room.runtime
+    ksp libs.androidx.room.compiler.v250
+    implementation libs.androidx.room.ktx
+
+    // Coroutines
+    implementation libs.kotlinx.coroutines.core
+    implementation libs.kotlinx.coroutines.android
+
+    // Retrofit
+    implementation libs.retrofit
+    implementation libs.converter.moshi
+    implementation libs.okhttp
+    implementation libs.logging.interceptor
+    implementation libs.gson
+
+    implementation libs.glide
+
+}

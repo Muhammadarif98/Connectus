@@ -1,0 +1,29 @@
+  {
+  "project_info": {
+    "project_number": "338526454745",
+    "project_id": "connectus-1998",
+    "storage_bucket": "connectus-1998.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338526454745:android:1298cda7839cbccb1b8fc8",
+        "android_client_info": {
+          "package_name": "com.example.connectus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWjIieUqqnJ3rNP7v6NmvV6RM_5q63R_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
