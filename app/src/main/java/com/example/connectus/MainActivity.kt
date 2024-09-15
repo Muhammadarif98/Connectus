@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(binding.container.id, LoginFragment())
+                .replace(binding.container.id, StartFragment())
                 .commit()
         }, 2000)
     }

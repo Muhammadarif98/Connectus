@@ -90,7 +90,7 @@
             android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonLogin"
+            android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="66dp"
             android:layout_marginLeft="16dp"
@@ -120,6 +120,7 @@
             android:textColor="@color/grey"
             />
         <TextView
+            android:id="@+id/registerButtonTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"

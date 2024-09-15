@@ -5,6 +5,7 @@
     <string name="login_in_with_email">Login in with Email</string>
     <string name="login">Войти</string>
     <string name="password">Пароль</string>
+    <string name="confirm_password">Подтвердить пароль</string>
     <string name="email_address">Электронная почта</string>
     <string name="register"><u>Зарегистрироваться</u></string>
     <string name="invalid_email_error">Неверный формат email адреса</string>
@@ -17,5 +18,7 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="log_in"><u>Войти</u></string>
+    <string name="privacy_text">Регистрируясь, вы соглашаетесь с нашими <u>Условиями</u> использования и <u>Политикой конфиденциальности</u></string>
 
 </resources>
