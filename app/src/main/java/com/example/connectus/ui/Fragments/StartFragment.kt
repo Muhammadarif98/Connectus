@@ -1,10 +1,11 @@
-package com.example.connectus
+package com.example.connectus.ui.Fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginBinding
 
 class StartFragment : Fragment() {

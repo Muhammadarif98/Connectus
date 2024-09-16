@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginInputFragment"
-        android:name="com.example.connectus.LoginInputFragment"
+        android:name="com.example.connectus.ui.Fragments.LoginInputFragment"
         android:label="fragment_login_input_fragment"
         tools:layout="@layout/fragment_login_input_fragment" >
         <action
@@ -16,23 +16,38 @@
         <action
             android:id="@+id/action_loginInputFragment_to_startFragment"
             app:destination="@id/startFragment" />
+        <action
+            android:id="@+id/action_loginInputFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.connectus.RegisterFragment"
+        android:name="com.example.connectus.ui.Fragments.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_loginInputFragment2"
+            app:destination="@id/loginInputFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.connectus.StartFragment"
+        android:name="com.example.connectus.ui.Fragments.StartFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_startFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.connectus.ui.Fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
 </navigation>

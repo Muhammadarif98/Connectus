@@ -1,4 +1,4 @@
-package com.example.connectus
+package com.example.connectus.ui.Fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -8,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.connectus.databinding.FragmentLoginBinding
+import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginInputFragment : Fragment() {
