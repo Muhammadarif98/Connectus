@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.connectus.R
-import com.example.connectus.ViewModel.RegisterViewModel
+import com.example.connectus.mvvm.RegisterViewModel
 import com.example.connectus.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {

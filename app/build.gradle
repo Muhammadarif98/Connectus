@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
+    //alias(libs.plugins.ksp)
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -62,13 +62,13 @@ dependencies {
 
     //Dagger - Hilt
     implementation libs.hilt.android
-    ksp libs.hilt.android.compiler
-    ksp libs.androidx.hilt.compiler
+   // ksp libs.hilt.android.compiler
+  //  ksp libs.androidx.hilt.compiler
     implementation libs.androidx.fragment.ktx
 
     // Kotlin Extensions and Coroutines support for Room
     implementation libs.androidx.room.runtime
-    ksp libs.androidx.room.compiler.v250
+   // ksp libs.androidx.room.compiler.v250
     implementation libs.androidx.room.ktx
 
     // Coroutines
@@ -94,6 +94,6 @@ dependencies {
     implementation(libs.play.services.auth)
 
 
-    implementation("io.github.vicmikhailau:MaskedEditText:5.0.2")
+    implementation(libs.vicmikhailau.maskededittext)
 
 }

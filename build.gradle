@@ -1,17 +1,17 @@
-buildscript {
-    ext {
-        compose_ui_version = '1.1.1'
-    }
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath libs.hilt.android.gradle.plugin
-        classpath libs.google.services
-        classpath libs.kotlin.gradle.plugin
-    }
-}
+//buildscript {
+//    ext {
+//        compose_ui_version = '1.1.1'
+//    }
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath libs.hilt.android.gradle.plugin
+//        classpath libs.google.services
+//        classpath libs.kotlin.gradle.plugin
+//    }
+//}
 
 plugins {
     alias(libs.plugins.android.application) apply false

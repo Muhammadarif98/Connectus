@@ -6,10 +6,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.connectus.databinding.ActivityMainBinding
 import com.example.connectus.ui.Fragments.MainFragment
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
+    init {
+        FirebaseApp.initializeApp(this)
+    }
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var binding: ActivityMainBinding
@@ -19,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         fragmentRunners = FragmentRunners(this, binding.container.id)
 
         if (auth.currentUser == null) {

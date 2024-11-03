@@ -1,4 +1,4 @@
-package com.example.connectus.ViewModel
+package com.example.connectus.mvvm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData

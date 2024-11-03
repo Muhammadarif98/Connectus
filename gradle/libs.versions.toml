@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.2"
+agp = "8.4.1"
 androidxJunit = "1.2.1"
 appcompatVersion = "1.7.0"
 coreKtxVersion = "1.13.1"
@@ -15,7 +15,7 @@ hiltAndroidCompiler = "2.44.2"
 hiltAndroidGradlePlugin = "2.46.1"
 hiltCompiler = "1.2.0"
 
-kotlin = "2.0.10"
+kotlin = "1.9.0"
 ksp ="2.0.10-1.0.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -26,6 +26,7 @@ kotlinGradlePlugin = "1.8.10"
 kotlinxCoroutinesCore = "1.7.3"
 lifecycleViewmodelKtx = "2.8.4"
 maskededittext = "1.0.5"
+maskededittextVersion = "5.0.2"
 material = "1.12.0"
 activity = "1.9.1"
 constraintlayout = "2.1.4"
@@ -81,6 +82,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
+vicmikhailau-maskededittext = { module = "io.github.vicmikhailau:MaskedEditText", version.ref = "maskededittextVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
