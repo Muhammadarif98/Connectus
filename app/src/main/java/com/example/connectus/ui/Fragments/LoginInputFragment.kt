@@ -1,13 +1,14 @@
 package com.example.connectus.ui.Fragments
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,7 @@ class LoginInputFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var progressDialogSignIn: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -33,7 +34,7 @@ class LoginInputFragment : Fragment() {
         val editTextLogin = binding.editTextLogin
         val editTextPassword = binding.editTextPassword
         val btnSign = binding.btnLogin
-
+        progressDialogSignIn = ProgressDialog(requireContext())
 
 
         editTextLogin.addTextChangedListener(object : TextWatcher {
@@ -58,6 +59,7 @@ class LoginInputFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Не используется
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = editTextPassword.text.toString()
                 if (password.length < 6) {
@@ -66,6 +68,7 @@ class LoginInputFragment : Fragment() {
                     editTextPassword.error = null
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {
                 // Не используется
             }
@@ -78,6 +81,7 @@ class LoginInputFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
+
 
         btnSign.setOnClickListener {
             login()
@@ -95,8 +99,11 @@ class LoginInputFragment : Fragment() {
             binding.editTextPassword.error = "Введите пароль"
             return
         }
+        progressDialogSignIn.show()
+        progressDialogSignIn.setMessage("Пожалуйста, подождите...")
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
+                progressDialogSignIn.dismiss()
                 Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
                 val mainFragment = MainFragment()
                 val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -104,7 +111,9 @@ class LoginInputFragment : Fragment() {
                 transaction.addToBackStack(null)
                 transaction.commit()
             } else {
-                Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT).show()
+                progressDialogSignIn.dismiss()
+                Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT)
+                    .show()
                 return@addOnCompleteListener
             }
         }

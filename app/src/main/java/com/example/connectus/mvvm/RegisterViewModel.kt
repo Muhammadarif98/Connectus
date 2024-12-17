@@ -1,8 +1,10 @@
 package com.example.connectus.mvvm
 
-import androidx.lifecycle.ViewModel
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterViewModel : ViewModel() {
 
@@ -15,8 +17,10 @@ class RegisterViewModel : ViewModel() {
     val emailError = MutableLiveData<String?>()
     val passwordError = MutableLiveData<String?>()
     val confirmPasswordError = MutableLiveData<String?>()
-
+    //private var progressDialogSignUp : ProgressDialog    = ProgressDialog(this)
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private  var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+
 
     fun signUpUser(name: String, lastName: String, phone: String, email: String, password: String, confirmPassword: String) {
         nameError.value = null
@@ -77,11 +81,39 @@ class RegisterViewModel : ViewModel() {
             emailError.value = "Неверный формат email адреса"
             return
         }
+       // progressDialogSignUp.show()
+        //progressDialogSignUp.setMessage("Регистрация пользователя...")
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if (it.isSuccessful) {
+                //progressDialogSignUp.dismiss()
+                val userId = auth.currentUser
+                val hashMap = hashMapOf(
+                    "userId" to userId!!.uid,
+                    "userName" to name, // Убедитесь, что имя пользователя записано
+                    "userLastName" to lastName,
+                    "userPhone" to phone,
+                    "userEmail" to email,
+                    "userPassword" to password,
+                    "userConfirmPassword" to confirmPassword,
+                    "status" to "default",
+                    "userImageUrl" to "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg" // Убедитесь, что URL изображения записан
+                )
+
+                Log.d("RegisterViewModel", "User data to save: $hashMap") // Логирование данных
+
+                firestore.collection("users").document(userId.uid).set(hashMap)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("RegisterViewModel", "User data saved successfully: $hashMap")
+                        } else {
+                            Log.e("RegisterViewModel", "Error saving user data", task.exception)
+                        }
+                    }
+
                 _registrationStatus.value = "Регистрация прошла успешно"
             } else {
+                //progressDialogSignUp.dismiss()
                 if (auth.currentUser != null) {
                     _registrationStatus.value = "Пользователь с таким email уже существует"
                     return@addOnCompleteListener
@@ -89,6 +121,8 @@ class RegisterViewModel : ViewModel() {
                 _registrationStatus.value = "Ошибка регистрации"
             }
         }
+
+
     }
 
     private fun isValidEmail(email: CharSequence): Boolean {

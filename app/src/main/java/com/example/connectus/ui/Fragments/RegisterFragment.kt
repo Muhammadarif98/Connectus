@@ -1,25 +1,24 @@
 package com.example.connectus.ui.Fragments
 
-import androidx.fragment.app.viewModels
+import android.app.ProgressDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.connectus.R
-import com.example.connectus.mvvm.RegisterViewModel
 import com.example.connectus.databinding.FragmentRegisterBinding
+import com.example.connectus.mvvm.RegisterViewModel
 
 class RegisterFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = RegisterFragment()
-    }
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: RegisterViewModel by viewModels()
+    private lateinit var progressDialogSignUp: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +27,14 @@ class RegisterFragment : Fragment() {
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        progressDialogSignUp = ProgressDialog(requireContext())
+
+        binding.termsCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            binding.btnSign.isEnabled = isChecked
+            if (!isChecked) {
+                Toast.makeText(requireContext(), "Поставьте галочку", Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.btnSign.setOnClickListener {
             val name = binding.nameRegisterET.text.toString()
             val lastName = binding.lastNameRegisterET.text.toString()
@@ -37,20 +44,27 @@ class RegisterFragment : Fragment() {
             val confirmPassword = binding.confirmPasswordET.text.toString()
 
             viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword)
+            signIn()
+
         }
         binding.loginButtonTV.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        binding.termsCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            binding.btnSign.isEnabled = isChecked
-            if (!isChecked) {
-                Toast.makeText(requireContext(), "Поставьте галочку", Toast.LENGTH_SHORT).show()
-            }
-        }
 
+
+
+
+
+        return view
+    }
+
+    private fun signIn() {
+        progressDialogSignUp.show()
+        progressDialogSignUp.setMessage("Регистрация пользователя...")
         viewModel.registrationStatus.observe(viewLifecycleOwner) { status ->
             Toast.makeText(requireContext(), status, Toast.LENGTH_SHORT).show()
             if (status == "Регистрация прошла успешно") {
+                progressDialogSignUp.dismiss()
                 val loginInputFragment = LoginInputFragment()
                 val transaction = requireActivity().supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.container, loginInputFragment)
@@ -67,12 +81,13 @@ class RegisterFragment : Fragment() {
             viewModel.passwordError to binding.editTextPassword,
             viewModel.confirmPasswordError to binding.confirmPasswordET
         ).forEach { (error, editText) ->
+            if (error.toString() == "true") {
+                progressDialogSignUp.dismiss()
+            }
+
             error.observe(viewLifecycleOwner) { editText.error = it }
         }
-
-        return view
     }
-
 
 
     override fun onDestroyView() {

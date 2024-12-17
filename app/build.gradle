@@ -1,18 +1,22 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    //alias(libs.plugins.ksp)
     alias(libs.plugins.google.gms.google.services)
+    //kotlin("kapt")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace 'com.example.connectus'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.connectus"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -56,19 +60,19 @@ dependencies {
     implementation libs.androidx.annotation
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.legacy.support.v4
+    implementation libs.firebase.database
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit.v115
     androidTestImplementation libs.androidx.espresso.core.v351
 
     //Dagger - Hilt
-    implementation libs.hilt.android
-   // ksp libs.hilt.android.compiler
-  //  ksp libs.androidx.hilt.compiler
+    implementation(libs.hilt.android)
+    ksp (libs.hilt.compiler)
     implementation libs.androidx.fragment.ktx
 
     // Kotlin Extensions and Coroutines support for Room
     implementation libs.androidx.room.runtime
-   // ksp libs.androidx.room.compiler.v250
+    kapt(libs.androidx.room.compiler)
     implementation libs.androidx.room.ktx
 
     // Coroutines
@@ -90,10 +94,14 @@ dependencies {
     // Add the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation(libs.firebase.auth)
+    implementation (platform("com.google.firebase:firebase-bom:31.0.0"))
+    implementation ("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
     // Also add the dependency for the Google Play services library and specify its version
     implementation(libs.play.services.auth)
 
-
+    kapt(libs.compiler)
     implementation(libs.vicmikhailau.maskededittext)
 
 }
