@@ -17,12 +17,19 @@ class RegisterViewModel : ViewModel() {
     val emailError = MutableLiveData<String?>()
     val passwordError = MutableLiveData<String?>()
     val confirmPasswordError = MutableLiveData<String?>()
-    //private var progressDialogSignUp : ProgressDialog    = ProgressDialog(this)
+
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private  var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
-    fun signUpUser(name: String, lastName: String, phone: String, email: String, password: String, confirmPassword: String) {
+    fun signUpUser(
+        name: String,
+        lastName: String,
+        phone: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ) {
         nameError.value = null
         lastNameError.value = null
         phoneError.value = null
@@ -35,22 +42,27 @@ class RegisterViewModel : ViewModel() {
                 nameError.value = "Введите имя"
                 return
             }
+
             lastName.isEmpty() -> {
                 lastNameError.value = "Введите фамилию"
                 return
             }
+
             phone.isEmpty() -> {
                 phoneError.value = "Введите номер телефона"
                 return
             }
+
             email.isEmpty() -> {
                 emailError.value = "Введите email"
                 return
             }
+
             password.isEmpty() -> {
                 passwordError.value = "Введите пароль"
                 return
             }
+
             confirmPassword.isEmpty() -> {
                 confirmPasswordError.value = "Введите подтверждение пароля"
                 return
@@ -81,44 +93,36 @@ class RegisterViewModel : ViewModel() {
             emailError.value = "Неверный формат email адреса"
             return
         }
-       // progressDialogSignUp.show()
-        //progressDialogSignUp.setMessage("Регистрация пользователя...")
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                //progressDialogSignUp.dismiss()
-                val userId = auth.currentUser
-                val hashMap = hashMapOf(
-                    "userId" to userId!!.uid,
-                    "userName" to name, // Убедитесь, что имя пользователя записано
-                    "userLastName" to lastName,
-                    "userPhone" to phone,
-                    "userEmail" to email,
-                    "userPassword" to password,
-                    "userConfirmPassword" to confirmPassword,
-                    "status" to "default",
-                    "userImageUrl" to "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg" // Убедитесь, что URL изображения записан
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val userId = auth.currentUser!!.uid
+                val userData = hashMapOf(
+                    "userId" to userId,
+                    "name" to name,
+                    "lastName" to lastName,
+                    "phone" to phone,
+                    "email" to email,
+                    "password" to password,
+                    "confirmPassword" to confirmPassword,
+                    "image" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
+                    "status" to "default"
                 )
 
-                Log.d("RegisterViewModel", "User data to save: $hashMap") // Логирование данных
-
-                firestore.collection("users").document(userId.uid).set(hashMap)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d("RegisterViewModel", "User data saved successfully: $hashMap")
+                firestore.collection("users").document(userId).set(userData)
+                    .addOnCompleteListener { firestoreTask ->
+                        if (firestoreTask.isSuccessful) {
+                            Log.d("RegisterFragment", "User data saved successfully: $userData")
                         } else {
-                            Log.e("RegisterViewModel", "Error saving user data", task.exception)
+                            Log.e(
+                                "RegisterFragment",
+                                "Error saving user data",
+                                firestoreTask.exception
+                            )
                         }
                     }
-
-                _registrationStatus.value = "Регистрация прошла успешно"
             } else {
-                //progressDialogSignUp.dismiss()
-                if (auth.currentUser != null) {
-                    _registrationStatus.value = "Пользователь с таким email уже существует"
-                    return@addOnCompleteListener
-                }
-                _registrationStatus.value = "Ошибка регистрации"
+                Log.e("RegisterFragment", "Error creating user", task.exception)
             }
         }
 

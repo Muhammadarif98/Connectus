@@ -6,14 +6,14 @@ import com.google.firebase.firestore.PropertyName
 
 data class Users(
     @PropertyName("userId") val userId: String? = "",
-    @PropertyName("name") val userName: String? = "",
-    @PropertyName("lastName") val userLastName: String? = "",
-    @PropertyName("phone") val userPhone: String? = "",
-    @PropertyName("email") val userEmail: String? = "",
-    @PropertyName("password") val userPassword: String? = "",
-    @PropertyName("confirmPassword") val userConfirmPassword: String? = "",
-    @PropertyName("image") val userImageUrl: String? = "",
-    @PropertyName("status") val status: String? = "",
+    @PropertyName("name") val name: String? = "",
+    @PropertyName("lastName") val lastName: String? = "",
+    @PropertyName("phone") val phone: String? = "",
+    @PropertyName("email") val email: String? = "",
+    @PropertyName("password") val password: String? = "",
+    @PropertyName("confirmPassword") val confirmPassword: String? = "",
+    @PropertyName("image") val imageUrl: String? = "",
+    @PropertyName("status") val status: String? = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -29,13 +29,13 @@ data class Users(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(userId)
-        parcel.writeString(userName)
-        parcel.writeString(userLastName)
-        parcel.writeString(userPhone)
-        parcel.writeString(userEmail)
-        parcel.writeString(userPassword)
-        parcel.writeString(userConfirmPassword)
-        parcel.writeString(userImageUrl)
+        parcel.writeString(name)
+        parcel.writeString(lastName)
+        parcel.writeString(phone)
+        parcel.writeString(email)
+        parcel.writeString(password)
+        parcel.writeString(confirmPassword)
+        parcel.writeString(imageUrl)
         parcel.writeString(status)
     }
 

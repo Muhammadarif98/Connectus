@@ -11,11 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectus.R
+import com.example.connectus.data.model.Users
 import com.example.connectus.databinding.FragmentUsersBinding
 import com.example.connectus.mvvm.ChatAppViewModel
+import com.example.connectus.ui.adapter.OnUserClickListener
 import com.example.connectus.ui.adapter.UserAdapter
 
-class UsersFragment : Fragment() {
+class UsersFragment : Fragment(), OnUserClickListener {
 
     lateinit var usersRecyclerView: RecyclerView
     lateinit var userAdapter: UserAdapter
@@ -39,6 +41,9 @@ class UsersFragment : Fragment() {
 
 
         userViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
+
+        //binding.lifecycleOwner = viewLifecycleOwner
+
         userAdapter = UserAdapter()
         usersRecyclerView = view.findViewById(R.id.rvRecentUsers)
 
@@ -48,6 +53,7 @@ class UsersFragment : Fragment() {
         userViewModel.getUsers().observe(viewLifecycleOwner, Observer {
 
             userAdapter.setUserList(it)
+            userAdapter.setOnUserClickListener(this)
             usersRecyclerView.adapter = userAdapter
         })
 
@@ -56,5 +62,9 @@ class UsersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onUserSelected(position: Int, users: Users) {
+
     }
 }

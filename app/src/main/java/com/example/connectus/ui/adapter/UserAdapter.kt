@@ -25,8 +25,8 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
         val users = listOfUsers[position]
-        val name = users.userName
-        val image = users.userImageUrl
+        val name = users.name
+        val image = users.imageUrl
 
         Log.d("UserAdapter", "Binding user: $name, image: $image") // Логирование данных
 

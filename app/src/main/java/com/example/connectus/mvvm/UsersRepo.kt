@@ -36,17 +36,17 @@ class UsersRepo {
 
                 val user = Users(
                     userId = userId,
-                    userName = userName,
-                    userLastName = userLastName,
-                    userPhone = userPhone,
-                    userEmail = userEmail,
-                    userPassword = userPassword,
-                    userConfirmPassword = userConfirmPassword,
-                    userImageUrl = userImageUrl,
+                    name = userName,
+                    lastName = userLastName,
+                    phone = userPhone,
+                    email = userEmail,
+                    password = userPassword,
+                    confirmPassword = userConfirmPassword,
+                    imageUrl = userImageUrl,
                     status = status
                 )
 
-                Log.d("UsersRepo", "Loaded user: ${user.userName}, ${user.userImageUrl}")
+                Log.d("UsersRepo", "Loaded user: ${user.name}, ${user.imageUrl}")
                 if (user.userId != getUiLoggedId()) {
                     usersList.add(user)
                 }
@@ -58,4 +58,6 @@ class UsersRepo {
         return users
     }
 }
+
+
 

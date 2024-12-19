@@ -105,8 +105,11 @@ class LoginInputFragment : Fragment() {
             if (it.isSuccessful) {
                 progressDialogSignIn.dismiss()
                 Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
+
+
                 val mainFragment = MainFragment()
                 val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                 transaction.replace(R.id.container, mainFragment)
                 transaction.addToBackStack(null)
                 transaction.commit()

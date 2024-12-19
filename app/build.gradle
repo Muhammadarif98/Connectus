@@ -39,8 +39,12 @@ android {
     viewBinding {
         enabled = true
     }
+    dataBinding {
+        enabled = true
+    }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 
 }
@@ -103,5 +107,7 @@ dependencies {
 
     kapt(libs.compiler)
     implementation(libs.vicmikhailau.maskededittext)
+
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
 }
