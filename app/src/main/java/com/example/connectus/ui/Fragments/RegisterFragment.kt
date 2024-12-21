@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentRegisterBinding
 import com.example.connectus.mvvm.RegisterViewModel
@@ -48,12 +49,9 @@ class RegisterFragment : Fragment() {
 
         }
         binding.loginButtonTV.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            findNavController().popBackStack()
+           // requireActivity().supportFragmentManager.popBackStack()
         }
-
-
-
-
 
         return view
     }
@@ -65,11 +63,12 @@ class RegisterFragment : Fragment() {
             Toast.makeText(requireContext(), status, Toast.LENGTH_SHORT).show()
             if (status == "Регистрация прошла успешно") {
                 progressDialogSignUp.dismiss()
-                val loginInputFragment = LoginInputFragment()
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.container, loginInputFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                findNavController().navigate(R.id.action_registerFragment_to_loginInputFragment)
+//                val loginInputFragment = LoginInputFragment()
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.nav_host_fragment, loginInputFragment)
+//                transaction.addToBackStack(null)
+//                transaction.commit()
             }
         }
 

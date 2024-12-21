@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:gravity="start"
+
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/rounded_rectangle_white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Привет как твои дела"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:id="@+id/show_message"
+                /> <!-- Используем новый фон -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14:00"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="@font/nunito"
+                android:id="@+id/timeView"
+                android:layout_gravity="start"
+                android:textStyle="italic"
+                android:textColor="@color/black"
+                android:gravity="end"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

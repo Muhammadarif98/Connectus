@@ -24,7 +24,7 @@ class FragmentRunners(private val activity: FragmentActivity, private val contai
             .commit()
     }
 
-    val splashFragment = Runnable {
+    val splash = Runnable {
         activity.supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
             .replace(containerId, SplashFragment())

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -75,11 +76,12 @@ class LoginInputFragment : Fragment() {
         })
 
         registerButton.setOnClickListener {
-            val loginInputFragment = RegisterFragment()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.container, loginInputFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            findNavController().navigate(R.id.action_loginInputFragment_to_registerFragment)
+//            val loginInputFragment = RegisterFragment()
+//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.nav_host_fragment, loginInputFragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
         }
 
 
@@ -106,13 +108,13 @@ class LoginInputFragment : Fragment() {
                 progressDialogSignIn.dismiss()
                 Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
 
-
-                val mainFragment = MainFragment()
-                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                transaction.replace(R.id.container, mainFragment)
-                transaction.addToBackStack(null)
-                transaction.commit()
+                findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
+//                val mainFragment = MainFragment()
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+//                transaction.replace(R.id.nav_host_fragment, mainFragment)
+//                transaction.addToBackStack(null)
+//                transaction.commit()
             } else {
                 progressDialogSignIn.dismiss()
                 Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT)

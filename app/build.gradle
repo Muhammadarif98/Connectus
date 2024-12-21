@@ -1,13 +1,13 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
-    //kotlin("kapt")
-    id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-kapt")
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
+    id 'com.google.dagger.hilt.android'
 }
+
 
 android {
     namespace 'com.example.connectus'
@@ -85,10 +85,11 @@ dependencies {
 
     // Retrofit
     implementation libs.retrofit
-    implementation libs.converter.moshi
+    implementation (libs.converter.gson)
     implementation libs.okhttp
     implementation libs.logging.interceptor
     implementation libs.gson
+
 
     implementation libs.glide
 

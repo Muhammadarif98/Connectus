@@ -3,67 +3,148 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginInputFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/loginInputFragment"
         android:name="com.example.connectus.ui.Fragments.LoginInputFragment"
         android:label="fragment_login_input_fragment"
-        tools:layout="@layout/fragment_login_input_fragment" >
+        tools:layout="@layout/fragment_login_input_fragment">
         <action
             android:id="@+id/action_loginInputFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_loginInputFragment_to_startFragment"
-            app:destination="@id/startFragment" />
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_loginInputFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            />
     </fragment>
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.connectus.ui.Fragments.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_loginInputFragment2"
-            app:destination="@id/loginInputFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/startFragment"
         android:name="com.example.connectus.ui.Fragments.StartFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_startFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
+        <action
+            android:id="@+id/action_startFragment_self"
+            app:destination="@id/startFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.connectus.ui.Fragments.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_startFragment"
-            app:destination="@id/startFragment" />
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_mainFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            app:destination="@id/aboutFragment"
+            />
         <action
             android:id="@+id/action_mainFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_splashFragment"
+            app:destination="@id/splashFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_mainFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_usersFragment2"
+            app:destination="@id/usersFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.connectus.ui.Fragments.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.connectus.ui.Fragments.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.connectus.ui.Fragments.UsersFragment"
+        android:label="fragment_users"
+        tools:layout="@layout/fragment_users">
+        <action
+            android:id="@+id/action_usersFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.ChatDialogFragment"
+        android:label="ChatDialogFragment">
+        <argument
+            android:name="users"
+            app:argType="com.example.connectus.data.model.Users" />
+        <action
+            android:id="@+id/action_chatDialogFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_chatDialogFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.connectus.ui.Fragments.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            />
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.example.connectus.ui.Fragments.ChatsFragment"
+        android:label="ChatsFragment" >
+        <action
+            android:id="@+id/action_chatsFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+        <argument
+            android:name="users"
+            app:argType="com.example.connectus.data.model.RecentChats" />
+    </fragment>
 </navigation>

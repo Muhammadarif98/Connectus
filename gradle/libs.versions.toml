@@ -15,7 +15,7 @@ gson = "2.10.1"
 hiltAndroidCompiler = "2.44.2"
 hiltAndroidGradlePlugin = "2.46.1"
 kotlin = "1.9.0"
-
+converterGson = "2.11.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -23,20 +23,20 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinGradlePlugin = "1.8.10"
 kotlinxCoroutinesCore = "1.7.3"
-lifecycleViewmodelKtx = "2.8.4"
+lifecycleViewmodelKtx = "2.8.7"
 maskededittext = "1.0.5"
 maskededittextVersion = "5.0.2"
 material = "1.12.0"
-activity = "1.9.1"
-constraintlayout = "2.1.4"
+activity = "1.9.3"
+constraintlayout = "2.2.0"
 materialVersion = "1.12.0"
-navigationFragmentKtx = "2.8.4"
+navigationFragmentKtx = "2.8.5"
 okhttp = "5.0.0-alpha.3"
-playServicesAuth = "21.2.0"
+playServicesAuth = "21.3.0"
 retrofit = "2.11.0"
 roomCompiler = "2.6.1"
 roomRuntime = "2.6.1"
-annotation = "1.6.0"
+annotation = "1.9.1"
 lifecycleLivedataKtx = "2.8.7"
 loggingInterceptor = "4.10.0"
 legacySupportV4 = "1.0.0"
@@ -56,11 +56,12 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

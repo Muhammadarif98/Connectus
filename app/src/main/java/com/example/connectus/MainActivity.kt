@@ -1,9 +1,8 @@
 package com.example.connectus
 
 import android.os.Bundle
-import android.os.Handler
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
 import com.example.connectus.databinding.ActivityMainBinding
 import com.example.connectus.ui.Fragments.MainFragment
 import com.google.firebase.FirebaseApp
@@ -23,19 +22,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        fragmentRunners = FragmentRunners(this, binding.container.id)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        //setupActionBarWithNavController(navController)
 
-        if (auth.currentUser == null) {
-            Handler().postDelayed(fragmentRunners.splashFragment, 500)
-            Handler().postDelayed(fragmentRunners.startFragment, 2000)
-        } else {
-            Handler().postDelayed(fragmentRunners.mainFragment, 500)
-        }
+        //fragmentRunners = FragmentRunners(this, R.id.nav_host_fragment)
+
+//        if (auth.currentUser == null) {
+//            Handler().postDelayed(fragmentRunners.splashFragment, 500)
+//            Handler().postDelayed(fragmentRunners.startFragment, 2000)
+//        } else {
+//            Handler().postDelayed(fragmentRunners.mainFragment, 500)
+//        }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        return navHostFragment.navController.navigateUp() || super.onSupportNavigateUp()
+    }
 
     override fun onBackPressed() {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         if (currentFragment is MainFragment) {
             finish()
             // DialogUtils.showExitDialog(this, auth, fragmentRunners)
