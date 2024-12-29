@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments
+package com.example.connectus.ui.Fragments.home.users
 
 import android.annotation.SuppressLint
 import android.os.Bundle

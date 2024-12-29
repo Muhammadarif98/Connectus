@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.connectus.databinding.ActivityMainBinding
-import com.example.connectus.ui.Fragments.MainFragment
+import com.example.connectus.ui.Fragments.home.MainFragment
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 

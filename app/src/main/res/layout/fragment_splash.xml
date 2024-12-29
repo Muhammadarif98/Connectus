@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ui.Fragments.SplashFragment">
+    tools:context=".ui.Fragments.welcome.SplashFragment">
 
     <ImageView
         android:layout_width="300dp"

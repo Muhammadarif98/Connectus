@@ -2,8 +2,8 @@ package com.example.connectus.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.connectus.ui.Fragments.ChatsFragment
-import com.example.connectus.ui.Fragments.UsersFragment
+import com.example.connectus.ui.Fragments.home.chats.ChatsFragment
+import com.example.connectus.ui.Fragments.home.users.UsersFragment
 
 
 class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

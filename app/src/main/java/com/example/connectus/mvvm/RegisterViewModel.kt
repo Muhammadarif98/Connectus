@@ -121,8 +121,14 @@ class RegisterViewModel : ViewModel() {
                             )
                         }
                     }
+                _registrationStatus.value = "Регистрация прошла успешно"
             } else {
-                Log.e("RegisterFragment", "Error creating user", task.exception)
+                //progressDialogSignUp.dismiss()
+                if (auth.currentUser != null) {
+                    _registrationStatus.value = "Пользователь с таким email уже существует"
+                    return@addOnCompleteListener
+                }
+                _registrationStatus.value = "Ошибка регистрации"
             }
         }
 

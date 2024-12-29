@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments
+package com.example.connectus.ui.Fragments.welcome
 
 import android.os.Bundle
 import android.view.LayoutInflater

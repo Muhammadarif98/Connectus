@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments
+package com.example.connectus.ui.Fragments.home.users
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -76,12 +76,9 @@ class ChatDialogFragment : Fragment() {
             chatAppViewModel.sendMessage(getUiLoggedId(), args.users.userId!!, args.users.name!!, args.users.imageUrl!!)
 
         }
-
         chatAppViewModel.getMessages(args.users.userId!!).observe(viewLifecycleOwner, Observer {
             initRecyclerView(it)
         })
-
-
     }
 
 

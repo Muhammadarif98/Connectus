@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginInputFragment"
-        android:name="com.example.connectus.ui.Fragments.LoginInputFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.LoginInputFragment"
         android:label="fragment_login_input_fragment"
         tools:layout="@layout/fragment_login_input_fragment">
         <action
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.connectus.ui.Fragments.RegisterFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register">
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.connectus.ui.Fragments.StartFragment"
+        android:name="com.example.connectus.ui.Fragments.welcome.StartFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.connectus.ui.Fragments.MainFragment"
+        android:name="com.example.connectus.ui.Fragments.home.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
         <action
@@ -80,24 +80,30 @@
         <action
             android:id="@+id/action_mainFragment_to_usersFragment2"
             app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_recentDialogFragment"
+            app:destination="@id/recentDialogFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.example.connectus.ui.Fragments.AboutFragment"
+        android:name="com.example.connectus.ui.Fragments.settings.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.connectus.ui.Fragments.ProfileFragment"
+        android:name="com.example.connectus.ui.Fragments.settings.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
     </fragment>
 
     <fragment
         android:id="@+id/usersFragment"
-        android:name="com.example.connectus.ui.Fragments.UsersFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.UsersFragment"
         android:label="fragment_users"
         tools:layout="@layout/fragment_users">
         <action
@@ -107,7 +113,7 @@
 
     <fragment
         android:id="@+id/chatDialogFragment"
-        android:name="com.example.connectus.ui.Fragments.ChatDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.ChatDialogFragment"
         android:label="ChatDialogFragment">
         <argument
             android:name="users"
@@ -115,13 +121,10 @@
         <action
             android:id="@+id/action_chatDialogFragment_to_usersFragment"
             app:destination="@id/usersFragment" />
-        <action
-            android:id="@+id/action_chatDialogFragment_to_chatsFragment"
-            app:destination="@id/chatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.connectus.ui.Fragments.SplashFragment"
+        android:name="com.example.connectus.ui.Fragments.welcome.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -137,14 +140,22 @@
             app:exitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
+        android:id="@+id/recentDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.RecentDialogFragment"
+        android:label="RecentDialogFragment" >
+        <argument
+            android:name="recentchats"
+            app:argType="com.example.connectus.data.model.RecentChats" />
+        <action
+            android:id="@+id/action_recentDialogFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.connectus.ui.Fragments.ChatsFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.ChatsFragment"
         android:label="ChatsFragment" >
         <action
-            android:id="@+id/action_chatsFragment_to_chatDialogFragment"
-            app:destination="@id/chatDialogFragment" />
-        <argument
-            android:name="users"
-            app:argType="com.example.connectus.data.model.RecentChats" />
+            android:id="@+id/action_chatsFragment_to_recentDialogFragment"
+            app:destination="@id/recentDialogFragment" />
     </fragment>
 </navigation>

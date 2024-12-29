@@ -27,19 +27,10 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
     }
 
-    override fun getItemCount(): Int {
-
-        return listOfChats.size
 
 
-    }
 
 
-    fun setList(list: List<RecentChats>) {
-        this.listOfChats = list
-
-
-    }
 
     override fun onBindViewHolder(holder: MyChatListHolder, position: Int) {
 
@@ -70,12 +61,17 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
     }
 
+    fun setList(list: List<RecentChats>) {
+        this.listOfChats = list
 
+    }
     fun setOnChatClickListener(listener: onChatClicked) {
         this.listener = listener
     }
 
-
+    override fun getItemCount(): Int {
+        return listOfChats.size
+    }
 
 }
 

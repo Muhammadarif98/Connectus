@@ -82,7 +82,6 @@ class ChatAppViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
 
             val context = App.instance.applicationContext
-
             val hashMap = hashMapOf<String, Any>(
                 "sender" to sender,
                 "receiver" to receiver,
@@ -90,10 +89,8 @@ class ChatAppViewModel : ViewModel() {
                 "time" to Utils.getTime()
             )
 
-
             val uniqueId = listOf(sender, receiver).sorted()
             uniqueId.joinToString(separator = "")
-
 
             val friendnamesplit = friendname.split("\\s".toRegex())[0]
             val mysharedPrefs = SharedPrefs(context)
@@ -102,13 +99,8 @@ class ChatAppViewModel : ViewModel() {
             mysharedPrefs.setValue("friendname", friendnamesplit)
             mysharedPrefs.setValue("friendimage", friendimage)
 
-
-
-
             firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
                 .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
-
-
                     val setHashap = hashMapOf<String, Any>(
                         "friendid" to receiver,
                         "time" to Utils.getTime(),
@@ -123,8 +115,6 @@ class ChatAppViewModel : ViewModel() {
                     firestore.collection("Conversation${getUiLoggedId()}").document(receiver)
                         .set(setHashap)
 
-
-
                     firestore.collection("Conversation${receiver}").document(getUiLoggedId())
                         .update(
                             "message",
@@ -134,59 +124,29 @@ class ChatAppViewModel : ViewModel() {
                             "person",
                             name.value!!
                         )
-
-
-
                     firestore.collection("Tokens").document(receiver)
                         .addSnapshotListener { value, error ->
-
-
                             if (value != null && value.exists()) {
-
-
                                 val tokenObject = value.toObject(Token::class.java)
-
-
                                 // token = tokenObject?.token!!
-
-
                                 val loggedInUsername =
                                     mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
-
-
-
                                 if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
-
                                     PushNotification(
                                         NotificationData(loggedInUsername, message.value!!), token!!
                                     ).also {
                                         //sendNotification(it)
                                     }
-
                                 } else {
-
-
                                     Log.e("ChatAppViewModel", "NO TOKEN, NO NOTIFICATION")
                                 }
-
-
                             }
-
                             Log.e("ViewModel", token.toString())
-
-
-
                             if (taskmessage.isSuccessful) {
-
                                 message.value = ""
-
-
                             }
-
-
                         }
                 }
-
         }
 
 
@@ -196,11 +156,7 @@ class ChatAppViewModel : ViewModel() {
     }
 
 
-    // get RecentUsers
-
-
     fun getRecentUsers(): LiveData<List<RecentChats>> {
-
 
         return chatlistRepo.getAllChatList()
 

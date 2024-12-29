@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments
+package com.example.connectus.ui.Fragments.signin
 
 import android.app.ProgressDialog
 import android.os.Bundle

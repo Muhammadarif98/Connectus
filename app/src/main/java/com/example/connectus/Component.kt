@@ -3,10 +3,10 @@ package com.example.connectus
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
-import com.example.connectus.ui.Fragments.LoginInputFragment
-import com.example.connectus.ui.Fragments.MainFragment
-import com.example.connectus.ui.Fragments.SplashFragment
-import com.example.connectus.ui.Fragments.StartFragment
+import com.example.connectus.ui.Fragments.home.MainFragment
+import com.example.connectus.ui.Fragments.signin.LoginInputFragment
+import com.example.connectus.ui.Fragments.welcome.SplashFragment
+import com.example.connectus.ui.Fragments.welcome.StartFragment
 import com.google.firebase.auth.FirebaseAuth
 
 class FragmentRunners(private val activity: FragmentActivity, private val containerId: Int) {

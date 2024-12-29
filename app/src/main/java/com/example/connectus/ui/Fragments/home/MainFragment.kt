@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments
+package com.example.connectus.ui.Fragments.home
 
 import android.os.Bundle
 import android.os.Handler
@@ -17,16 +17,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.connectus.R
 import com.example.connectus.Utils.Companion.getUiLoggedId
+import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
 import com.example.connectus.databinding.FragmentMainBinding
 import com.example.connectus.ui.adapter.OnUserClickListener
 import com.example.connectus.ui.adapter.ViewPagerAdapter
+import com.example.connectus.ui.adapter.onChatClicked
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MainFragment : Fragment(), OnUserClickListener {
+class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
@@ -125,6 +127,11 @@ class MainFragment : Fragment(), OnUserClickListener {
         val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
         findNavController().navigate(action)
     }
+    override fun getOnChatCLickedItem(position: Int, chatList: RecentChats) {
+        val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
+        findNavController().navigate(action)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -140,6 +147,8 @@ class MainFragment : Fragment(), OnUserClickListener {
             show()
         }
     }
+
+
 }
 
 //            activity?.supportFragmentManager?.beginTransaction()
