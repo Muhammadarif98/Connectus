@@ -1,25 +1,16 @@
 package com.example.connectus.mvvm
 
-import android.util.Log
-import android.widget.Toast
+import Utils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.connectus.App
 import com.example.connectus.SharedPrefs
-import com.example.connectus.Utils
-import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Messages
 import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
-import com.example.connectus.notifications.entity.NotificationData
-import com.example.connectus.notifications.entity.PushNotification
-import com.example.connectus.notifications.network.RetrofitInstance
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.Token
 import kotlinx.coroutines.CoroutineExceptionHandler
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -28,7 +19,7 @@ class ChatAppViewModel : ViewModel() {
     val imageUrl = MutableLiveData<String?>()
     val message = MutableLiveData<String>()
     private var token: String? = null
-    private val firestore = FirebaseFirestore.getInstance()
+ //   private val firestore = FirebaseFirestore.getInstance()
     val messageRepo = MessageRepo()
     val chatlistRepo = ChatListRepo()
 
@@ -51,7 +42,7 @@ class ChatAppViewModel : ViewModel() {
     fun getCurrentUser() = viewModelScope.launch(Dispatchers.IO) {
         val context = App.instance.applicationContext
 
-        firestore.collection("users").document(getUiLoggedId())
+     /*   firestore.collection("users").document(getUiLoggedId())
             .addSnapshotListener { value, error ->
                 if (value != null && value.exists()) {
                     val userId = value.getString("userId")
@@ -76,6 +67,7 @@ class ChatAppViewModel : ViewModel() {
                     }
                 }
             }
+        */
     }
 
     fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) =
@@ -99,7 +91,7 @@ class ChatAppViewModel : ViewModel() {
             mysharedPrefs.setValue("friendname", friendnamesplit)
             mysharedPrefs.setValue("friendimage", friendimage)
 
-            firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
+           /* firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
                 .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
                     val setHashap = hashMapOf<String, Any>(
                         "friendid" to receiver,
@@ -147,6 +139,7 @@ class ChatAppViewModel : ViewModel() {
                             }
                         }
                 }
+            */
         }
 
 
@@ -163,15 +156,15 @@ class ChatAppViewModel : ViewModel() {
     }
 
 
-    fun sendNotification(notification: PushNotification) = viewModelScope.launch {
-        try {
-            val response = RetrofitInstance.api.postNotification(notification)
-        } catch (e: Exception) {
-
-            Log.e("ViewModelError", e.toString())
-            // showToast(e.message.toString())
-        }
-    }
+//    fun sendNotification(notification: PushNotification) = viewModelScope.launch {
+//        try {
+//            val response = RetrofitInstance.api.postNotification(notification)
+//        } catch (e: Exception) {
+//
+//            Log.e("ViewModelError", e.toString())
+//            // showToast(e.message.toString())
+//        }
+//    }
 
 
     fun updateProfile() = viewModelScope.launch(Dispatchers.IO) {
@@ -181,7 +174,7 @@ class ChatAppViewModel : ViewModel() {
         val hashMapUser =
             hashMapOf<String, Any>("username" to name.value!!, "imageUrl" to imageUrl.value!!)
 
-        firestore.collection("Users").document(getUiLoggedId()).update(hashMapUser)
+      /*  firestore.collection("Users").document(getUiLoggedId()).update(hashMapUser)
             .addOnCompleteListener {
 
                 if (it.isSuccessful) {
@@ -192,7 +185,7 @@ class ChatAppViewModel : ViewModel() {
                 }
 
             }
-
+*/
 
         val mysharedPrefs = SharedPrefs(context)
         val friendid = mysharedPrefs.getValue("friendid")
@@ -206,12 +199,12 @@ class ChatAppViewModel : ViewModel() {
 
         // updating the chatlist and recent list message, image etc
 
-        firestore.collection("Conversation${friendid}").document(getUiLoggedId())
+      /* firestore.collection("Conversation${friendid}").document(getUiLoggedId())
             .update(hashMapUpdate)
 
         firestore.collection("Conversation${getUiLoggedId()}").document(friendid!!)
             .update("person", "you")
 
-
+*/
     }
 }

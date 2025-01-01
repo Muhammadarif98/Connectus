@@ -7,6 +7,5 @@ data class Messages(
     val time: String? = "",
 
     ) {
-
     val id : String get() = "$sender-$receiver-$message-$time"
 }

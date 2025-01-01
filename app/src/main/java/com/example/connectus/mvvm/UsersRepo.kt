@@ -1,19 +1,16 @@
 package com.example.connectus.mvvm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Users
-import com.google.firebase.firestore.FirebaseFirestore
 
 class UsersRepo {
-    private var fireStore = FirebaseFirestore.getInstance()
+   // private var fireStore = FirebaseFirestore.getInstance()
 
     fun getUsers(): LiveData<List<Users>> {
         val users = MutableLiveData<List<Users>>()
 
-        fireStore.collection("users").addSnapshotListener { snapshot, exception ->
+      /*  fireStore.collection("users").addSnapshotListener { snapshot, exception ->
             if (exception != null) {
                 Log.e("UsersRepo", "Error getting users: ", exception)
                 return@addSnapshotListener
@@ -54,7 +51,7 @@ class UsersRepo {
 
             users.value = usersList
         }
-
+*/
         return users
     }
 }

@@ -1,20 +1,22 @@
 [versions]
-agp = "8.4.1"
+agp = "8.4.2"
 androidxJunit = "1.2.1"
 appcompatVersion = "1.7.0"
 coreKtxVersion = "1.15.0"
 hiltCompiler = "2.52"
 espressoCoreVersion = "3.6.1"
-firebaseAuthKtx = "23.0.0"
-firebaseBom = "33.3.0"
-firebaseFirestoreKtx = "25.1.0"
-fragmentKtx = "1.8.2"
+firebaseAuthKtx = "23.1.0"
+firebaseBom = "33.7.0"
+firebaseFirestoreKtx = "25.1.1"
+fragmentKtx = "1.8.5"
 glide = "4.16.0"
 googleServices = "4.4.2"
 gson = "2.10.1"
 hiltAndroidCompiler = "2.44.2"
-hiltAndroidGradlePlugin = "2.46.1"
-kotlin = "1.9.0"
+hiltAndroidGradlePlugin = "2.50"
+
+kotlin = "2.1.0"
+
 converterGson = "2.11.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -22,7 +24,8 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinGradlePlugin = "1.8.10"
-kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesCore = "1.9.0"
+kotlinxSerializationJson = "1.7.3"
 lifecycleViewmodelKtx = "2.8.7"
 maskededittext = "1.0.5"
 maskededittextVersion = "5.0.2"
@@ -77,6 +80,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 maskededittext = { module = "com.vicmikhailau:MaskedEditText", version.ref = "maskededittext" }
 material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
@@ -92,7 +96,8 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinx-serialization-json = { id = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
 

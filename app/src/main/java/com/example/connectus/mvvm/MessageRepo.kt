@@ -1,15 +1,13 @@
 package com.example.connectus.mvvm
 
+import Utils.Companion.getUiLoggedId
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Messages
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 
 class MessageRepo {
 
-    val firestore = FirebaseFirestore.getInstance()
+    //val firestore = FirebaseFirestore.getInstance()
 
 
 
@@ -24,7 +22,7 @@ class MessageRepo {
 
 
 
-        firestore.collection("Messages").document(uniqueId.toString()).collection("chats").orderBy("time", Query.Direction.ASCENDING)
+       /* firestore.collection("Messages").document(uniqueId.toString()).collection("chats").orderBy("time", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, exception ->
 
                 if (exception != null) {
@@ -64,7 +62,7 @@ class MessageRepo {
 
                 }
             }
-
+*/
         return messages
 
 

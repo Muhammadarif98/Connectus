@@ -23,13 +23,7 @@ class StartFragment : Fragment() {
 
 
         binding.buttonLogin.setOnClickListener {
-            // Код для открытия следующего фlayout.рагмента
             findNavController().navigate(R.id.action_startFragment_to_loginInputFragment)
-//            val loginInputFragment = LoginInputFragment()
-//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.nav_host_fragment, loginInputFragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
         }
 
         return view

@@ -2,17 +2,13 @@ package com.example.connectus.mvvm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.connectus.Utils.Companion.getUiLoggedId
-
 import com.example.connectus.data.model.RecentChats
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 
 
 class ChatListRepo() {
 
 
-    val firestore = FirebaseFirestore.getInstance()
+   // val firestore = FirebaseFirestore.getInstance()
 
 
     fun getAllChatList(): LiveData<List<RecentChats>> {
@@ -20,7 +16,7 @@ class ChatListRepo() {
         val mainChatList = MutableLiveData<List<RecentChats>>()
 
 
-        // SHOWING THE RECENT MESSAGED PERSON ON TOP
+     /*   // SHOWING THE RECENT MESSAGED PERSON ON TOP
         firestore.collection("Conversation${getUiLoggedId()}")
             .orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->
@@ -52,7 +48,7 @@ class ChatListRepo() {
                 mainChatList.value = chatlist
 
             }
-
+*/
         return mainChatList
 
     }

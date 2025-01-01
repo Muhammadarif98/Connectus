@@ -1,5 +1,7 @@
 package com.example.connectus.ui.Fragments.home
 
+import Utils.Companion.getUiLoggedId
+import Utils.Companion.supabase
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,10 +15,10 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.connectus.R
-import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
 import com.example.connectus.databinding.FragmentMainBinding
@@ -25,18 +27,18 @@ import com.example.connectus.ui.adapter.ViewPagerAdapter
 import com.example.connectus.ui.adapter.onChatClicked
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         setHasOptionsMenu(true)
     }
 
@@ -82,7 +84,9 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
                     .setTitle("Выход")
                     .setMessage("Вы хотите выйти?")
                     .setPositiveButton("Да") { _, _ ->
-                        auth.signOut()
+                        lifecycleScope.launch {
+                            supabase.auth.signOut()
+                        }
                         Handler().postDelayed(loginFragment, 0)
                     }
                     .setNegativeButton("Нет", null)
@@ -94,19 +98,12 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
     }
 
     private fun mainFragmentBody() {
-        val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
         val userId = getUiLoggedId()
-        firestore.collection("users").document(userId).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val userName = document.getString("name")
-                    binding.toolbar.title = userName
-                } else {
-                    Log.d("MainFragment", "No such document")
-                }
-            }.addOnFailureListener { exception ->
-                Log.d("MainFragment", "get failed with ", exception)
-            }
+        lifecycleScope.launch {
+            val response = supabase.from("users").select(Columns.ALL).decodeSingle<Users>()
+            Log.d("MainFragment", "User name: ${response.name}")
+            binding.toolbar.title = response.name.toString()
+        }
 
         val viewPager: ViewPager2 = binding.viewPager
         val tabLayout: TabLayout = binding.tabLayout
@@ -123,13 +120,14 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
         }.attach()
     }
 
+
     override fun onUserSelected(position: Int, users: Users) {
-        val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
-        findNavController().navigate(action)
+       // val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
+       // findNavController().navigate(action)
     }
     override fun getOnChatCLickedItem(position: Int, chatList: RecentChats) {
-        val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
-        findNavController().navigate(action)
+      //  val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
+      //  findNavController().navigate(action)
     }
 
 
