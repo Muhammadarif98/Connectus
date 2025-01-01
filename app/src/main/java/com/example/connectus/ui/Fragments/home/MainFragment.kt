@@ -28,9 +28,10 @@ import com.example.connectus.ui.adapter.onChatClicked
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 
 class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
@@ -100,9 +101,16 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
     private fun mainFragmentBody() {
         val userId = getUiLoggedId()
         lifecycleScope.launch {
-            val response = supabase.from("users").select(Columns.ALL).decodeSingle<Users>()
-            Log.d("MainFragment", "User name: ${response.name}")
-            binding.toolbar.title = response.name.toString()
+            val response = supabase.postgrest["users"].select(Columns.list("name")){
+                filter {
+                    eq("user_id", userId)
+                }
+            }
+            val jsonArray = JSONArray(response.data)
+            val jsonObject = jsonArray.getJSONObject(0)
+            val name = jsonObject.getString("name")
+            Log.d("MainFragment", "User name: ${name}")
+            binding.toolbar.title = name
         }
 
         val viewPager: ViewPager2 = binding.viewPager
@@ -122,12 +130,12 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
 
     override fun onUserSelected(position: Int, users: Users) {
-       // val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
-       // findNavController().navigate(action)
+        val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
+        findNavController().navigate(action)
     }
     override fun getOnChatCLickedItem(position: Int, chatList: RecentChats) {
-      //  val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
-      //  findNavController().navigate(action)
+       // val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
+       // findNavController().navigate(action)
     }
 
 

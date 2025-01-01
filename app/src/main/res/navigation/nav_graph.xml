@@ -75,9 +75,6 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"/>
         <action
-            android:id="@+id/action_mainFragment_to_chatDialogFragment"
-            app:destination="@id/chatDialogFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_usersFragment2"
             app:destination="@id/usersFragment" />
         <action
@@ -86,6 +83,9 @@
         <action
             android:id="@+id/action_mainFragment_to_recentDialogFragment"
             app:destination="@id/recentDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
     </fragment>
 
     <fragment
@@ -111,17 +111,6 @@
             app:destination="@id/chatDialogFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/chatDialogFragment"
-        android:name="com.example.connectus.ui.Fragments.home.users.ChatDialogFragment"
-        android:label="ChatDialogFragment">
-        <action
-            android:id="@+id/action_chatDialogFragment_to_usersFragment"
-            app:destination="@id/usersFragment" />
-        <argument
-            android:name="users"
-            app:argType="com.example.connectus.data.model.Users" />
-    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.connectus.ui.Fragments.welcome.SplashFragment"
@@ -157,5 +146,16 @@
         <action
             android:id="@+id/action_chatsFragment_to_recentDialogFragment"
             app:destination="@id/recentDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.ChatDialogFragment"
+        android:label="ChatDialogFragment" >
+        <action
+            android:id="@+id/action_chatDialogFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <argument
+            android:name="users"
+            app:argType="com.example.connectus.data.model.Users" />
     </fragment>
 </navigation>

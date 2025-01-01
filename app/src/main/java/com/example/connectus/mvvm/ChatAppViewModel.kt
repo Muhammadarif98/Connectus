@@ -1,6 +1,9 @@
 package com.example.connectus.mvvm
 
 import Utils
+import Utils.Companion.getUiLoggedId
+import Utils.Companion.supabase
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +13,8 @@ import com.example.connectus.SharedPrefs
 import com.example.connectus.data.model.Messages
 import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +35,6 @@ class ChatAppViewModel : ViewModel() {
     val usersRepo = UsersRepo()
 
     init {
-
         getCurrentUser()
         getRecentUsers()
     }
@@ -41,34 +45,72 @@ class ChatAppViewModel : ViewModel() {
 
     fun getCurrentUser() = viewModelScope.launch(Dispatchers.IO) {
         val context = App.instance.applicationContext
-
-     /*   firestore.collection("users").document(getUiLoggedId())
-            .addSnapshotListener { value, error ->
-                if (value != null && value.exists()) {
-                    val userId = value.getString("userId")
-                    val userName = value.getString("name")
-                    val userLastName = value.getString("lastName")
-                    val userPhone = value.getString("phone")
-                    val userEmail = value.getString("email")
-                    val userPassword = value.getString("password")
-                    val userConfirmPassword = value.getString("confirmPassword")
-                    val userImageUrl = value.getString("image")
-                    val status = value.getString("status")
-
-                    name.postValue(userName)
-                    imageUrl.postValue(userImageUrl)
-
-                    val mySharedPrefs = SharedPrefs(context)
-                    if (userName != null) {
-                        mySharedPrefs.setValue("name", userName)
-                    }
-                    if (userImageUrl != null) {
-                        mySharedPrefs.setValue("imageUrl", userImageUrl)
-                    }
+        try {
+            val userId = getUiLoggedId()
+            val response = supabase.postgrest["users"].select(Columns.ALL){
+                filter {
+                    eq("user_id", userId)
                 }
             }
-        */
+            val user = response.let {
+                Users(
+                    user_id = "user_id" as String?,
+                    name = "name" as String?,
+                    lastName = "lastName" as String?,
+                    phone = "phone" as String?,
+                    email = "email" as String?,
+                    password = "password" as String?,
+                    confirmPassword = "confirmPassword" as String?,
+                    imageUrl = "imageUrl" as String?,
+                    status = "status" as String?
+                )
+            }
+
+            user?.let {
+                name.postValue(it.name)
+                imageUrl.postValue(it.imageUrl)
+
+                val mySharedPrefs = SharedPrefs(context)
+                if (it.name != null) {
+                    mySharedPrefs.setValue("name", it.name)
+                }
+                if (it.imageUrl != null) {
+                    mySharedPrefs.setValue("imageUrl", it.imageUrl)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("MainFragment", "Exception: ${e.message}")
+        }
+
     }
+
+//        firestore.collection("users").document(getUiLoggedId())
+//            .addSnapshotListener { value, error ->
+//                if (value != null && value.exists()) {
+//                    val userId = value.getString("user_id")
+//                    val userName = value.getString("name")
+//                    val userLastName = value.getString("lastName")
+//                    val userPhone = value.getString("phone")
+//                    val userEmail = value.getString("email")
+//                    val userPassword = value.getString("password")
+//                    val userConfirmPassword = value.getString("confirmPassword")
+//                    val userImageUrl = value.getString("image")
+//                    val status = value.getString("status")
+//
+//                    name.postValue(userName)
+//                    imageUrl.postValue(userImageUrl)
+//
+//                    val mySharedPrefs = SharedPrefs(context)
+//                    if (userName != null) {
+//                        mySharedPrefs.setValue("name", userName)
+//                    }
+//                    if (userImageUrl != null) {
+//                        mySharedPrefs.setValue("imageUrl", userImageUrl)
+//                    }
+//                }
+//            }
+
+
 
     fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) =
         viewModelScope.launch(Dispatchers.IO) {

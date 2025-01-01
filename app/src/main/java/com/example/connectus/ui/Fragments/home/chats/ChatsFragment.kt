@@ -22,13 +22,7 @@ class ChatsFragment : Fragment(), onChatClicked {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-   /* private lateinit var args : ChatsFragmentArgs
-    private lateinit var chatAppViewModel : ChatAppViewModel
-    private lateinit var toolbar: Toolbar
-    lateinit var adapter : MessageAdapter
-    private lateinit var circleImageView: CircleImageView
-    private lateinit var textViewName : TextView
-    */
+
     private var navigationListener: onChatClicked? = null
     private lateinit var chatsRecyclerView: RecyclerView
     private lateinit var chatAdapter: RecentChatAdapter
@@ -67,60 +61,6 @@ class ChatsFragment : Fragment(), onChatClicked {
     }
 }
 
-//        toolbar = view.findViewById(R.id.toolBarChat)
-//        circleImageView = toolbar.findViewById(R.id.chatImageViewUser)
-//        textViewName = toolbar.findViewById(R.id.chatUserName)
-//
-//
-//        args = ChatsFragmentArgs.fromBundle(requireArguments())
-//
-//        chatAppViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
-//
-//        binding.viewModel = chatAppViewModel
-//        binding.lifecycleOwner = viewLifecycleOwner
-//        Glide.with(view.getContext())
-//            .load(args.recentchats.friendsimage!!)
-//            .placeholder(R.drawable.ic_profile)
-//            .dontAnimate().into(circleImageView);
-//        textViewName.setText(args.recentchats.name)
-        //textViewStatus.setText(args.users.status)
 
-
-
-
-
-//        binding.sendBtn.setOnClickListener {
-//
-//            chatAppViewModel.sendMessage(getUiLoggedId(), args.recentchats.friendid!!, args.recentchats.name!!, args.recentchats.friendsimage!!)
-//        }
-
-
-//        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(viewLifecycleOwner, Observer {
-//
-//            initRecyclerView(it)
-//
-//        })
-
-
-
-
-
-//    private fun initRecyclerView(list: List<Messages>) {
-//
-//
-//       // adapter = MessageAdapter()
-//
-//      //  val layoutManager = LinearLayoutManager(context)
-//
-////        binding.messagesRecyclerView.layoutManager = layoutManager
-////        layoutManager.stackFromEnd = true
-////
-////        adapter.setList(list)
-////        adapter.notifyDataSetChanged()
-////        binding.messagesRecyclerView.adapter = adapter
-//
-//
-//
-//    }
 
 

@@ -2,12 +2,11 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlinx-serialization'
-    //id ('kotlinx-serialization')
-    //id 'com.google.gms.google-services'
-    //id 'androidx.navigation.safeargs.kotlin'
-    //id 'kotlin-kapt'
-    //id 'com.google.devtools.ksp'
-    //id 'com.google.dagger.hilt.android'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
+    id 'com.google.dagger.hilt.android'
     alias(libs.plugins.serialization) apply false
 }
 
@@ -75,14 +74,14 @@ dependencies {
     androidTestImplementation libs.androidx.espresso.core.v351
 
     //Dagger - Hilt
- //   implementation(libs.hilt.android)
- //   ksp (libs.hilt.compiler)
- //   implementation libs.androidx.fragment.ktx
+    implementation(libs.hilt.android)
+    ksp (libs.hilt.compiler)
+    implementation libs.androidx.fragment.ktx
 
     // Kotlin Extensions and Coroutines support for Room
-  //  implementation libs.androidx.room.runtime
-  //  kapt(libs.androidx.room.compiler)
-   // implementation libs.androidx.room.ktx
+    implementation libs.androidx.room.runtime
+    kapt(libs.androidx.room.compiler)
+    implementation libs.androidx.room.ktx
 
     // Coroutines
     implementation libs.kotlinx.coroutines.core
@@ -99,7 +98,7 @@ dependencies {
     implementation libs.glide
 
     // Import the BoM for the Firebase platform
- //   implementation(platform(libs.firebase.bom))
+    // implementation(platform(libs.firebase.bom))
 
     // Add the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
@@ -109,15 +108,15 @@ dependencies {
   //  implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
    // implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
     // Also add the dependency for the Google Play services library and specify its version
-  //  implementation(libs.play.services.auth)
+    implementation(libs.play.services.auth)
 
-  //  kapt(libs.compiler)
+    kapt(libs.compiler)
     implementation(libs.vicmikhailau.maskededittext)
 
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
     //SupaBase
-    //1.2.0-alpha-1
+
     implementation(platform("io.github.jan-tennert.supabase:bom:3.0.3"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.ktor:ktor-client-android:3.0.3")

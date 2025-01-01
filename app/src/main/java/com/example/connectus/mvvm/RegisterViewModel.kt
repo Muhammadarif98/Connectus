@@ -99,7 +99,7 @@ class RegisterViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 // Регистрация пользователя
-                val user = supabase.auth.signUpWith(Email) {
+                supabase.auth.signUpWith(Email) {
                     this.email = email
                     this.password = password
                 }
@@ -129,8 +129,7 @@ class RegisterViewModel : ViewModel() {
                             )
 
                             // Вставка данных пользователя в таблицу
-                            val response = supabase.from("users").insert(userData)
-
+                            supabase.from("users").insert(userData)
                             // Проверка на ошибки при вставке
                             Log.d(
                                 "RegisterFragment",
