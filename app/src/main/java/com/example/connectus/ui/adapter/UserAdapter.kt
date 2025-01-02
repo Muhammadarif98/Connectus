@@ -30,6 +30,8 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
 
         Log.d("UserAdapter", "Binding user: $name, image: $image") // Логирование данных
 
+
+
         holder.profileName.text = name
         Glide.with(holder.itemView.context)
             .load(image)

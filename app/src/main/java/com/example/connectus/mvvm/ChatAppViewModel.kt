@@ -13,6 +13,7 @@ import com.example.connectus.SharedPrefs
 import com.example.connectus.data.model.Messages
 import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -24,7 +25,8 @@ class ChatAppViewModel : ViewModel() {
     val imageUrl = MutableLiveData<String?>()
     val message = MutableLiveData<String>()
     private var token: String? = null
- //   private val firestore = FirebaseFirestore.getInstance()
+
+    //   private val firestore = FirebaseFirestore.getInstance()
     val messageRepo = MessageRepo()
     val chatlistRepo = ChatListRepo()
 
@@ -47,7 +49,7 @@ class ChatAppViewModel : ViewModel() {
         val context = App.instance.applicationContext
         try {
             val userId = getUiLoggedId()
-            val response = supabase.postgrest["users"].select(Columns.ALL){
+            val response = supabase.postgrest["users"].select(Columns.ALL) {
                 filter {
                     eq("user_id", userId)
                 }
@@ -66,7 +68,7 @@ class ChatAppViewModel : ViewModel() {
                 )
             }
 
-            user?.let {
+            user.let {
                 name.postValue(it.name)
                 imageUrl.postValue(it.imageUrl)
 
@@ -79,7 +81,7 @@ class ChatAppViewModel : ViewModel() {
                 }
             }
         } catch (e: Exception) {
-            Log.e("MainFragment", "Exception: ${e.message}")
+            Log.e("ChatAppViewModel_getCurrentUser", "Exception: ${e.message}")
         }
 
     }
@@ -110,9 +112,102 @@ class ChatAppViewModel : ViewModel() {
 //                }
 //            }
 
+    fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) = viewModelScope.launch(Dispatchers.IO) {
+
+        val context = App.instance.applicationContext
+        val currentTime = Utils.getTime()
+        val messageText = message.value!!
+
+        val uniqueId = listOf(sender, receiver).sorted().joinToString(separator = "")
+        val friendnamesplit = friendname.split("\\s".toRegex())[0]
+        val mySharedPrefs = SharedPrefs(context)
+        mySharedPrefs.setValue("friendid", receiver)
+        mySharedPrefs.setValue("chatroomid", uniqueId)
+        mySharedPrefs.setValue("friendname", friendnamesplit)
+        mySharedPrefs.setValue("friendimage", friendimage)
+
+        try {
+            // Сохраняем сообщение в таблицу "Messages"
+            val messageData = mapOf(
+                "chatroom_id" to uniqueId,
+                "message_id" to currentTime,
+                "sender" to sender,
+                "receiver" to receiver,
+                "message" to messageText,
+                "time" to currentTime
+            )
+            val messageResponse = supabase.from("Messages").insert(messageData)
+
+            if (messageResponse.data != null) {
+                val conversationData = mapOf(
+                    "friendid" to receiver,
+                    "time" to currentTime,
+                    "sender" to getUiLoggedId(),
+                    "message" to messageText,
+                    "friendsimage" to friendimage,
+                    "name" to friendname,
+                    "person" to "you"
+                )
+
+                // Обновляем таблицу "Conversation" для отправителя
+                val senderConversationResponse = supabase.from("Conversationsender")
+                    .upsert(conversationData){
+                        filter { eq("friendid", receiver) }
+                    }
+
+                // Обновляем таблицу "Conversation" для получателя
+                val receiverConversationData = mapOf(
+                    "friendid" to getUiLoggedId(),
+                    "message" to messageText,
+                    "time" to currentTime,
+                    "person" to name.value!!
+                )
+                val receiverConversationResponse = supabase.from("Conversationsender")
+                    .upsert(receiverConversationData){
+                        filter { eq("friendid", getUiLoggedId()) }
+                    }
+
+                val snapshot = supabase.from("Tokens").select(){
+                    filter {
+                        eq("id", receiver)
+                    }
+                }
+
+//                        if (snapshot != null && snapshot.exists()) {
+//                            val tokenObject = snapshot.toObject(Token::class.java)
+//                            val token = tokenObject?.token!!
+//                            val loggedInUsername = mySharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
+//
+//                            if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
+//                                PushNotification(
+//                                    NotificationData(loggedInUsername, message.value!!),
+//                                    token
+//                                ).also {
+//                                    // sendNotification(it)
+//                                }
+//                            } else {
+//                                Log.e("ChatAppViewModel", "NO TOKEN, NO NOTIFICATION")
+//                            }
+//                        }
+//                        Log.e("ViewModel", token.toString())
+//                        if (taskmessage.isSuccessful) {
+//                            message.value = ""
+//                        }
 
 
-    fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) =
+                if (senderConversationResponse.data == null || receiverConversationResponse.data == null) {
+                    Log.e("ChatAppViewModel", "Ошибка обновления данных разговора ${senderConversationResponse.data}, ${receiverConversationResponse.data}")
+                }
+
+            } else {
+                Log.e("ChatAppViewModel", "Ошибка отправки сообщения: ${messageResponse.data}")
+            }
+        } catch (e: Exception) {
+            Log.e("ChatAppViewModel", "Exception: ${e.message}")
+        }
+    }
+
+   /* fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) =
         viewModelScope.launch(Dispatchers.IO) {
 
             val context = App.instance.applicationContext
@@ -133,7 +228,7 @@ class ChatAppViewModel : ViewModel() {
             mysharedPrefs.setValue("friendname", friendnamesplit)
             mysharedPrefs.setValue("friendimage", friendimage)
 
-           /* firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
+            firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
                 .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
                     val setHashap = hashMapOf<String, Any>(
                         "friendid" to receiver,
@@ -158,11 +253,13 @@ class ChatAppViewModel : ViewModel() {
                             "person",
                             name.value!!
                         )
+                }
+
                     firestore.collection("Tokens").document(receiver)
                         .addSnapshotListener { value, error ->
                             if (value != null && value.exists()) {
                                 val tokenObject = value.toObject(Token::class.java)
-                                // token = tokenObject?.token!!
+                                 token = tokenObject?.token!!
                                 val loggedInUsername =
                                     mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
                                 if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
@@ -180,13 +277,10 @@ class ChatAppViewModel : ViewModel() {
                                 message.value = ""
                             }
                         }
-                }
-            */
-        }
+ }*/
 
 
     fun getMessages(friend: String): LiveData<List<Messages>> {
-
         return messageRepo.getMessages(friend)
     }
 
@@ -198,16 +292,17 @@ class ChatAppViewModel : ViewModel() {
     }
 
 
-//    fun sendNotification(notification: PushNotification) = viewModelScope.launch {
-//        try {
-//            val response = RetrofitInstance.api.postNotification(notification)
-//        } catch (e: Exception) {
-//
-//            Log.e("ViewModelError", e.toString())
-//            // showToast(e.message.toString())
-//        }
-//    }
-
+    /*
+    /    fun sendNotification(notification: PushNotification) = viewModelScope.launch {
+    //        try {
+    //            val response = RetrofitInstance.api.postNotification(notification)
+    //        } catch (e: Exception) {
+    //
+    //            Log.e("ViewModelError", e.toString())
+    //            // showToast(e.message.toString())
+    //        }
+    //  }
+    */
 
     fun updateProfile() = viewModelScope.launch(Dispatchers.IO) {
 
@@ -216,18 +311,18 @@ class ChatAppViewModel : ViewModel() {
         val hashMapUser =
             hashMapOf<String, Any>("username" to name.value!!, "imageUrl" to imageUrl.value!!)
 
-      /*  firestore.collection("Users").document(getUiLoggedId()).update(hashMapUser)
-            .addOnCompleteListener {
+        /*  firestore.collection("Users").document(getUiLoggedId()).update(hashMapUser)
+              .addOnCompleteListener {
 
-                if (it.isSuccessful) {
+                  if (it.isSuccessful) {
 
-                    Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show()
+                      Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show()
 
 
-                }
+                  }
 
-            }
-*/
+              }
+  */
 
         val mysharedPrefs = SharedPrefs(context)
         val friendid = mysharedPrefs.getValue("friendid")
@@ -241,12 +336,12 @@ class ChatAppViewModel : ViewModel() {
 
         // updating the chatlist and recent list message, image etc
 
-      /* firestore.collection("Conversation${friendid}").document(getUiLoggedId())
-            .update(hashMapUpdate)
+        /* firestore.collection("Conversation${friendid}").document(getUiLoggedId())
+              .update(hashMapUpdate)
 
-        firestore.collection("Conversation${getUiLoggedId()}").document(friendid!!)
-            .update("person", "you")
+          firestore.collection("Conversation${getUiLoggedId()}").document(friendid!!)
+              .update("person", "you")
 
-*/
+  */
     }
 }

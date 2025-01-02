@@ -45,7 +45,7 @@ class SplashFragment : Fragment() {
         if (user == null) {
             Handler().postDelayed(startFragment, 2000)
         } else {
-            Handler().postDelayed(mainFragment, 500)
+            Handler().postDelayed(startFragment, 500)
         }
         return view
 
