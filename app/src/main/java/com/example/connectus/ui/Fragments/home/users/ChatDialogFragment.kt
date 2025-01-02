@@ -67,9 +67,12 @@ class ChatDialogFragment : Fragment() {
             .dontAnimate().into(circleImageView);
         textView.text = args.users.name
 
+        circleImageView.setOnClickListener {
+            findNavController().navigate(R.id.action_chatDialogFragment_to_profileDialogFragment)
+        }
+
         backImageView.setOnClickListener {
             findNavController().popBackStack()
-            // requireActivity().onBackPressed()
         }
         binding.sendBtn.setOnClickListener {
             chatAppViewModel.sendMessage(getUiLoggedId(), args.users.userId!!, args.users.name!!, args.users.imageUrl!!)

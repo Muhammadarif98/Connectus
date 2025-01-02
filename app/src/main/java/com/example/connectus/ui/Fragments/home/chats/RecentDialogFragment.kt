@@ -70,9 +70,12 @@ class RecentDialogFragment : Fragment() {
             .dontAnimate().into(circleImageView);
         textView.text = args.recentchats.name
 
+        circleImageView.setOnClickListener {
+            findNavController().navigate(R.id.action_recentDialogFragment_to_recentProfileDialogFragment)
+        }
+
         backImageView.setOnClickListener {
             findNavController().popBackStack()
-            // requireActivity().onBackPressed()
         }
         binding.sendBtn.setOnClickListener {
 

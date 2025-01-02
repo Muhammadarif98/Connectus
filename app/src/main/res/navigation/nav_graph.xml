@@ -136,6 +136,9 @@
         <argument
             android:name="recentchats"
             app:argType="com.example.connectus.data.model.RecentChats" />
+        <action
+            android:id="@+id/action_recentDialogFragment_to_recentProfileDialogFragment"
+            app:destination="@id/recentProfileDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatsFragment"
@@ -155,5 +158,26 @@
         <argument
             android:name="users"
             app:argType="com.example.connectus.data.model.Users" />
+        <action
+            android:id="@+id/action_chatDialogFragment_to_profileDialogFragment"
+            app:destination="@id/profileDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.ProfileDialogFragment"
+        android:label="fragment_profile_dialog"
+        tools:layout="@layout/fragment_profile_dialog" >
+        <argument
+            android:name="usersDialog"
+            app:argType="com.example.connectus.data.model.Users" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentProfileDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.RecentProfileDialogFragment"
+        android:label="fragment_recent_profile_dialog"
+        tools:layout="@layout/fragment_recent_profile_dialog" >
+        <argument
+            android:name="recentDialog"
+            app:argType="com.example.connectus.data.model.RecentChats" />
     </fragment>
 </navigation>
