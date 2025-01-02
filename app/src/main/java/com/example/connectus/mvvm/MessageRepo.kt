@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.connectus.data.model.Messages
-import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ class MessageRepo {
 
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val messageResponse = supabase.from("Messages")
+                val messageResponse = supabase.postgrest["Messages"]
                     .select(Columns.ALL){
                         filter {
                             eq("chatroom_id", uniqueId)
@@ -31,24 +31,21 @@ class MessageRepo {
                         }
                     }
 
-
-                if (messageResponse.data != null) {
-                    val messagesList = messageResponse.data.map {
-                        Messages(
-                            chatroom_id = "chatroom_id",
-                            message_id = "message_id",
-                            sender = "sender",
-                            receiver = "receiver",
-                            message = "message",
-                            time = "time"
-                        )
-                    }.filter { message ->
-                        (message.sender == getUiLoggedId() && message.receiver == friendid) ||
-                                (message.sender == friendid && message.receiver == getUiLoggedId())
-                    }
-
-                    messages.postValue(messagesList)
+                val messagesList = messageResponse.data.map {
+                    Messages(
+                        chatroom_id = "chatroom_id",
+                        message_id = "message_id",
+                        sender = "sender",
+                        receiver = "receiver",
+                        message = "message",
+                        time = "time"
+                    )
+                }.filter { message ->
+                    (message.sender == getUiLoggedId() && message.receiver == friendid) ||
+                            (message.sender == friendid && message.receiver == getUiLoggedId())
                 }
+                Log.e("MessageRepo", "Exception:")
+                messages.postValue(messagesList)
             } catch (e: Exception) {
                 Log.e("MessageRepo", "Exception: ${e.message}")
             }
