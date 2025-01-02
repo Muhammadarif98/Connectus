@@ -1,6 +1,5 @@
 package com.example.connectus.ui.Fragments.home.users
 
-import Utils.Companion.getUiLoggedId
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.connectus.R
+import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Messages
 import com.example.connectus.databinding.FragmentChatDialogBinding
 import com.example.connectus.mvvm.ChatAppViewModel
@@ -69,14 +69,14 @@ class ChatDialogFragment : Fragment() {
 
         backImageView.setOnClickListener {
             findNavController().popBackStack()
-           // requireActivity().onBackPressed()
+            // requireActivity().onBackPressed()
         }
         binding.sendBtn.setOnClickListener {
-
-            chatAppViewModel.sendMessage(getUiLoggedId(), args.users.user_id!!, args.users.name!!, args.users.imageUrl!!)
+            chatAppViewModel.sendMessage(getUiLoggedId(), args.users.userId!!, args.users.name!!, args.users.imageUrl!!)
+            chatAppViewModel.sendFile(getUiLoggedId(), args.users.userId!!, args.users.name!!, args.users.imageUrl!!)
 
         }
-        chatAppViewModel.getMessages(args.users.user_id!!).observe(viewLifecycleOwner, Observer {
+        chatAppViewModel.getMessages(args.users.userId!!).observe(viewLifecycleOwner, Observer {
             initRecyclerView(it)
         })
     }

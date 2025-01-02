@@ -130,12 +130,12 @@
         android:id="@+id/recentDialogFragment"
         android:name="com.example.connectus.ui.Fragments.home.chats.RecentDialogFragment"
         android:label="RecentDialogFragment" >
-        <argument
-            android:name="recentchats"
-            app:argType="com.example.connectus.data.model.RecentChats" />
         <action
             android:id="@+id/action_recentDialogFragment_to_chatsFragment"
             app:destination="@id/chatsFragment" />
+        <argument
+            android:name="recentchats"
+            app:argType="com.example.connectus.data.model.RecentChats" />
     </fragment>
     <fragment
         android:id="@+id/chatsFragment"

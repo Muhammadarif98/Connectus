@@ -1,6 +1,5 @@
 package com.example.connectus.ui.Fragments.home.chats
 
-import Utils.Companion.getUiLoggedId
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.connectus.R
+import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Messages
 import com.example.connectus.databinding.FragmentRecentDialogBinding
 import com.example.connectus.mvvm.ChatAppViewModel
@@ -58,7 +58,7 @@ class RecentDialogFragment : Fragment() {
         circleImageView = chatToolbar.findViewById(R.id.recentImageViewUser)
         backImageView = chatToolbar.findViewById(R.id.recentBackBtn)
 
-       // args = RecentDialogFragmentArgs.fromBundle(requireArguments())
+        args = RecentDialogFragmentArgs.fromBundle(requireArguments())
 
         binding.viewModel = chatAppViewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -84,8 +84,7 @@ class RecentDialogFragment : Fragment() {
             )
 
         }
-        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(
-            viewLifecycleOwner, Observer {
+        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(viewLifecycleOwner, Observer {
             initRecyclerView(it)
         })
     }

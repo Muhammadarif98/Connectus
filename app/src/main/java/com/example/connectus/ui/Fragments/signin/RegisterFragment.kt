@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentRegisterBinding
 import com.example.connectus.mvvm.RegisterViewModel
-import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
 
@@ -46,14 +44,13 @@ class RegisterFragment : Fragment() {
             val password = binding.editTextPassword.text.toString()
             val confirmPassword = binding.confirmPasswordET.text.toString()
 
-            lifecycleScope.launch {
-                viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword)
-                signIn()
-            }
+            viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword)
+            signIn()
+
         }
         binding.loginButtonTV.setOnClickListener {
             findNavController().popBackStack()
-           // requireActivity().supportFragmentManager.popBackStack()
+            // requireActivity().supportFragmentManager.popBackStack()
         }
 
         return view
@@ -67,8 +64,6 @@ class RegisterFragment : Fragment() {
             if (status == "Регистрация прошла успешно") {
                 progressDialogSignUp.dismiss()
                 findNavController().navigate(R.id.action_registerFragment_to_loginInputFragment)
-            }else{
-                progressDialogSignUp.dismiss()
             }
         }
 
@@ -83,6 +78,7 @@ class RegisterFragment : Fragment() {
             if (error.toString() == "true") {
                 progressDialogSignUp.dismiss()
             }
+
             error.observe(viewLifecycleOwner) { editText.error = it }
         }
     }

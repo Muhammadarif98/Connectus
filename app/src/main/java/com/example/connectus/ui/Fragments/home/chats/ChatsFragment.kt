@@ -22,7 +22,6 @@ class ChatsFragment : Fragment(), onChatClicked {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
-
     private var navigationListener: onChatClicked? = null
     private lateinit var chatsRecyclerView: RecyclerView
     private lateinit var chatAdapter: RecentChatAdapter
@@ -60,7 +59,4 @@ class ChatsFragment : Fragment(), onChatClicked {
         navigationListener?.getOnChatCLickedItem(position, chatList)
     }
 }
-
-
-
 

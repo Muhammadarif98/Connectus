@@ -23,6 +23,7 @@ class StartFragment : Fragment() {
 
 
         binding.buttonLogin.setOnClickListener {
+            // Код для открытия следующего фlayout.рагмента
             findNavController().navigate(R.id.action_startFragment_to_loginInputFragment)
         }
 

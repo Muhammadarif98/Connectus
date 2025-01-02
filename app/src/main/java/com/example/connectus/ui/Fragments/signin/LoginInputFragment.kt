@@ -1,32 +1,28 @@
 package com.example.connectus.ui.Fragments.signin
 
-import Utils.Companion.supabase
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginInputFragment : Fragment() {
     private var _binding: FragmentLoginInputFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var progressDialogSignIn: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
@@ -81,6 +77,11 @@ class LoginInputFragment : Fragment() {
 
         registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginInputFragment_to_registerFragment)
+//            val loginInputFragment = RegisterFragment()
+//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//            transaction.replace(R.id.nav_host_fragment, loginInputFragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
         }
 
 
@@ -102,30 +103,25 @@ class LoginInputFragment : Fragment() {
         }
         progressDialogSignIn.show()
         progressDialogSignIn.setMessage("Пожалуйста, подождите...")
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful) {
+                progressDialogSignIn.dismiss()
+                Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
 
-        lifecycleScope.launch {
-            val user = supabase.auth.currentUserOrNull()?.userMetadata?.get("name").toString()
-            try {
-                supabase.auth.signInWith(Email) {
-                    this.email = email
-                    this.password = password
-                }
                 findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
+//                val mainFragment = MainFragment()
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
+//                transaction.replace(R.id.nav_host_fragment, mainFragment)
+//                transaction.addToBackStack(null)
+//                transaction.commit()
+            } else {
                 progressDialogSignIn.dismiss()
-                Toast.makeText(
-                    requireContext(),
-                    "Вы вошли в аккаунт",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.e("LoginFragment", "login $user")
-            } catch (e: Exception) {
-                progressDialogSignIn.dismiss()
-                Toast.makeText(requireContext(), "Неправильный логин или пароль", Toast.LENGTH_SHORT).show()
-                Log.e("LoginFragment", "Error during sign in", e)
+                Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT)
+                    .show()
+                return@addOnCompleteListener
             }
         }
-
-
     }
 
     private fun isValidEmail(email: CharSequence): Boolean {

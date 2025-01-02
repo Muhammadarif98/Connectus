@@ -67,18 +67,3 @@ class UsersFragment : Fragment(), OnUserClickListener {
     }
 }
 
-
-//        val bundle = Bundle().apply {
-//            putParcelable("user", users)
-//        }
-//
-//        Log.d("ChoseUsersFragment", "Selected user: ${users.name}")
-//
-//
-//        val chatDialogFragment = ChatDialogFragment().apply {
-//            arguments = bundle
-//        }
-//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.container, chatDialogFragment) // Заменяем текущий фрагмент
-//        transaction.addToBackStack(null) // Добавляем в стек возврата
-//        transaction.commit() // Завершаем транзакцию

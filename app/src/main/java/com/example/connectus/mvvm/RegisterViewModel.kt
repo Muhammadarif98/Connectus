@@ -1,15 +1,10 @@
 package com.example.connectus.mvvm
 
-import Utils.Companion.supabase
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
-import io.github.jan.supabase.auth.status.SessionStatus
-import io.github.jan.supabase.postgrest.from
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterViewModel : ViewModel() {
 
@@ -23,8 +18,11 @@ class RegisterViewModel : ViewModel() {
     val passwordError = MutableLiveData<String?>()
     val confirmPasswordError = MutableLiveData<String?>()
 
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    suspend fun signUpUser(
+
+    fun signUpUser(
         name: String,
         lastName: String,
         phone: String,
@@ -96,58 +94,44 @@ class RegisterViewModel : ViewModel() {
             return
         }
 
-        viewModelScope.launch {
-            try {
-                // Регистрация пользователя
-                supabase.auth.signUpWith(Email) {
-                    this.email = email
-                    this.password = password
-                }
-            } catch (e: Exception) {
-                Log.e("RegisterFragment", "Ошибка регистрации: ${e.message}")
-                _registrationStatus.value = "Ошибка регистрации: ${e.message}"
-            }
-        }.join() // Ожидание завершения первого потока
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val userId = auth.currentUser!!.uid
+                val userData = hashMapOf(
+                    "userId" to userId,
+                    "name" to name,
+                    "lastName" to lastName,
+                    "phone" to phone,
+                    "email" to email,
+                    "password" to password,
+                    "confirmPassword" to confirmPassword,
+                    "image" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
+                    "status" to "default"
+                )
 
-        viewModelScope.launch {
-            try {
-                val user = supabase.auth.currentUserOrNull()
-                supabase.auth.sessionStatus.collect { status ->
-                    when (status) {
-                        is SessionStatus.Authenticated -> {
-                            val userId = user?.id
-                            val userData = mapOf(
-                                "user_id" to userId,
-                                "name" to name,
-                                "lastName" to lastName,
-                                "phone" to phone,
-                                "email" to email,
-                                "password" to password,
-                                "confirmPassword" to confirmPassword,
-                                "imageUrl" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
-                                "status" to "default"
-                            )
-
-                            // Вставка данных пользователя в таблицу
-                            supabase.from("users").insert(userData)
-                            // Проверка на ошибки при вставке
-                            Log.d(
+                firestore.collection("users").document(userId).set(userData)
+                    .addOnCompleteListener { firestoreTask ->
+                        if (firestoreTask.isSuccessful) {
+                            Log.d("RegisterFragment", "User data saved successfully: $userData")
+                        } else {
+                            Log.e(
                                 "RegisterFragment",
-                                "Данные пользователя успешно сохранены: $userData"
+                                "Error saving user data",
+                                firestoreTask.exception
                             )
-                            _registrationStatus.value = "Регистрация прошла успешно"
-                        }
-                        else -> {
-                            // Обработка других статусов, если необходимо
                         }
                     }
+                _registrationStatus.value = "Регистрация прошла успешно"
+            } else {
+                //progressDialogSignUp.dismiss()
+                if (auth.currentUser != null) {
+                    _registrationStatus.value = "Пользователь с таким email уже существует"
+                    return@addOnCompleteListener
                 }
-            }catch (e: Exception) {
-                Log.e("RegisterFragment", "Ошибка регистрации: ${e.message}")
-                _registrationStatus.value = "Ошибка регистрации: ${e.message}"
+                _registrationStatus.value = "Ошибка регистрации"
             }
-
         }
+
 
     }
 

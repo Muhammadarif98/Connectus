@@ -92,6 +92,7 @@
                     android:layout_gravity="center_horizontal">
                 </TextView>
                 <TextView
+                    android:id="@+id/emailPr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jhon2490@xyz.com"
@@ -276,6 +277,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginTop="8dp"
+                    android:clickable="true"
                     android:drawableStart="@drawable/ic_save"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"

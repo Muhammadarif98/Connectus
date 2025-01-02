@@ -1,13 +1,13 @@
 package com.example.connectus.ui.adapter
 
 
-import Utils.Companion.getUiLoggedId
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectus.R
+import com.example.connectus.Utils.Companion.getUiLoggedId
 import com.example.connectus.data.model.Messages
 
 class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
