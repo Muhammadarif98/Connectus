@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.connectus.R
 import com.example.connectus.data.model.RecentChats
+import com.example.connectus.data.model.Users
 import de.hdodenhof.circleimageview.CircleImageView
 
 class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
     var listOfChats = listOf<RecentChats>()
+    var listOfUsers = listOf<Users>()
     private var listener: onChatClicked? = null
     var chatShitModal = RecentChats()
 
@@ -63,6 +65,10 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
     fun setList(list: List<RecentChats>) {
         this.listOfChats = list
+
+    }
+    fun setListUser(list: List<Users>) {
+        this.listOfUsers = list
 
     }
     fun setOnChatClickListener(listener: onChatClicked) {

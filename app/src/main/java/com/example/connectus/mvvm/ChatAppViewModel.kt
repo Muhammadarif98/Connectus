@@ -73,6 +73,10 @@ class ChatAppViewModel : ViewModel() {
         return usersRepo.getUsers()
     }
 
+    fun getRecentUsers(): LiveData<List<RecentChats>> {
+        return chatlistRepo.getAllChatList()
+    }
+
     fun getCurrentUser() = viewModelScope.launch(Dispatchers.IO) {
         val context = App.instance.applicationContext
 
@@ -209,7 +213,14 @@ class ChatAppViewModel : ViewModel() {
 
     }
 
-    fun sendMessage(sender: String, receiver: String, friendname: String, friendimage: String) =
+    fun sendMessage(sender: String,
+                    receiver: String,
+                    friendname: String,
+                    friendimage: String,
+                    friendemail: String,
+                    friendlastname: String,
+                    friendphone: String
+                    ) =
         viewModelScope.launch(Dispatchers.IO) {
 
             val context = App.instance.applicationContext
@@ -223,12 +234,15 @@ class ChatAppViewModel : ViewModel() {
             val uniqueId = listOf(sender, receiver).sorted()
             uniqueId.joinToString(separator = "")
 
-            val friendnamesplit = friendname.split("\\s".toRegex())[0]
+            val friendnamesplit =   friendname.split("\\s".toRegex())[0]
             val mysharedPrefs = SharedPrefs(context)
             mysharedPrefs.setValue("friendid", receiver)
             mysharedPrefs.setValue("chatroomid", uniqueId.toString())
             mysharedPrefs.setValue("friendname", friendnamesplit)
             mysharedPrefs.setValue("friendimage", friendimage)
+            mysharedPrefs.setValue("friendemail", friendemail)
+            mysharedPrefs.setValue("friendphone", friendphone)
+            mysharedPrefs.setValue("friendlastname", friendlastname)
 
             firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
                 .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
@@ -239,6 +253,9 @@ class ChatAppViewModel : ViewModel() {
                         "message" to message.value!!,
                         "friendsimage" to friendimage,
                         "name" to friendname,
+                        "email" to friendemail,
+                        "phone" to friendphone,
+                        "lastname" to friendlastname,
                         "person" to "you"
                     )
 
@@ -248,12 +265,14 @@ class ChatAppViewModel : ViewModel() {
 
                     firestore.collection("Conversation${receiver}").document(getUidLoggedIn())
                         .update(
-                            "message",
-                            message.value!!,
-                            "time",
-                            Utils.getTime(),
-                            "person",
-                            name.value!!
+                            "message", message.value!!,
+                            "time", Utils.getTime(),
+                            "person", name.value!!,
+                            "friendsimage", friendImageUrl.value!!,
+                            "name", friendName.value!!,
+                            "email", friendEmail.value!!,
+                            "phone", friendPhone.value!!,
+                            "lastname", friendLastName.value!!,
                         )
                     firestore.collection("Tokens").document(receiver)
                         .addSnapshotListener { value, error ->
@@ -287,11 +306,7 @@ class ChatAppViewModel : ViewModel() {
     }
 
 
-    fun getRecentUsers(): LiveData<List<RecentChats>> {
 
-        return chatlistRepo.getAllChatList()
-
-    }
 
 
     fun sendNotification(notification: PushNotification) = viewModelScope.launch {

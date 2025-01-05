@@ -84,7 +84,10 @@ class RecentDialogFragment : Fragment() {
                 getUidLoggedIn(),
                 args.recentchats.friendid!!,
                 args.recentchats.name!!,
-                args.recentchats.friendsimage!!
+                args.recentchats.friendsimage!!,
+                args.recentchats.email!!,
+                args.recentchats.friendLastname!! ,
+                args.recentchats.phone!!
             )
 
         }

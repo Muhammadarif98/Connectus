@@ -78,7 +78,17 @@ class ChatDialogFragment : Fragment() {
         }
         binding.sendBtn.setOnClickListener {
 
-            chatAppViewModel.sendMessage(getUidLoggedIn(), args.users.userId!!, args.users.name!!, args.users.imageUrl!!)
+            args.users.lastName?.let { it1 ->
+                chatAppViewModel.sendMessage(
+                    getUidLoggedIn(),
+                    args.users.userId!!,
+                    args.users.name!!,
+                    args.users.imageUrl!!,
+                    args.users.email!!,
+                    it1,
+                    args.users.phone!!
+                )
+            }
 
         }
         chatAppViewModel.getMessages(args.users.userId!!).observe(viewLifecycleOwner, Observer {

@@ -45,37 +45,18 @@ class RecentProfileDialogFragment : Fragment() {
       //  binding.friendId.text = args.recentProfile.userId
         binding.friendName.text = args.recentProfile.name
         binding.friendNameAgain.text = args.recentProfile.name
-
+        binding.lastName.text = args.recentProfile.friendLastname
         binding.friendImageUrl.setOnClickListener {
             showImageDialog(args.recentProfile.friendsimage!!)
         }
 
-       // binding.email.text = args.recentProfile.email
-       // binding.friendId.text = args.recentProfile.userId
-      //  binding.lastName.text = args.recentProfile.lastName
-//         binding.phone.text = args.recentProfile.phone
-        // binding.job.text = args.usersProfile.employee
-        //  binding.age.text = args.usersProfile.age
+        binding.email.text = args.recentProfile.email
+        binding.friendId.text = args.recentProfile.friendid
+
+         binding.phone.text = args.recentProfile.phone
+         //binding.job.text = args.usersProfile.employee
+         // binding.age.text = args.usersProfile.age
         // binding.adress.text = args.usersProfile.adress
-
-        //profileViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
-
-//        profileViewModel.friendName.observe(viewLifecycleOwner) {
-//            binding.friendName.text = it
-//            binding.friendNameAgain.text = it
-//        }
-//        profileViewModel.friendEmail.observe(viewLifecycleOwner) { binding.email.text = it }
-//        profileViewModel.friendId.observe(viewLifecycleOwner) { binding.friendId.text = it }
-//        profileViewModel.friendLastName.observe(viewLifecycleOwner) { binding.lastName.text = it }
-//        profileViewModel.friendEmployee.observe(viewLifecycleOwner) { binding.job.text = it }
-//        profileViewModel.friendPhone.observe(viewLifecycleOwner) { binding.phone.text = it }
-//        profileViewModel.friendAge.observe(viewLifecycleOwner) { binding.age.text = it }
-//        profileViewModel.friendAdress.observe(viewLifecycleOwner) { binding.adress.text = it }
-//          profileViewModel.loginMethod.observe(viewLifecycleOwner) { binding.loginMethod.text = it }
-
-
-
-
     }
     private fun showImageDialog(imageUrl: String) {
         val dialog = Dialog(

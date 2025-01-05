@@ -6,6 +6,9 @@ import android.os.Parcelable
 data class RecentChats(
     val friendid: String? = "",
     val friendsimage: String? = "",
+    val friendLastname: String? = "",
+    val phone: String? = "",
+    val email : String? = "",
     val time: String? = "",
     val name: String? = "",
     val sender: String? = "",
@@ -24,20 +27,24 @@ data class RecentChats(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(friendid)
         parcel.writeString(friendsimage)
+        parcel.writeString(friendLastname)
+        parcel.writeString(phone)
+        parcel.writeString(email)
         parcel.writeString(time)
         parcel.writeString(name)
         parcel.writeString(sender)
         parcel.writeString(message)
         parcel.writeString(person)
         parcel.writeString(status)
-
-
     }
 
     override fun describeContents(): Int {
