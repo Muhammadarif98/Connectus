@@ -79,15 +79,20 @@ class ChatDialogFragment : Fragment() {
         binding.sendBtn.setOnClickListener {
 
             args.users.lastName?.let { it1 ->
-                chatAppViewModel.sendMessage(
-                    getUidLoggedIn(),
-                    args.users.userId!!,
-                    args.users.name!!,
-                    args.users.imageUrl!!,
-                    args.users.email!!,
-                    it1,
-                    args.users.phone!!
-                )
+                args.users.employee?.let { it2 ->
+                    chatAppViewModel.sendMessage(
+                        getUidLoggedIn(),
+                        args.users.userId!!,
+                        args.users.name!!,
+                        args.users.imageUrl!!,
+                        args.users.email!!,
+                        it1,
+                        args.users.phone!!,
+                        args.users.adress!!,
+                        args.users.age!!,
+                        it2
+                    )
+                }
             }
 
         }

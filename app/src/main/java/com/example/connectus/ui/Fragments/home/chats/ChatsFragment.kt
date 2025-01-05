@@ -52,11 +52,11 @@ class ChatsFragment : Fragment(), onChatClicked {
             chatsRecyclerView.adapter = chatAdapter
         })
 
-        chatViewModel.getUsers().observe(viewLifecycleOwner, Observer {
-            chatAdapter.setListUser(it)
-            chatAdapter.setOnChatClickListener(this)
-            chatsRecyclerView.adapter = chatAdapter
-        })
+//        chatViewModel.getUsers().observe(viewLifecycleOwner, Observer {
+//            chatAdapter.setListUser(it)
+//            chatAdapter.setOnChatClickListener(this)
+//            chatsRecyclerView.adapter = chatAdapter
+//        })
 
 
     }

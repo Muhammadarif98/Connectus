@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class RecentChats(
     val friendid: String? = "",
     val friendsimage: String? = "",
-    val friendLastname: String? = "",
+    val lastname: String? = "",
     val phone: String? = "",
     val email : String? = "",
     val time: String? = "",
@@ -15,6 +15,9 @@ data class RecentChats(
     val message: String? = "",
     val person: String? = "",
     val status: String? = "",
+    val friendAdress : String? = "",
+    val friendAge : String? = "",
+    val friendEmployee : String? = "",
 
 
     ) : Parcelable {
@@ -36,7 +39,7 @@ data class RecentChats(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(friendid)
         parcel.writeString(friendsimage)
-        parcel.writeString(friendLastname)
+        parcel.writeString(lastname)
         parcel.writeString(phone)
         parcel.writeString(email)
         parcel.writeString(time)

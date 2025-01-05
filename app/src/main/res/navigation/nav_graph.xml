@@ -155,12 +155,12 @@
         <action
             android:id="@+id/action_chatDialogFragment_to_usersFragment"
             app:destination="@id/usersFragment" />
-        <argument
-            android:name="users"
-            app:argType="com.example.connectus.data.model.Users" />
         <action
             android:id="@+id/action_chatDialogFragment_to_friendProfileFragment"
             app:destination="@id/friendProfileFragment" />
+        <argument
+            android:name="users"
+            app:argType="com.example.connectus.data.model.Users" />
     </fragment>
     <fragment
         android:id="@+id/friendProfileFragment"

@@ -43,8 +43,11 @@ class RegisterFragment : Fragment() {
             val email = binding.editTextLogin.text.toString()
             val password = binding.editTextPassword.text.toString()
             val confirmPassword = binding.confirmPasswordET.text.toString()
+            val adress = binding.editTextAdress.text.toString()
+            val age = binding.editTextAge.text.toString()
+            val employee = binding.editTextEmployee.text.toString()
 
-            viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword)
+            viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword, adress, age, employee)
             signIn()
 
         }
@@ -73,7 +76,10 @@ class RegisterFragment : Fragment() {
             viewModel.phoneError to binding.phoneRegisterET,
             viewModel.emailError to binding.editTextLogin,
             viewModel.passwordError to binding.editTextPassword,
-            viewModel.confirmPasswordError to binding.confirmPasswordET
+            viewModel.confirmPasswordError to binding.confirmPasswordET,
+            viewModel.adressError to binding.editTextAdress,
+            viewModel.ageError to binding.editTextAge,
+            viewModel.employeeError to binding.editTextEmployee
         ).forEach { (error, editText) ->
             if (error.toString() == "true") {
                 progressDialogSignUp.dismiss()

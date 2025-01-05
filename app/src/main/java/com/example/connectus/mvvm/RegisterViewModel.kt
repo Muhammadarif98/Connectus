@@ -17,6 +17,9 @@ class RegisterViewModel : ViewModel() {
     val emailError = MutableLiveData<String?>()
     val passwordError = MutableLiveData<String?>()
     val confirmPasswordError = MutableLiveData<String?>()
+    val adressError = MutableLiveData<String?>()
+    val ageError = MutableLiveData<String?>()
+    val employeeError = MutableLiveData<String?>()
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -28,7 +31,10 @@ class RegisterViewModel : ViewModel() {
         phone: String,
         email: String,
         password: String,
-        confirmPassword: String
+        confirmPassword: String,
+        adress: String,
+        age: String,
+        employee: String
     ) {
         nameError.value = null
         lastNameError.value = null
@@ -36,6 +42,9 @@ class RegisterViewModel : ViewModel() {
         emailError.value = null
         passwordError.value = null
         confirmPasswordError.value = null
+        adressError.value = null
+        ageError.value = null
+        employeeError.value = null
 
         when {
             name.isEmpty() -> {
@@ -106,7 +115,10 @@ class RegisterViewModel : ViewModel() {
                     "password" to password,
                     "confirmPassword" to confirmPassword,
                     "image" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
-                    "status" to "default"
+                    "status" to "default",
+                    "adress" to adress,
+                    "age" to age,
+                    "employee" to employee
                 )
 
                 firestore.collection("users").document(userId).set(userData)

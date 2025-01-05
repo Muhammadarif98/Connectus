@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectus.R
+import com.example.connectus.Utils.Companion.MESSAGE_LEFT
+import com.example.connectus.Utils.Companion.MESSAGE_RIGHT
 import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Messages
 
@@ -13,12 +15,10 @@ class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
 
     private var listOfMessage = listOf<Messages>()
 
-    private val LEFT = 0
-    private val RIGHT = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == RIGHT) {
+        return if (viewType == MESSAGE_RIGHT) {
             val view = inflater.inflate(R.layout.chatitemright, parent, false)
             MessageHolder(view)
         } else {
@@ -40,7 +40,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
     }
 
     override fun getItemViewType(position: Int) =
-        if (listOfMessage[position].sender == getUidLoggedIn()) RIGHT else LEFT
+        if (listOfMessage[position].sender == getUidLoggedIn()) MESSAGE_RIGHT else MESSAGE_LEFT
 
     fun setList(newList: List<Messages>) {
         this.listOfMessage = newList

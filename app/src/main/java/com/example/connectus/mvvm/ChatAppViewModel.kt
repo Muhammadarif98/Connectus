@@ -27,7 +27,6 @@ class ChatAppViewModel : ViewModel() {
     val id = MutableLiveData<String?>()
     val name = MutableLiveData<String?>()
     val imageUrl = MutableLiveData<String?>()
-    val loadImageUrl = MutableLiveData<String?>()
     val lastName = MutableLiveData<String?>()
     val phone = MutableLiveData<String?>()
     val email = MutableLiveData<String?>()
@@ -38,6 +37,7 @@ class ChatAppViewModel : ViewModel() {
     val age = MutableLiveData<String?>()
     val employee = MutableLiveData<String?>()
 
+    val loadImageUrl = MutableLiveData<String?>()
 
 
     val friendId = MutableLiveData<String?>()
@@ -46,6 +46,8 @@ class ChatAppViewModel : ViewModel() {
     val friendLastName = MutableLiveData<String?>()
     val friendPhone = MutableLiveData<String?>()
     val friendEmail = MutableLiveData<String?>()
+    val friendPassword = MutableLiveData<String?>()
+    val friendConfirmPassword = MutableLiveData<String?>()
     val friendStatus = MutableLiveData<String?>()
     val friendAdress = MutableLiveData<String?>()
     val friendAge = MutableLiveData<String?>()
@@ -92,6 +94,9 @@ class ChatAppViewModel : ViewModel() {
                     val userConfirmPassword = value.getString("confirmPassword")
                     val userImageUrl = value.getString("image")
                     val status = value.getString("status")
+                    val userAdress = value.getString("adress")
+                    val userAge = value.getString("age")
+                    val userEmployee = value.getString("employee")
 
                     id.postValue(userId)
                     name.postValue(userName)
@@ -101,6 +106,9 @@ class ChatAppViewModel : ViewModel() {
                     email.postValue(userEmail)
                     password.postValue(userPassword)
                     confirmPassword.postValue(userConfirmPassword)
+                    adress.postValue(userAdress)
+                    age.postValue(userAge)
+                    employee.postValue(userEmployee)
                     this@ChatAppViewModel.status.postValue(status)
 
                     val mySharedPrefs = SharedPrefs(context)
@@ -116,9 +124,17 @@ class ChatAppViewModel : ViewModel() {
                     if (userImageUrl != null) {
                         mySharedPrefs.setValue("imageUrl", userImageUrl)
                     }
-
                     if (userEmail != null) {
                         mySharedPrefs.setValue("email", userEmail)
+                    }
+                    if (userAdress != null) {
+                        mySharedPrefs.setValue("adress", userAdress)
+                    }
+                    if (userAge != null) {
+                        mySharedPrefs.setValue("age", userAge)
+                    }
+                    if (userEmployee != null) {
+                        mySharedPrefs.setValue("employee", userEmployee)
                     }
 
                 }
@@ -135,8 +151,13 @@ class ChatAppViewModel : ViewModel() {
                     val userLastName = value.getString("lastName")
                     val userPhone = value.getString("phone")
                     val userEmail = value.getString("email")
+                    val userPassword = value.getString("password")
+                    val userConfirmPassword = value.getString("confirmPassword")
                     val userImageUrl = value.getString("image")
                     val status = value.getString("status")
+                    val userAdress = value.getString("adress")
+                    val userAge = value.getString("age")
+                    val userEmployee = value.getString("employee")
 
                     friendId.postValue(userId)
                     friendName.postValue(userName)
@@ -144,7 +165,12 @@ class ChatAppViewModel : ViewModel() {
                     friendLastName.postValue(userLastName)
                     friendPhone.postValue(userPhone)
                     friendEmail.postValue(userEmail)
-                    this@ChatAppViewModel.status.postValue(status)
+                    friendPassword.postValue(userPassword)
+                    friendConfirmPassword.postValue(userConfirmPassword)
+                    friendStatus.postValue(status)
+                    friendAdress.postValue(userAdress)
+                    friendAge.postValue(userAge)
+                    friendEmployee.postValue(userEmployee)
 
                     val mySharedPrefs = SharedPrefs(context)
 
@@ -180,7 +206,10 @@ class ChatAppViewModel : ViewModel() {
             "password" to password.value!!,
             "confirmPassword" to confirmPassword.value!!,
             "image" to imageUrl.value!!,
-            "status" to status.value!!
+            "status" to status.value!!,
+            "adress" to adress.value!!,
+            "age" to age.value!!,
+            "employee" to employee.value!!
         )
         firestore.collection("users").document(getUidLoggedIn()).update(hashMap)
             .addOnCompleteListener { task ->
@@ -196,8 +225,18 @@ class ChatAppViewModel : ViewModel() {
         val friendid = mysharedPrefs.getValue("friendid")
 
         val hashMapUpdate = hashMapOf<String, Any>(
+            "friendsid" to friendId.value!!,
             "friendsimage" to imageUrl.value!!,
             "name" to name.value!!,
+            "lastname" to lastName.value!!,
+            "phone" to phone.value!!,
+            "email" to email.value!!,
+            "time" to Utils.getTime(),
+            "status" to status.value!!,
+            "friendAdress" to friendAdress.value!!,
+            "friendAge" to friendAge.value!!,
+            "friendEmployee" to friendEmployee.value!!,
+            "sender" to "you",
             "person" to name.value!!
         )
 
@@ -219,7 +258,10 @@ class ChatAppViewModel : ViewModel() {
                     friendimage: String,
                     friendemail: String,
                     friendlastname: String,
-                    friendphone: String
+                    friendphone: String,
+                    friendAdress: String,
+                    friendAge: String,
+                    friendEmployee: String
                     ) =
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -243,6 +285,15 @@ class ChatAppViewModel : ViewModel() {
             mysharedPrefs.setValue("friendemail", friendemail)
             mysharedPrefs.setValue("friendphone", friendphone)
             mysharedPrefs.setValue("friendlastname", friendlastname)
+            mysharedPrefs.setValue("friendAdress", friendAdress)
+            mysharedPrefs.setValue("friendAge", friendAge)
+            mysharedPrefs.setValue("friendEmployee", friendEmployee)
+
+
+            // Получение значений из SharedPreferences
+            val adr = mysharedPrefs.getValue("friendAdress")
+            val ageF = mysharedPrefs.getValue("friendAge")
+            val emp = mysharedPrefs.getValue("friendEmployee")
 
             firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
                 .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
@@ -256,9 +307,14 @@ class ChatAppViewModel : ViewModel() {
                         "email" to friendemail,
                         "phone" to friendphone,
                         "lastname" to friendlastname,
+                        "status" to status.value!!,
+                        "friendAdress" to adr!!,
+                        "friendAge" to ageF!!,
+                        "friendEmployee" to emp!!,
                         "person" to "you"
                     )
 
+                    Log.d("setHashap", "Sending data: $setHashap")
 
                     firestore.collection("Conversation${getUidLoggedIn()}").document(receiver)
                         .set(setHashap)
@@ -272,10 +328,19 @@ class ChatAppViewModel : ViewModel() {
                             "name", friendName.value!!,
                             "email", friendEmail.value!!,
                             "phone", friendPhone.value!!,
+                            "password", friendPassword.value!!,
+                            "confirmPassword", friendConfirmPassword.value!!,
                             "lastname", friendLastName.value!!,
+                            "friendAdress", adr,
+                            "friendAge", ageF,
+                            "friendEmployee", emp
                         )
                     firestore.collection("Tokens").document(receiver)
                         .addSnapshotListener { value, error ->
+                            if (taskmessage.isSuccessful) {
+                                message.value = ""
+                            }
+
                             if (value != null && value.exists()) {
                                 val tokenObject = value.toObject(Token::class.java)
                                 // token = tokenObject?.token!!
@@ -292,9 +357,7 @@ class ChatAppViewModel : ViewModel() {
                                 }
                             }
                             Log.e("ViewModel", token.toString())
-                            if (taskmessage.isSuccessful) {
-                                message.value = ""
-                            }
+
                         }
                 }
         }

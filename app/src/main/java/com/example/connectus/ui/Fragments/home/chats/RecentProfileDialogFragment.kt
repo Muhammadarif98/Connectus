@@ -41,23 +41,22 @@ class RecentProfileDialogFragment : Fragment() {
             .load(args.recentProfile.friendsimage!!)
             .placeholder(R.drawable.ic_profile)
             .into(binding.friendImageUrl)
-
-      //  binding.friendId.text = args.recentProfile.userId
-        binding.friendName.text = args.recentProfile.name
-        binding.friendNameAgain.text = args.recentProfile.name
-        binding.lastName.text = args.recentProfile.friendLastname
         binding.friendImageUrl.setOnClickListener {
             showImageDialog(args.recentProfile.friendsimage!!)
         }
 
-        binding.email.text = args.recentProfile.email
         binding.friendId.text = args.recentProfile.friendid
+        binding.friendLastName.text = args.recentProfile.lastname
+        binding.phone.text = args.recentProfile.phone
+        binding.email.text = args.recentProfile.email
+        binding.friendName.text = args.recentProfile.name
+        binding.friendNameAgain.text = args.recentProfile.name
 
-         binding.phone.text = args.recentProfile.phone
-         //binding.job.text = args.usersProfile.employee
-         // binding.age.text = args.usersProfile.age
-        // binding.adress.text = args.usersProfile.adress
+        binding.adress.text = args.recentProfile.friendAdress
+        binding.age.text = args.recentProfile.friendAge
+        binding.job.text = args.recentProfile.friendEmployee
     }
+
     private fun showImageDialog(imageUrl: String) {
         val dialog = Dialog(
             requireContext(),
@@ -71,6 +70,7 @@ class RecentProfileDialogFragment : Fragment() {
         imageView.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -48,7 +48,7 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
         val themessage = chatlist.message!!.split(" ").take(4).joinToString(" ")
         val makelastmessage = "${chatlist.person}: ${themessage} "
 
-        holder.lastMessage.setText(makelastmessage)
+        holder.lastMessage.text = makelastmessage
 
         Glide.with(holder.itemView.context).load(chatlist.friendsimage).into(holder.imageView)
 
@@ -67,10 +67,10 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
         this.listOfChats = list
 
     }
-    fun setListUser(list: List<Users>) {
-        this.listOfUsers = list
-
-    }
+//    fun setListUser(list: List<Users>) {
+//        this.listOfUsers = list
+//
+//    }
     fun setOnChatClickListener(listener: onChatClicked) {
         this.listener = listener
     }

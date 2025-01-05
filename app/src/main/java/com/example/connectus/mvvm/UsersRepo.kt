@@ -33,6 +33,9 @@ class UsersRepo {
                 val userConfirmPassword = document.getString("confirmPassword")
                 val userImageUrl = document.getString("image")
                 val status = document.getString("status")
+                val adress = document.getString("adress")
+                val age = document.getString("age")
+                val employee = document.getString("employee")
 
                 val user = Users(
                     userId = userId,
@@ -43,7 +46,10 @@ class UsersRepo {
                     password = userPassword,
                     confirmPassword = userConfirmPassword,
                     imageUrl = userImageUrl,
-                    status = status
+                    status = status,
+                    adress = adress,
+                    age = age,
+                    employee = employee
                 )
 
                 Log.d("UsersRepo", "Loaded user: ${user.name}, ${user.imageUrl}")

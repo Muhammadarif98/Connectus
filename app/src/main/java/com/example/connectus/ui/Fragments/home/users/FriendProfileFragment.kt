@@ -47,28 +47,13 @@ class FriendProfileFragment : Fragment() {
         binding.friendName.text = args.usersProfile.name
         binding.friendNameAgain.text = args.usersProfile.name
         binding.email.text = args.usersProfile.email
-        binding.friendId.text = args.usersProfile.userId
         binding.lastName.text = args.usersProfile.lastName
         binding.phone.text = args.usersProfile.phone
-        // binding.job.text = args.usersProfile.employee
-        //  binding.age.text = args.usersProfile.age
-        // binding.adress.text = args.usersProfile.adress
+        binding.job.text = args.usersProfile.employee
+        binding.age.text = args.usersProfile.age
+        binding.adress.text = args.usersProfile.adress
 
         profileViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
-
-//        profileViewModel.friendName.observe(viewLifecycleOwner) {
-//            binding.friendName.text = it
-//            binding.friendNameAgain.text = it
-//        }
-//        profileViewModel.friendEmail.observe(viewLifecycleOwner) { binding.email.text = it }
-//        profileViewModel.friendId.observe(viewLifecycleOwner) { binding.friendId.text = it }
-//        profileViewModel.friendLastName.observe(viewLifecycleOwner) { binding.lastName.text = it }
-//        profileViewModel.friendEmployee.observe(viewLifecycleOwner) { binding.job.text = it }
-//        profileViewModel.friendPhone.observe(viewLifecycleOwner) { binding.phone.text = it }
-//        profileViewModel.friendAge.observe(viewLifecycleOwner) { binding.age.text = it }
-//        profileViewModel.friendAdress.observe(viewLifecycleOwner) { binding.adress.text = it }
-//          profileViewModel.loginMethod.observe(viewLifecycleOwner) { binding.loginMethod.text = it }
-
 
     }
 

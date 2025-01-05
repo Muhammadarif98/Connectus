@@ -37,7 +37,7 @@ class Utils {
         const val REQUEST_IMAGE_PICK = 2
         const val MESSAGE_RIGHT = 1
         const val MESSAGE_LEFT = 2
-        const val CHANNEL_ID = "com.example.chatmessenger"
+        const val CHANNEL_ID = "com.example.connectus"
 
         fun getUidLoggedIn(): String {
             if (auth.currentUser != null) {
