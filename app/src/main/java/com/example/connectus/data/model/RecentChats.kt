@@ -13,6 +13,7 @@ data class RecentChats(
     val person: String? = "",
     val status: String? = "",
 
+
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -21,7 +22,8 @@ data class RecentChats(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readString(),
     ) {
     }
 
@@ -34,6 +36,7 @@ data class RecentChats(
         parcel.writeString(message)
         parcel.writeString(person)
         parcel.writeString(status)
+
 
     }
 

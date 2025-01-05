@@ -1,13 +1,12 @@
 package com.example.connectus.ui.adapter
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectus.R
-import com.example.connectus.Utils.Companion.getUiLoggedId
+import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Messages
 
 class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
@@ -37,20 +36,15 @@ class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
         holder.timeOfSent.visibility = View.VISIBLE
 
         holder.messageText.text = message.message
-        holder.timeOfSent.text = message.time?.substring(0, 5) ?: ""
-
-
+        holder.timeOfSent.text = message.time ?: ""  // Отображаем время в формате HH:mm:ss
     }
 
     override fun getItemViewType(position: Int) =
-        if (listOfMessage[position].sender == getUiLoggedId()) RIGHT else LEFT
+        if (listOfMessage[position].sender == getUidLoggedIn()) RIGHT else LEFT
 
     fun setList(newList: List<Messages>) {
-
         this.listOfMessage = newList
-
     }
-
 }
 
 class MessageHolder(itemView: View) : RecyclerView.ViewHolder(itemView.rootView) {

@@ -3,7 +3,7 @@ package com.example.connectus.mvvm
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.connectus.Utils.Companion.getUiLoggedId
+import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Users
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -47,7 +47,7 @@ class UsersRepo {
                 )
 
                 Log.d("UsersRepo", "Loaded user: ${user.name}, ${user.imageUrl}")
-                if (user.userId != getUiLoggedId()) {
+                if (user.userId != getUidLoggedIn()) {
                     usersList.add(user)
                 }
             }

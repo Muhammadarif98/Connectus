@@ -39,7 +39,7 @@ class Utils {
         const val MESSAGE_LEFT = 2
         const val CHANNEL_ID = "com.example.chatmessenger"
 
-        fun getUiLoggedId(): String {
+        fun getUidLoggedIn(): String {
             if (auth.currentUser != null) {
 
                 userId = auth.currentUser!!.uid
@@ -48,13 +48,28 @@ class Utils {
             return userId
         }
 
-        fun getTime(): String {
-            val formatter = SimpleDateFormat("HH:mm:ss")
-            val date: Date = Date(System.currentTimeMillis())
-            val stringdate = formatter.format(date)
-
-            return stringdate
-
+        fun getUidFriendIn(): String {
+            if (auth.currentUser != null) {
+                userId = auth.uid!!
+            }
+            return userId
         }
+
+        @SuppressLint("SimpleDateFormat")
+        fun getTime(): String {
+            val formatter = SimpleDateFormat("dd.MM, HH:mm:ss")
+            val date: Date = Date(System.currentTimeMillis())
+            val stringDate = formatter.format(date)
+
+            return stringDate
+        }
+
     }
 }
+//@SuppressLint("SimpleDateFormat")
+//fun getTime(): String {
+//    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+//    val date: Date = Date(System.currentTimeMillis())
+//    val stringdate = formatter.format(date)
+//    return stringdate
+//}

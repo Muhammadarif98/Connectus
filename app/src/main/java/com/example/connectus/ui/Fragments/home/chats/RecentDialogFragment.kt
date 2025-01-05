@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.connectus.R
-import com.example.connectus.Utils.Companion.getUiLoggedId
+import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Messages
 import com.example.connectus.databinding.FragmentRecentDialogBinding
 import com.example.connectus.mvvm.ChatAppViewModel
@@ -71,7 +71,8 @@ class RecentDialogFragment : Fragment() {
         textView.text = args.recentchats.name
 
         circleImageView.setOnClickListener {
-            findNavController().navigate(R.id.action_recentDialogFragment_to_recentProfileDialogFragment)
+            val action = RecentDialogFragmentDirections.actionRecentDialogFragmentToRecentProfileDialogFragment(args.recentchats)
+            findNavController().navigate(action)
         }
 
         backImageView.setOnClickListener {
@@ -80,7 +81,7 @@ class RecentDialogFragment : Fragment() {
         binding.sendBtn.setOnClickListener {
 
             chatAppViewModel.sendMessage(
-                getUiLoggedId(),
+                getUidLoggedIn(),
                 args.recentchats.friendid!!,
                 args.recentchats.name!!,
                 args.recentchats.friendsimage!!

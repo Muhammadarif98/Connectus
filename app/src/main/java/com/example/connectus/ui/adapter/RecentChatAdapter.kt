@@ -40,7 +40,7 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
         chatShitModal = chatlist
 
 
-        holder.userName.setText(chatlist.name)
+        holder.userName.text = chatlist.name
 
 
         val themessage = chatlist.message!!.split(" ").take(4).joinToString(" ")
@@ -50,7 +50,7 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
         Glide.with(holder.itemView.context).load(chatlist.friendsimage).into(holder.imageView)
 
-        holder.timeView.text = chatlist.time!!.substring(0, 5)
+        holder.timeView.text = chatlist.time!!
 
         holder.itemView.setOnClickListener {
             listener?.getOnChatCLickedItem(position, chatlist)

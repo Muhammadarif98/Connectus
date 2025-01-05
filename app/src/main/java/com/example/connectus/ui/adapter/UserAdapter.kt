@@ -58,6 +58,8 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
         this.listener = listener
     }
 
+
+
     override fun getItemCount(): Int {
         return listOfUsers.size
     }
@@ -70,6 +72,7 @@ class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val statusImageView : ImageView = itemView.findViewById(R.id.statusOnline)
     val time : TextView = itemView.findViewById(R.id.recentUserTextTime)
 }
+
 
 
 interface OnUserClickListener {

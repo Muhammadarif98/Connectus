@@ -5,6 +5,7 @@ data class Messages(
     val receiver: String? = "",
     val message: String? = "",
     val time: String? = "",
+   // val type: String? = "text"
 
     ) {
 

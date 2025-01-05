@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.connectus.R
-import com.example.connectus.Utils.Companion.getUiLoggedId
+import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
 import com.example.connectus.databinding.FragmentMainBinding
@@ -95,7 +95,7 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
     private fun mainFragmentBody() {
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-        val userId = getUiLoggedId()
+        val userId = getUidLoggedIn()
         firestore.collection("users").document(userId).get()
             .addOnSuccessListener { document ->
                 if (document != null) {

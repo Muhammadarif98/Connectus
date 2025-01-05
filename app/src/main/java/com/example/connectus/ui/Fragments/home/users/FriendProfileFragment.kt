@@ -1,4 +1,4 @@
-package com.example.connectus.ui.Fragments.home.chats
+package com.example.connectus.ui.Fragments.home.users
 
 import android.app.Dialog
 import android.os.Bundle
@@ -7,27 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.connectus.R
-import com.example.connectus.databinding.FragmentRecentProfileDialogBinding
+import com.example.connectus.databinding.FragmentFriendProfileBinding
+import com.example.connectus.mvvm.ChatAppViewModel
 
+class FriendProfileFragment : Fragment() {
 
-class RecentProfileDialogFragment : Fragment() {
+    private lateinit var args: FriendProfileFragmentArgs
 
-    private lateinit var args: RecentProfileDialogFragmentArgs
-
-    private var _binding: FragmentRecentProfileDialogBinding? = null
+    private var _binding: FragmentFriendProfileBinding? = null
     private val binding get() = _binding!!
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var profileViewModel: ChatAppViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRecentProfileDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentFriendProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -35,30 +33,28 @@ class RecentProfileDialogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        args = RecentProfileDialogFragmentArgs.fromBundle(requireArguments())
+        args = FriendProfileFragmentArgs.fromBundle(requireArguments())
 
         Glide.with(view.context)
-            .load(args.recentProfile.friendsimage!!)
+            .load(args.usersProfile.imageUrl!!)
             .placeholder(R.drawable.ic_profile)
             .into(binding.friendImageUrl)
 
-      //  binding.friendId.text = args.recentProfile.userId
-        binding.friendName.text = args.recentProfile.name
-        binding.friendNameAgain.text = args.recentProfile.name
-
         binding.friendImageUrl.setOnClickListener {
-            showImageDialog(args.recentProfile.friendsimage!!)
+            showImageDialog(args.usersProfile.imageUrl!!)
         }
-
-       // binding.email.text = args.recentProfile.email
-       // binding.friendId.text = args.recentProfile.userId
-      //  binding.lastName.text = args.recentProfile.lastName
-//         binding.phone.text = args.recentProfile.phone
+        binding.friendId.text = args.usersProfile.userId
+        binding.friendName.text = args.usersProfile.name
+        binding.friendNameAgain.text = args.usersProfile.name
+        binding.email.text = args.usersProfile.email
+        binding.friendId.text = args.usersProfile.userId
+        binding.lastName.text = args.usersProfile.lastName
+        binding.phone.text = args.usersProfile.phone
         // binding.job.text = args.usersProfile.employee
         //  binding.age.text = args.usersProfile.age
         // binding.adress.text = args.usersProfile.adress
 
-        //profileViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
+        profileViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
 
 //        profileViewModel.friendName.observe(viewLifecycleOwner) {
 //            binding.friendName.text = it
@@ -74,9 +70,8 @@ class RecentProfileDialogFragment : Fragment() {
 //          profileViewModel.loginMethod.observe(viewLifecycleOwner) { binding.loginMethod.text = it }
 
 
-
-
     }
+
     private fun showImageDialog(imageUrl: String) {
         val dialog = Dialog(
             requireContext(),
@@ -90,6 +85,7 @@ class RecentProfileDialogFragment : Fragment() {
         imageView.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
