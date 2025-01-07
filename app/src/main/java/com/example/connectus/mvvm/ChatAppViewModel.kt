@@ -71,6 +71,25 @@ class ChatAppViewModel : ViewModel() {
         getRecentUsers()
     }
 
+    fun deleteMessage(chatPartnerId: String, messageId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val uniqueId = listOf(getUidLoggedIn(), chatPartnerId).sorted().joinToString(separator = "")
+
+            firestore.collection("Messages")
+                .document(uniqueId.toString())
+                .collection("chats")
+                .document(messageId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("DeleteMessage", "Message successfully deleted")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("DeleteMessage", "Error deleting message", e)
+                }
+        }
+    }
+
+
     fun getUsers(): LiveData<List<Users>> {
         return usersRepo.getUsers()
     }

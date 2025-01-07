@@ -67,6 +67,7 @@ class RegisterFragment : Fragment() {
             if (status == "Регистрация прошла успешно") {
                 progressDialogSignUp.dismiss()
                 findNavController().navigate(R.id.action_registerFragment_to_loginInputFragment)
+                //findNavController().navigate(R.id.action_registerFragment_to_OTPVerificationFragment)
             }
         }
 

@@ -26,6 +26,9 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             />
+        <action
+            android:id="@+id/action_loginInputFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
     </fragment>
 
     <fragment
@@ -36,6 +39,9 @@
         <action
             android:id="@+id/action_registerFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_OTPVerificationFragment"
+            app:destination="@id/OTPVerificationFragment" />
     </fragment>
 
     <fragment
@@ -181,5 +187,21 @@
         <argument
             android:name="recentProfile"
             app:argType="com.example.connectus.data.model.RecentChats" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginInputFragment"
+            app:destination="@id/loginInputFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPVerificationFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.OTPVerificationFragment"
+        android:label="OTPVerificationFragment" >
+        <action
+            android:id="@+id/action_OTPVerificationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

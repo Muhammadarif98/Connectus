@@ -35,6 +35,7 @@ class LoginInputFragment : Fragment() {
         val editTextLogin = binding.editTextLogin
         val editTextPassword = binding.editTextPassword
         val btnSign = binding.btnLogin
+        val forgotPassword = binding.forgotPassword
         progressDialogSignIn = ProgressDialog(requireContext())
 
 
@@ -77,16 +78,15 @@ class LoginInputFragment : Fragment() {
 
         registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginInputFragment_to_registerFragment)
-//            val loginInputFragment = RegisterFragment()
-//            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.nav_host_fragment, loginInputFragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
         }
 
 
         btnSign.setOnClickListener {
             login()
+        }
+
+        forgotPassword.setOnClickListener {
+            findNavController().navigate(R.id.action_loginInputFragment_to_resetPasswordFragment)
         }
 
         return view
@@ -109,12 +109,6 @@ class LoginInputFragment : Fragment() {
                 Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
 
                 findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
-//                val mainFragment = MainFragment()
-//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-//                transaction.replace(R.id.nav_host_fragment, mainFragment)
-//                transaction.addToBackStack(null)
-//                transaction.commit()
             } else {
                 progressDialogSignIn.dismiss()
                 Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT)

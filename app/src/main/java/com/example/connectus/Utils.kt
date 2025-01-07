@@ -1,6 +1,11 @@
 package com.example.connectus
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.github.jan.supabase.auth.Auth
@@ -65,6 +70,24 @@ class Utils {
         }
 
     }
+
+
+    object PermissionsHelper {
+
+        fun hasPermission(context: Context, permission: String): Boolean {
+            return ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun requestPermission(activity: FragmentActivity, permission: String, requestCode: Int) {
+            if (!hasPermission(activity, permission)) {
+                ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)
+            }
+        }
+    }
+
 }
 //@SuppressLint("SimpleDateFormat")
 //fun getTime(): String {

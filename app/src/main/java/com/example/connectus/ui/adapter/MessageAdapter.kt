@@ -11,7 +11,7 @@ import com.example.connectus.Utils.Companion.MESSAGE_RIGHT
 import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Messages
 
-class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
+class MessageAdapter(private val onItemClick: (Messages) -> Unit) : RecyclerView.Adapter<MessageHolder>() {
 
     private var listOfMessage = listOf<Messages>()
 
@@ -37,6 +37,10 @@ class MessageAdapter : RecyclerView.Adapter<MessageHolder>() {
 
         holder.messageText.text = message.message
         holder.timeOfSent.text = message.time ?: ""  // Отображаем время в формате HH:mm:ss
+        holder.itemView.setOnClickListener {
+            onItemClick(message)
+        }
+
     }
 
     override fun getItemViewType(position: Int) =

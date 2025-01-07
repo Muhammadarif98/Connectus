@@ -27,5 +27,8 @@
     <string name="adress">Адрес</string>
     <string name="age">Возраст</string>
     <string name="employee">Род занятий</string>
+    <string name="text_send">Отправить</string>
+    <string name="resendtext">Повторно отправить</string>
+    <string name="submit">Подтвердить</string>
 
 </resources>

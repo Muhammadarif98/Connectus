@@ -5,9 +5,7 @@ data class Messages(
     val receiver: String? = "",
     val message: String? = "",
     val time: String? = "",
-   // val type: String? = "text"
-
     ) {
-
     val id : String get() = "$sender-$receiver-$message-$time"
 }
+// val type: String? = "text"

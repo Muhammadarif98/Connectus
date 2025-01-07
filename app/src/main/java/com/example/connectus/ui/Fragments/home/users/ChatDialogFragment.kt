@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -101,10 +102,22 @@ class ChatDialogFragment : Fragment() {
         })
     }
 
+    private fun showDeleteMessageDialog(message: Messages) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Что вы хотите сделать?")
+            .setPositiveButton("Удалить сообщение") { _, _ ->
+                chatAppViewModel.deleteMessage(args.users.userId!!, message.id!!)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initRecyclerView(list: List<Messages>) {
-        adapter = MessageAdapter()
+        adapter = MessageAdapter(){message ->
+            showDeleteMessageDialog(message)
+        }
         val layoutManager = LinearLayoutManager(context)
         binding.messageRecyclerView.layoutManager = layoutManager
         layoutManager.stackFromEnd = true
