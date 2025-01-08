@@ -29,11 +29,6 @@ class RecentChatAdapter : RecyclerView.Adapter<MyChatListHolder>() {
 
     }
 
-
-
-
-
-
     override fun onBindViewHolder(holder: MyChatListHolder, position: Int) {
 
         val chatlist = listOfChats[position]

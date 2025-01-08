@@ -1,5 +1,7 @@
 package com.example.connectus.mvvm
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -19,11 +21,18 @@ import com.example.connectus.notifications.entity.PushNotification
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.Token
 import kotlinx.coroutines.CoroutineExceptionHandler
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.UUID
 
-class ChatAppViewModel : ViewModel() {
+@SuppressLint("StaticFieldLeak")
+class ChatAppViewModel() : ViewModel() {
+
+    private val context: Context = App.instance.applicationContext
+    private val _messages = MutableLiveData<List<Messages>>()
+    val messages: LiveData<List<Messages>> get() = _messages
+
+
     val id = MutableLiveData<String?>()
     val name = MutableLiveData<String?>()
     val imageUrl = MutableLiveData<String?>()
@@ -71,22 +80,19 @@ class ChatAppViewModel : ViewModel() {
         getRecentUsers()
     }
 
-    fun deleteMessage(chatPartnerId: String, messageId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val uniqueId = listOf(getUidLoggedIn(), chatPartnerId).sorted().joinToString(separator = "")
-
-            firestore.collection("Messages")
-                .document(uniqueId.toString())
-                .collection("chats")
-                .document(messageId)
-                .delete()
-                .addOnSuccessListener {
-                    Log.d("DeleteMessage", "Message successfully deleted")
-                }
-                .addOnFailureListener { e ->
-                    Log.w("DeleteMessage", "Error deleting message", e)
-                }
+    fun getMessages(friend: String): LiveData<List<Messages>> {
+        return messageRepo.getMessages(friend)
+    }
+    fun deleteMessage(uniqueId: String, messageId: String) {
+        messageRepo.deleteMessage(uniqueId, messageId) {
+            // После успешного удаления обновляем данные
+            refreshMessages(uniqueId.split("").sorted().joinToString(""))
         }
+    }
+
+    fun refreshMessages(friendId: String) {
+        // Обновляем LiveData, вызывая getMessages
+        _messages.value = messageRepo.getMessages(friendId).value
     }
 
 
@@ -271,51 +277,66 @@ class ChatAppViewModel : ViewModel() {
 
     }
 
-    fun sendMessage(sender: String,
-                    receiver: String,
-                    friendname: String,
-                    friendimage: String,
-                    friendemail: String,
-                    friendlastname: String,
-                    friendphone: String,
-                    friendAdress: String,
-                    friendAge: String,
-                    friendEmployee: String
-                    ) =
-        viewModelScope.launch(Dispatchers.IO) {
+    fun sendMessage(
+        sender: String,
+        receiver: String,
+        friendname: String,
+        friendimage: String,
+        friendemail: String,
+        friendlastname: String,
+        friendphone: String,
+        friendAdress: String,
+        friendAge: String,
+        friendEmployee: String
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val context = App.instance.applicationContext
 
-            val context = App.instance.applicationContext
-            val hashMap = hashMapOf<String, Any>(
-                "sender" to sender,
-                "receiver" to receiver,
-                "message" to message.value!!,
-                "time" to Utils.getTime()
-            )
+        // Генерация рандомного ID для сообщения
+        val messageId = UUID.randomUUID().toString()
 
-            val uniqueId = listOf(sender, receiver).sorted()
-            uniqueId.joinToString(separator = "")
+        // Данные сообщения
+        val hashMap = hashMapOf<String, Any>(
+            "id" to messageId, // Добавляем рандомный ID
+            "sender" to sender,
+            "receiver" to receiver,
+            "message" to message.value!!,
+            "time" to Utils.getTime()
+        )
 
-            val friendnamesplit =   friendname.split("\\s".toRegex())[0]
-            val mysharedPrefs = SharedPrefs(context)
-            mysharedPrefs.setValue("friendid", receiver)
-            mysharedPrefs.setValue("chatroomid", uniqueId.toString())
-            mysharedPrefs.setValue("friendname", friendnamesplit)
-            mysharedPrefs.setValue("friendimage", friendimage)
-            mysharedPrefs.setValue("friendemail", friendemail)
-            mysharedPrefs.setValue("friendphone", friendphone)
-            mysharedPrefs.setValue("friendlastname", friendlastname)
-            mysharedPrefs.setValue("friendAdress", friendAdress)
-            mysharedPrefs.setValue("friendAge", friendAge)
-            mysharedPrefs.setValue("friendEmployee", friendEmployee)
+        // Генерация уникального ID для чата
+        val uniqueId = listOf(sender, receiver).sorted().joinToString(separator = "")
+
+        // Сохранение данных в SharedPreferences
+        val friendnamesplit = friendname.split("\\s".toRegex())[0]
+        val mysharedPrefs = SharedPrefs(context)
+        mysharedPrefs.setValue("friendid", receiver)
+        mysharedPrefs.setValue("chatroomid", uniqueId)
+        mysharedPrefs.setValue("friendname", friendnamesplit)
+        mysharedPrefs.setValue("friendimage", friendimage)
+        mysharedPrefs.setValue("friendemail", friendemail)
+        mysharedPrefs.setValue("friendphone", friendphone)
+        mysharedPrefs.setValue("friendlastname", friendlastname)
+        mysharedPrefs.setValue("friendAdress", friendAdress)
+        mysharedPrefs.setValue("friendAge", friendAge)
+        mysharedPrefs.setValue("friendEmployee", friendEmployee)
+
+        // Получение значений из SharedPreferences
+        val adr = mysharedPrefs.getValue("friendAdress")
+        val ageF = mysharedPrefs.getValue("friendAge")
+        val emp = mysharedPrefs.getValue("friendEmployee")
+
+        // Сохранение сообщения в Firestore
+        firestore.collection("Messages")
+            .document(uniqueId)
+            .collection("chats")
+            .document(messageId) // Используем рандомный ID как document ID
+            .set(hashMap)
+            .addOnCompleteListener { taskmessage ->
+                if (taskmessage.isSuccessful) {
+                    // Очистка поля сообщения после успешной отправки
 
 
-            // Получение значений из SharedPreferences
-            val adr = mysharedPrefs.getValue("friendAdress")
-            val ageF = mysharedPrefs.getValue("friendAge")
-            val emp = mysharedPrefs.getValue("friendEmployee")
-
-            firestore.collection("Messages").document(uniqueId.toString()).collection("chats")
-                .document(Utils.getTime()).set(hashMap).addOnCompleteListener { taskmessage ->
+                    // Обновление данных в коллекции Conversation
                     val setHashap = hashMapOf<String, Any>(
                         "friendid" to receiver,
                         "time" to Utils.getTime(),
@@ -330,15 +351,18 @@ class ChatAppViewModel : ViewModel() {
                         "friendAdress" to adr!!,
                         "friendAge" to ageF!!,
                         "friendEmployee" to emp!!,
-                        "person" to "you"
+                        "person" to "Вы"
                     )
 
                     Log.d("setHashap", "Sending data: $setHashap")
 
-                    firestore.collection("Conversation${getUidLoggedIn()}").document(receiver)
+                    // Обновление данных в коллекции Conversation
+                    firestore.collection("Conversation${getUidLoggedIn()}")
+                        .document(receiver)
                         .set(setHashap)
 
-                    firestore.collection("Conversation${receiver}").document(getUidLoggedIn())
+                    firestore.collection("Conversation${receiver}")
+                        .document(getUidLoggedIn())
                         .update(
                             "message", message.value!!,
                             "time", Utils.getTime(),
@@ -354,17 +378,14 @@ class ChatAppViewModel : ViewModel() {
                             "friendAge", ageF,
                             "friendEmployee", emp
                         )
-                    firestore.collection("Tokens").document(receiver)
+                    message.value = ""
+                    // Отправка уведомления
+                    firestore.collection("Tokens")
+                        .document(receiver)
                         .addSnapshotListener { value, error ->
-                            if (taskmessage.isSuccessful) {
-                                message.value = ""
-                            }
-
                             if (value != null && value.exists()) {
                                 val tokenObject = value.toObject(Token::class.java)
-                                // token = tokenObject?.token!!
-                                val loggedInUsername =
-                                    mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
+                                val loggedInUsername = mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
                                 if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
                                     PushNotification(
                                         NotificationData(loggedInUsername, message.value!!), token!!
@@ -376,19 +397,12 @@ class ChatAppViewModel : ViewModel() {
                                 }
                             }
                             Log.e("ViewModel", token.toString())
-
                         }
+                } else {
+                    Log.e("ChatAppViewModel", "Ошибка отправки сообщения", taskmessage.exception)
                 }
-        }
-
-
-    fun getMessages(friend: String): LiveData<List<Messages>> {
-
-        return messageRepo.getMessages(friend)
+            }
     }
-
-
-
 
 
     fun sendNotification(notification: PushNotification) = viewModelScope.launch {

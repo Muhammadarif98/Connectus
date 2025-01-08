@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,16 +18,15 @@ import com.example.connectus.mvvm.ChatAppViewModel
 import com.example.connectus.ui.adapter.RecentChatAdapter
 import com.example.connectus.ui.adapter.onChatClicked
 
-
 class ChatsFragment : Fragment(), onChatClicked {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
     private var navigationListener: onChatClicked? = null
     private lateinit var chatsRecyclerView: RecyclerView
+    private lateinit var emptyView: TextView
     private lateinit var chatAdapter: RecentChatAdapter
     private lateinit var chatViewModel: ChatAppViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +42,8 @@ class ChatsFragment : Fragment(), onChatClicked {
         chatViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
 
         chatAdapter = RecentChatAdapter()
-        chatsRecyclerView= view.findViewById(R.id.rvRecentChats)
+        chatsRecyclerView = view.findViewById(R.id.rvRecentChats)
+        emptyView = view.findViewById(R.id.empty_view)
         val layoutManagerUsers = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         chatsRecyclerView.layoutManager = layoutManagerUsers
 
@@ -50,19 +51,18 @@ class ChatsFragment : Fragment(), onChatClicked {
             chatAdapter.setList(it)
             chatAdapter.setOnChatClickListener(this)
             chatsRecyclerView.adapter = chatAdapter
+
+            if (it.isEmpty()) {
+                chatsRecyclerView.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+            } else {
+                chatsRecyclerView.visibility = View.VISIBLE
+                emptyView.visibility = View.GONE
+            }
         })
-
-//        chatViewModel.getUsers().observe(viewLifecycleOwner, Observer {
-//            chatAdapter.setListUser(it)
-//            chatAdapter.setOnChatClickListener(this)
-//            chatsRecyclerView.adapter = chatAdapter
-//        })
-
-
     }
 
     override fun getOnChatCLickedItem(position: Int, chatList: RecentChats) {
         navigationListener?.getOnChatCLickedItem(position, chatList)
     }
 }
-

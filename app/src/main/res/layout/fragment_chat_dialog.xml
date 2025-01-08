@@ -153,7 +153,7 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        tools:context=".ui.Fragments.home.MainFragment">
+        tools:context=".ui.Fragments.home.com.example.connectus.ui.Fragments.home.MainFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

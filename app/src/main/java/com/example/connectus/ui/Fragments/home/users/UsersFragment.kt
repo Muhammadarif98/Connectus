@@ -2,9 +2,12 @@ package com.example.connectus.ui.Fragments.home.users
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -55,6 +58,21 @@ class UsersFragment : Fragment(), OnUserClickListener {
         })
 
         navigationListener = parentFragment as? OnUserClickListener
+
+        // Обработка изменения текста в EditText
+        val searchUserEditText = view.findViewById<EditText>(R.id.search_user)
+        searchUserEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.isNullOrEmpty()) {
+                    usersRecyclerView.visibility = View.GONE
+                } else {
+                    userAdapter.filter(s.toString())
+                    usersRecyclerView.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -66,4 +84,3 @@ class UsersFragment : Fragment(), OnUserClickListener {
         navigationListener?.onUserSelected(position, users)
     }
 }
-

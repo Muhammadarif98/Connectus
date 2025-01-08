@@ -1,17 +1,20 @@
 package com.example.connectus.ui.Fragments.home
 
+import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.util.TypedValue
+import android.view.*
 import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.MenuCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -44,13 +47,19 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         val view = binding.root
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         binding.toolbar.setOnMenuItemClickListener { item ->
             onOptionsItemSelected(item)
+        }
+
+        // Обработчик долгого нажатия для показа PopupMenu
+        binding.toolbar.setOnLongClickListener { view ->
+            showPopupMenu(view)
+            true
         }
 
         mainFragmentBody()
@@ -60,6 +69,7 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+        setOptionalIconsVisible(menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -102,10 +112,10 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
                     val userName = document.getString("name")
                     binding.toolbar.title = userName
                 } else {
-                    Log.d("MainFragment", "No such document")
+                    Log.d("com.example.connectus.ui.Fragments.home.MainFragment", "No such document")
                 }
             }.addOnFailureListener { exception ->
-                Log.d("MainFragment", "get failed with ", exception)
+                Log.d("com.example.connectus.ui.Fragments.home.MainFragment", "get failed with ", exception)
             }
 
         val viewPager: ViewPager2 = binding.viewPager
@@ -132,21 +142,57 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
         findNavController().navigate(action)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun showPopupMenu(view: View) {
-        PopupMenu(requireContext(), view).apply {
-            menuInflater.inflate(R.menu.menu_main, menu)
-            setOnMenuItemClickListener { item ->
-                onOptionsItemSelected(item)
-            }
-            show()
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menuInflater.inflate(R.menu.menu_main, popupMenu.menu)
+
+        // Получение доступа к внутреннему представлению PopupMenu и установка фона
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val menuPopupHelper = popup.get(popupMenu)
+            val classPopupHelper = Class.forName(menuPopupHelper.javaClass.name)
+            val setForceIcons = classPopupHelper.getMethod("setForceShowIcon", Boolean::class.java)
+            setForceIcons.invoke(menuPopupHelper, true)
+            val backgroundDrawable = resources.getDrawable(R.drawable.menu_background, null)
+            classPopupHelper.getDeclaredMethod("setBackgroundDrawable", Drawable::class.java)
+                .invoke(menuPopupHelper, backgroundDrawable)
         }
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            onOptionsItemSelected(item)
+        }
+        popupMenu.show()
     }
 
 
+    @SuppressLint("RestrictedApi")
+    private fun setOptionalIconsVisible(menu: Menu) {
+        if (menu is MenuBuilder) {
+            val menuBuilder = menu as MenuBuilder
+            menuBuilder.setOptionalIconsVisible(true)
+            for (item in menuBuilder.visibleItems) {
+                val iconMarginPx = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt()
+                if (item.icon != null) {
+                    item.icon = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                        InsetDrawable(item.icon, iconMarginPx, 0, iconMarginPx, 0)
+                    } else {
+                        object : InsetDrawable(item.icon, iconMarginPx, 0, iconMarginPx, 0) {
+                            override fun getIntrinsicWidth(): Int {
+                                return intrinsicHeight + iconMarginPx + iconMarginPx
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            MenuCompat.setGroupDividerEnabled(menu, true)
+        }
+    }
 }

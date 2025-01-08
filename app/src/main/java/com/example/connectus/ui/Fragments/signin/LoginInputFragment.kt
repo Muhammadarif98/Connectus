@@ -7,11 +7,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginInputFragment : Fragment() {
@@ -20,6 +20,7 @@ class LoginInputFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var progressDialogSignIn: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = FirebaseAuth.getInstance()
@@ -38,12 +39,8 @@ class LoginInputFragment : Fragment() {
         val forgotPassword = binding.forgotPassword
         progressDialogSignIn = ProgressDialog(requireContext())
 
-
         editTextLogin.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Не используется
-            }
-
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = editTextLogin.text.toString()
                 if (!isValidEmail(email)) {
@@ -52,16 +49,11 @@ class LoginInputFragment : Fragment() {
                     editTextLogin.error = null
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                // Не используется
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
-        editTextPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Не используется
-            }
 
+        editTextPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = editTextPassword.text.toString()
                 if (password.length < 6) {
@@ -70,16 +62,12 @@ class LoginInputFragment : Fragment() {
                     editTextPassword.error = null
                 }
             }
-
-            override fun afterTextChanged(s: Editable?) {
-                // Не используется
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginInputFragment_to_registerFragment)
         }
-
 
         btnSign.setOnClickListener {
             login()
@@ -89,31 +77,42 @@ class LoginInputFragment : Fragment() {
             findNavController().navigate(R.id.action_loginInputFragment_to_resetPasswordFragment)
         }
 
+        binding.verifity.setOnClickListener {
+            findNavController().navigate(R.id.action_loginInputFragment_to_OTPVerificationFragment)
+        }
+
         return view
     }
 
     private fun login() {
         val email = binding.editTextLogin.text.toString()
         val password = binding.editTextPassword.text.toString()
+
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(requireContext(), "Заполните все поля", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Заполните все поля", Snackbar.LENGTH_SHORT).show()
             binding.editTextLogin.error = "Введите почту"
             binding.editTextPassword.error = "Введите пароль"
             return
         }
+
         progressDialogSignIn.show()
         progressDialogSignIn.setMessage("Пожалуйста, подождите...")
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                progressDialogSignIn.dismiss()
-                Toast.makeText(requireContext(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
 
-                findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user = auth.currentUser
+                if (user != null && user.isEmailVerified) {
+                    progressDialogSignIn.dismiss()
+                    Snackbar.make(binding.root, "Вы вошли в аккаунт", Snackbar.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
+                } else {
+                    progressDialogSignIn.dismiss()
+                    Snackbar.make(binding.root, "Пожалуйста, подтвердите ваш email перед входом", Snackbar.LENGTH_SHORT).show()
+                    auth.signOut() // Выходим из аккаунта
+                }
             } else {
                 progressDialogSignIn.dismiss()
-                Toast.makeText(requireContext(), "Неверный логин или пароль", Toast.LENGTH_SHORT)
-                    .show()
-                return@addOnCompleteListener
+                Snackbar.make(binding.root, "Неверный логин или пароль", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -122,5 +121,4 @@ class LoginInputFragment : Fragment() {
         val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z]+\\.[a-zA-Z]+"
         return email.matches(emailPattern.toRegex())
     }
-
 }

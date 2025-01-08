@@ -15,6 +15,7 @@ import com.example.connectus.data.model.Users
 class UserAdapter : RecyclerView.Adapter<UserHolder>() {
 
     private var listOfUsers = listOf<Users>()
+    private var filteredListOfUsers = listOf<Users>()
     private var listener: OnUserClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
@@ -24,7 +25,7 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
     }
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
-        val users = listOfUsers[position]
+        val users = filteredListOfUsers[position]
         val name = users.name
         val image = users.imageUrl
 
@@ -46,11 +47,10 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
         }
     }
 
-
-
     @SuppressLint("NotifyDataSetChanged")
     fun setUserList(users: List<Users>) {
         this.listOfUsers = users
+        this.filteredListOfUsers = users
         notifyDataSetChanged()
     }
 
@@ -58,10 +58,19 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
         this.listener = listener
     }
 
-
-
     override fun getItemCount(): Int {
-        return listOfUsers.size
+        return filteredListOfUsers.size
+    }
+
+    fun filter(query: String) {
+        filteredListOfUsers = if (query.isEmpty()) {
+            listOfUsers
+        } else {
+            listOfUsers.filter {
+                it.name?.contains(query, ignoreCase = true) ?:  false
+            }
+        }
+        notifyDataSetChanged()
     }
 }
 
@@ -72,8 +81,6 @@ class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val statusImageView : ImageView = itemView.findViewById(R.id.statusOnline)
     val time : TextView = itemView.findViewById(R.id.recentUserTextTime)
 }
-
-
 
 interface OnUserClickListener {
     fun onUserSelected(position: Int, users: Users)

@@ -5,16 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
 import com.example.connectus.databinding.FragmentRegisterBinding
 import com.example.connectus.mvvm.RegisterViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class RegisterFragment : Fragment() {
-
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
@@ -33,7 +32,7 @@ class RegisterFragment : Fragment() {
         binding.termsCheckBox.setOnCheckedChangeListener { _, isChecked ->
             binding.btnSign.isEnabled = isChecked
             if (!isChecked) {
-                Toast.makeText(requireContext(), "Поставьте галочку", Toast.LENGTH_SHORT).show()
+                Snackbar.make(view, "Поставьте галочку", Snackbar.LENGTH_SHORT).show()
             }
         }
         binding.btnSign.setOnClickListener {
@@ -63,11 +62,12 @@ class RegisterFragment : Fragment() {
         progressDialogSignUp.show()
         progressDialogSignUp.setMessage("Регистрация пользователя...")
         viewModel.registrationStatus.observe(viewLifecycleOwner) { status ->
-            Toast.makeText(requireContext(), status, Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, status, Snackbar.LENGTH_SHORT).show()
             if (status == "Регистрация прошла успешно") {
                 progressDialogSignUp.dismiss()
+                Snackbar.make(binding.root, "Пожалуйста, проверьте вашу почту для верификации.", Snackbar.LENGTH_LONG).show()
                 findNavController().navigate(R.id.action_registerFragment_to_loginInputFragment)
-                //findNavController().navigate(R.id.action_registerFragment_to_OTPVerificationFragment)
+
             }
         }
 
@@ -89,7 +89,6 @@ class RegisterFragment : Fragment() {
             error.observe(viewLifecycleOwner) { editText.error = it }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

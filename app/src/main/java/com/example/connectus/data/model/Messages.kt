@@ -1,11 +1,9 @@
 package com.example.connectus.data.model
 
 data class Messages(
-    val sender : String? = "",
+    val id: String = "",
+    val sender: String? = "",
     val receiver: String? = "",
     val message: String? = "",
-    val time: String? = "",
-    ) {
-    val id : String get() = "$sender-$receiver-$message-$time"
-}
-// val type: String? = "text"
+    val time: String? = ""
+)

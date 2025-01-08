@@ -32,6 +32,7 @@ import com.example.connectus.Utils
 import com.example.connectus.databinding.FragmentProfileBinding
 import com.example.connectus.mvvm.ChatAppViewModel
 import com.example.connectus.ui.adapter.HorizontalAdapter
+import com.google.firebase.auth.FirebaseAuth
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -47,6 +48,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var profileViewModel: ChatAppViewModel
     private lateinit var progressDialogUpdate: ProgressDialog
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val supabase = createSupabaseClient(
         supabaseUrl = "https://cpozuctgjtujueilydrs.supabase.co",
         supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwb3p1Y3RnanR1anVlaWx5ZHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU1NTQ0ODIsImV4cCI6MjA1MTEzMDQ4Mn0.dPE0pHw8Daj3so6Ox03XTUwz6Eo5htet3K9P3GG-zN8"
@@ -67,6 +69,8 @@ class ProfileFragment : Fragment() {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
         val view = binding.root
         progressDialogUpdate = ProgressDialog(requireContext())
+
+
         return view
     }
 
@@ -101,6 +105,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupTextFields() {
         val textFields = listOf(
             binding.nameProfileET to profileViewModel.name,
@@ -141,6 +146,10 @@ class ProfileFragment : Fragment() {
                 binding.emailPr.text = email
                 SharedPrefs(requireContext()).setValue("email", email ?: "")
             }
+        }
+
+        if (auth.currentUser != null && auth.currentUser!!.isEmailVerified) {
+            binding.btnVerificarion.text = "Верифицирован"
         }
     }
 

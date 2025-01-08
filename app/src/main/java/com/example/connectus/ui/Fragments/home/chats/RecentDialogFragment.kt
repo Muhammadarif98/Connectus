@@ -1,7 +1,8 @@
 package com.example.connectus.ui.Fragments.home.chats
 
-import android.annotation.SuppressLint
+import ChatAppViewModelFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,21 +25,18 @@ import com.example.connectus.mvvm.ChatAppViewModel
 import com.example.connectus.ui.adapter.MessageAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 
-
 class RecentDialogFragment : Fragment() {
 
     private var _binding: FragmentRecentDialogBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var args: RecentDialogFragmentArgs
-
     private lateinit var adapter: MessageAdapter
     private lateinit var chatAppViewModel: ChatAppViewModel
     private lateinit var chatToolbar: Toolbar
     private lateinit var circleImageView: CircleImageView
     private lateinit var backImageView: ImageView
     private lateinit var textView: TextView
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +50,20 @@ class RecentDialogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         chatToolbar = view.findViewById(R.id.recenttoolBarChat)
 
-        chatAppViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
+        // Инициализация ViewModel
+        chatAppViewModel = ViewModelProvider(this, ChatAppViewModelFactory(requireActivity().application)).get(ChatAppViewModel::class.java)
 
+        // Настройка UI
+        setupUI()
 
+        // Наблюдение за сообщениями
+        observeMessages()
+
+        // Обработка нажатий
+        setupClickListeners()
+    }
+
+    private fun setupUI() {
         textView = chatToolbar.findViewById(R.id.recentUserName)
         circleImageView = chatToolbar.findViewById(R.id.recentImageViewUser)
         backImageView = chatToolbar.findViewById(R.id.recentBackBtn)
@@ -64,64 +73,82 @@ class RecentDialogFragment : Fragment() {
         binding.viewModel = chatAppViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-        Glide.with(view.context)
-            .load(args.recentchats.friendsimage!!)
+        // Загрузка изображения и имени друга
+        Glide.with(requireContext())
+            .load(args.recentchats.friendsimage)
             .placeholder(R.drawable.ic_profile)
-            .dontAnimate().into(circleImageView);
+            .dontAnimate()
+            .into(circleImageView)
         textView.text = args.recentchats.name
+    }
 
+    private fun observeMessages() {
+        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(viewLifecycleOwner, Observer {
+            initRecyclerView(it)
+        })
+    }
+
+    private fun setupClickListeners() {
         circleImageView.setOnClickListener {
-            val action = RecentDialogFragmentDirections.actionRecentDialogFragmentToRecentProfileDialogFragment(args.recentchats)
+            val action = RecentDialogFragmentDirections
+                .actionRecentDialogFragmentToRecentProfileDialogFragment(args.recentchats)
             findNavController().navigate(action)
         }
 
         backImageView.setOnClickListener {
             findNavController().popBackStack()
         }
+
         binding.sendBtn.setOnClickListener {
-
-            chatAppViewModel.sendMessage(
-                getUidLoggedIn(),
-                args.recentchats.friendid!!,
-                args.recentchats.name!!,
-                args.recentchats.friendsimage!!,
-                args.recentchats.email!!,
-                args.recentchats.lastname!! ,
-                args.recentchats.phone!!,
-                args.recentchats.friendAdress!!,
-                args.recentchats.friendAge!!,
-                args.recentchats.friendEmployee!!,
-            )
-
+            sendMessage()
         }
-        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(viewLifecycleOwner, Observer {
-            initRecyclerView(it)
-        })
+    }
+
+    private fun sendMessage() {
+        chatAppViewModel.sendMessage(
+            getUidLoggedIn(),
+            args.recentchats.friendid!!,
+            args.recentchats.name!!,
+            args.recentchats.friendsimage!!,
+            args.recentchats.email!!,
+            args.recentchats.lastname!!,
+            args.recentchats.phone!!,
+            args.recentchats.friendAdress!!,
+            args.recentchats.friendAge!!,
+            args.recentchats.friendEmployee!!
+        )
     }
 
     private fun showDeleteMessageDialog(message: Messages) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Что вы хотите сделать?")
-            .setPositiveButton("Удалить сообщение") { _, _ ->
-                chatAppViewModel.deleteMessage(args.recentchats.friendid!!, message.id!!)
-            }
-            .setNegativeButton("Отмена", null)
-            .show()
+        // Проверяем, что сообщение принадлежит текущему пользователю
+        if (message.sender == getUidLoggedIn()) {
+            Log.d("ChatDialogFragment", "Показ диалога для удаления сообщения: ${message.id}")
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("Что вы хотите сделать?")
+                .setPositiveButton("Удалить сообщение") { _, _ ->
+                    val uniqueId = listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
+                    chatAppViewModel.deleteMessage(uniqueId, message.id) // Используем реальный ID
+                }
+                .setNegativeButton("Отмена", null)
+                .show()
+        } else {
+            // Сообщение не принадлежит пользователю, ничего не делаем
+            Log.d("ChatDialogFragment", "Сообщение не принадлежит пользователю, удаление невозможно")
+        }
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
     private fun initRecyclerView(list: List<Messages>) {
-        adapter = MessageAdapter(){message ->
+        adapter = MessageAdapter { message ->
             showDeleteMessageDialog(message)
         }
         val layoutManager = LinearLayoutManager(context)
         binding.recentRecyclerView.layoutManager = layoutManager
         layoutManager.stackFromEnd = true
         adapter.setList(list)
-        adapter.notifyDataSetChanged()
         binding.recentRecyclerView.adapter = adapter
+
+        Log.d("ChatDialogFragment", "RecyclerView инициализирован")
     }
 
     override fun onDestroyView() {

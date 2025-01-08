@@ -1,22 +1,24 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.Fragments.signin.LoginInputFragment">
+
     <LinearLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="80dp"
+            android:layout_marginEnd="16dp"
             android:text="Добро пожаловать!"
             android:textColor="@color/black"
             android:textSize="26sp" />
@@ -33,12 +35,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintEnabled="false"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="40dp"
             android:layout_marginRight="16dp"
             app:errorEnabled="true"
-            app:errorTextAppearance="@string/invalid_email_error">
+            app:errorTextAppearance="@string/invalid_email_error"
+            app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextLogin"
@@ -58,37 +60,60 @@
             android:id="@+id/textInputLayoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/black"
-            app:hintEnabled="false"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="16dp"
+            app:hintEnabled="false"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/black">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:drawablePadding="14dp"
-                android:inputType="textPassword"
-                android:hint="@string/password"
                 android:autofillHints="password"
-                android:drawableStart="@drawable/ic_passw"
                 android:background="@drawable/back_edit_text"
+                android:drawableStart="@drawable/ic_passw"
+                android:drawablePadding="14dp"
+                android:hint="@string/password"
+                android:inputType="textPassword"
                 android:textColor="@color/black"
                 android:textColorHint="@color/grey" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/forgotPassword"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="16dp"
-            android:text="Забыли пароль?"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="16dp"
+
+                android:text="@string/forgot_password"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/verifity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="18dp"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:layout_marginEnd="16dp"
+                android:text="@string/verif"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnLogin"
@@ -110,22 +135,22 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="59dp"
+        android:layout_alignBottom="@+id/rootLayout"
         android:background="#EBEBEB"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_alignBottom = "@+id/rootLayout">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="У вас нет аккаунта? "
-            android:textColor="@color/grey"
-            />
+            android:textColor="@color/grey" />
+
         <TextView
             android:id="@+id/registerButtonTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:text="@string/register"
-            />
+            android:textColor="@color/black" />
     </LinearLayout>
 </RelativeLayout>

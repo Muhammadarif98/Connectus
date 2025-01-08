@@ -60,18 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:text="Код подтверждения"
-                android:textSize="22sp" />
-
-            <TextView
-                android:id="@+id/instruction_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
                 android:padding="16dp"
-                android:text="abcdefg.hijk@gmail.com"
-                android:textSize="14sp" />
+                android:gravity="center"
+                android:text="Потдвердите вашу почту для верификации"
+                android:textSize="22sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -94,6 +86,28 @@
                     android:textColorHint="@color/grey" />
 
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/back_edit_text"
+                    android:drawableStart="@drawable/ic_passw"
+                    android:drawablePadding="10dp"
+                    android:hint="@string/password"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSubmit"
@@ -103,20 +117,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/square_button"
-                android:enabled="false"
+                android:enabled="true"
                 android:text="@string/submit"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/resend_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/resendtext" />
 
         </LinearLayout>
 

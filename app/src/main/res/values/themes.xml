@@ -4,7 +4,9 @@
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-    </style>
 
+
+    </style>
+    <style name="MenuStyle"> <item name="android:popupBackground">@drawable/menu_background</item> </style>
     <style name="Theme.Connectus" parent="Base.Theme.Connectus" />
 </resources>

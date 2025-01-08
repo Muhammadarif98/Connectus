@@ -105,44 +105,53 @@ class RegisterViewModel : ViewModel() {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val userId = auth.currentUser!!.uid
-                val userData = hashMapOf(
-                    "userId" to userId,
-                    "name" to name,
-                    "lastName" to lastName,
-                    "phone" to phone,
-                    "email" to email,
-                    "password" to password,
-                    "confirmPassword" to confirmPassword,
-                    "image" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
-                    "status" to "default",
-                    "adress" to adress,
-                    "age" to age,
-                    "employee" to employee
-                )
+                val user = auth.currentUser
+                user?.sendEmailVerification()?.addOnCompleteListener { verificationTask ->
+                    if (verificationTask.isSuccessful) {
+                        val userId = user.uid
+                        val userData = hashMapOf(
+                            "userId" to userId,
+                            "name" to name,
+                            "lastName" to lastName,
+                            "phone" to phone,
+                            "email" to email,
+                            "password" to password,
+                            "confirmPassword" to confirmPassword,
+                            "image" to "https://imgcdn.stablediffusionweb.com/2024/9/8/9bc3b58a-aca9-4f88-9ecc-6ea2217f7790.jpg",
+                            "status" to "default",
+                            "adress" to adress,
+                            "age" to age,
+                            "employee" to employee
+                        )
 
-                firestore.collection("users").document(userId).set(userData)
-                    .addOnCompleteListener { firestoreTask ->
-                        if (firestoreTask.isSuccessful) {
-                            Log.d("RegisterFragment", "User data saved successfully: $userData")
-                        } else {
-                            Log.e(
-                                "RegisterFragment",
-                                "Error saving user data",
-                                firestoreTask.exception
-                            )
-                        }
+                        firestore.collection("users").document(userId).set(userData)
+                            .addOnCompleteListener { firestoreTask ->
+                                if (firestoreTask.isSuccessful) {
+                                    Log.d("RegisterFragment", "User data saved successfully: $userData")
+                                } else {
+                                    Log.e(
+                                        "RegisterFragment",
+                                        "Error saving user data",
+                                        firestoreTask.exception
+                                    )
+                                }
+                            }
+                        _registrationStatus.value = "Регистрация прошла успешно"
+                    } else {
+                        Log.e("RegisterFragment", "Error sending email verification", verificationTask.exception)
+                        _registrationStatus.value = "Ошибка при отправке email для верификации"
                     }
-                _registrationStatus.value = "Регистрация прошла успешно"
+                }
             } else {
-                //progressDialogSignUp.dismiss()
                 if (auth.currentUser != null) {
                     _registrationStatus.value = "Пользователь с таким email уже существует"
                     return@addOnCompleteListener
                 }
+                Log.d( "RegisterFragment", "Registration failed: ${task.exception?.message}")
                 _registrationStatus.value = "Ошибка регистрации"
             }
         }
+
 
 
     }
