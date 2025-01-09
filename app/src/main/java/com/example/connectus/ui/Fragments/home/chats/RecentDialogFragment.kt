@@ -156,33 +156,46 @@ class RecentDialogFragment : Fragment() {
     }
 
     private fun showDeleteMessageDialog(message: Messages, isImage: Boolean) {
+        Log.d("ChatDialogFragment", "showDeleteMessageDialog called: messageId=${message.id}, isImage=$isImage, fileUrl=${message.fileUrl}")
+
         if (message.sender == getUidLoggedIn()) {
             Log.d("ChatDialogFragment", "Показ диалога для удаления сообщения: ${message.id}")
 
             val dialogBuilder = AlertDialog.Builder(requireContext())
                 .setTitle("Что вы хотите сделать?")
 
-            // Если это изображение, добавляем действие "Посмотреть"
             if (isImage) {
                 dialogBuilder.setNeutralButton("Посмотреть") { _, _ ->
-                    // Открываем изображение на полный экран
                     showFullScreenImage(message.fileUrl)
                 }
             }
 
-            // Добавляем действие "Удалить"
             dialogBuilder.setPositiveButton("Удалить") { _, _ ->
                 val uniqueId = listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
                 chatAppViewModel.deleteMessage(uniqueId, message.id)
             }
 
-            // Добавляем действие "Отмена"
             dialogBuilder.setNegativeButton("Отмена", null)
-
-            // Показываем диалог
             dialogBuilder.show()
         } else {
-            Log.d("ChatDialogFragment", "Сообщение не принадлежит пользователю, удаление невозможно")
+            if (isImage) {
+                Log.d("ChatDialogFragment", "Показ диалога для просмотра изображения: ${message.id}")
+
+                val dialogBuilder = AlertDialog.Builder(requireContext())
+                    .setTitle("Что вы хотите сделать?")
+
+                dialogBuilder.setNeutralButton("Посмотреть") { _, _ ->
+                    showFullScreenImage(message.fileUrl)
+                }
+
+                dialogBuilder.setNegativeButton("Отмена", null)
+                dialogBuilder.show()
+            } else {
+                Log.d(
+                    "ChatDialogFragment",
+                    "Сообщение не принадлежит пользователю, удаление невозможно"
+                )
+            }
         }
     }
 
