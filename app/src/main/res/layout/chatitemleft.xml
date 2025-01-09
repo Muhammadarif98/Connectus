@@ -10,13 +10,13 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:orientation="vertical"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/rounded_rectangle_white">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 app:cardCornerRadius="10dp"
                 android:visibility="gone"
@@ -24,19 +24,38 @@
 
                 <ImageView
                     android:id="@+id/fileView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"
-                    android:scaleType="centerCrop" />
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
             </androidx.cardview.widget.CardView>
 
-            <Button
+            <LinearLayout
                 android:id="@+id/downloadButton"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:visibility="visible"
-                android:text="Download"
-                android:layout_margin="1dp" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="start"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/downloadImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:src="@drawable/ic_download_black">
+
+                </ImageView>
+                <TextView
+                    android:id="@+id/downloadText"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/download">
+                </TextView>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/show_message"

@@ -9,8 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -66,6 +66,7 @@ class MessageAdapter(private val onItemClick: (Messages, Boolean) -> Unit) :
                 holder.fileView.visibility = View.VISIBLE
                 holder.cardView.visibility = View.VISIBLE
                 holder.downloadButton.visibility = View.VISIBLE
+                holder.timeOfSent.visibility = View.VISIBLE
 
                 // Загружаем изображение с помощью Glide
                 Glide.with(holder.itemView.context)
@@ -133,6 +134,7 @@ class MessageAdapter(private val onItemClick: (Messages, Boolean) -> Unit) :
                 holder.cardView.visibility = View.GONE
                 holder.downloadButton.visibility = View.GONE
                 holder.messageText.text = message.message
+                holder.timeOfSent.visibility = View.VISIBLE
 
                 holder.itemView.setOnClickListener {
                     onItemClick(message, false) // Передаем false, если это текстовое сообщение
@@ -165,7 +167,7 @@ class MessageAdapter(private val onItemClick: (Messages, Boolean) -> Unit) :
         val timeOfSent: TextView = itemView.findViewById(R.id.timeView)
         val fileView: ImageView = itemView.findViewById(R.id.fileView)
         val cardView: CardView = itemView.findViewById(R.id.cardView)
-        val downloadButton: Button = itemView.findViewById(R.id.downloadButton)
+        val downloadButton: LinearLayout = itemView.findViewById(R.id.downloadButton)
     }
 }
 

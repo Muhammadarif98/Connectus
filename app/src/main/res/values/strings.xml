@@ -33,5 +33,7 @@
     <string name="forgot_password"><u>Забыли пароль?</u></string>
     <string name="instr">Инструкции по сбросу пароля отправлены на вашу почту</string>
     <string name="verif"><u>Верификация</u></string>
+    <string name="download"><u>Скачать</u></string>
+    <string name="text_message">Привет как твои дела</string>
 
 </resources>
