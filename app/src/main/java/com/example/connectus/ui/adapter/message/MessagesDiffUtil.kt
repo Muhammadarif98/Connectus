@@ -1,4 +1,4 @@
-package com.example.connectus.ui.adapter
+package com.example.connectus.ui.adapter.message
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.connectus.data.model.Messages

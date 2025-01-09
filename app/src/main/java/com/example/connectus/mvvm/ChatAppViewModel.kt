@@ -2,8 +2,10 @@ package com.example.connectus.mvvm
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,7 +28,9 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 @SuppressLint("StaticFieldLeak")
-class ChatAppViewModel() : ViewModel() {
+class ChatAppViewModel @JvmOverloads constructor(
+    private val lifecycleOwner: LifecycleOwner? = null
+) : ViewModel() {
 
     private val context: Context = App.instance.applicationContext
     private val _messages = MutableLiveData<List<Messages>>()
@@ -65,7 +69,7 @@ class ChatAppViewModel() : ViewModel() {
     val message = MutableLiveData<String>()
     private var token: String? = null
     private val firestore = FirebaseFirestore.getInstance()
-    val messageRepo = MessageRepo()
+    val messageRepo = lifecycleOwner?.let { MessageRepo(it) }
     val chatlistRepo = ChatListRepo()
 
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
@@ -81,18 +85,18 @@ class ChatAppViewModel() : ViewModel() {
     }
 
     fun getMessages(friend: String): LiveData<List<Messages>> {
-        return messageRepo.getMessages(friend)
+        return messageRepo!!.getMessages(friend)
     }
+
     fun deleteMessage(uniqueId: String, messageId: String) {
-        messageRepo.deleteMessage(uniqueId, messageId) {
+        messageRepo!!.deleteMessage(uniqueId, messageId) {
             // После успешного удаления обновляем данные
             refreshMessages(uniqueId.split("").sorted().joinToString(""))
         }
     }
 
     fun refreshMessages(friendId: String) {
-        // Обновляем LiveData, вызывая getMessages
-        _messages.value = messageRepo.getMessages(friendId).value
+        _messages.value = messageRepo!!.getMessages(friendId).value
     }
 
 
@@ -385,7 +389,8 @@ class ChatAppViewModel() : ViewModel() {
                         .addSnapshotListener { value, error ->
                             if (value != null && value.exists()) {
                                 val tokenObject = value.toObject(Token::class.java)
-                                val loggedInUsername = mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
+                                val loggedInUsername =
+                                    mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
                                 if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
                                     PushNotification(
                                         NotificationData(loggedInUsername, message.value!!), token!!
@@ -403,7 +408,61 @@ class ChatAppViewModel() : ViewModel() {
                 }
             }
     }
-
+    fun sendImage(
+        context: Context,
+        sender: String,
+        receiver: String,
+        imageUri: Uri
+    ) = viewModelScope.launch {
+        messageRepo?.uploadImage(
+            context,
+            imageUri,
+            onSuccess = { imageUrl ->
+                val message = Messages(
+                    sender = sender,
+                    receiver = receiver,
+                    fileUrl = imageUrl,
+                    fileType = "image", // Указываем тип файла как изображение
+                    time = Utils.getTime()
+                )
+                messageRepo.sendMessageWithFile(message)
+                Toast.makeText(context, "Изображение отправлено", Toast.LENGTH_SHORT).show()
+                Log.d("SendImage", "Image sent successfully: $imageUrl")
+            },
+            onError = { e ->
+                Log.e("SendImageError", "Ошибка загрузки изображения", e)
+                Toast.makeText(context, "Ошибка отправки изображения", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+    /*fun sendFile(
+        context: Context,
+        sender: String,
+        receiver: String,
+        fileUri: Uri,
+        fileType: String
+    ) = viewModelScope.launch {
+        messageRepo!!.uploadFile(
+            context,
+            fileUri,
+            onSuccess = { fileUrl ->
+                val message = Messages(
+                    sender = sender,
+                    receiver = receiver,
+                    fileUrl = fileUrl,
+                    fileType = fileType,
+                    time = Utils.getTime()
+                )
+                messageRepo.sendMessageWithFile(message)
+                Toast.makeText(context, "Файл отправлен", Toast.LENGTH_SHORT).show()
+                Log.d("SendFile", "File sent successfully: $fileUrl")
+            },
+            onError = { e ->
+                Log.e("SendFileError", "Ошибка загрузки файла", e)
+                Toast.makeText(context, "Ошибка отправки файла", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }*/
 
     fun sendNotification(notification: PushNotification) = viewModelScope.launch {
         try {

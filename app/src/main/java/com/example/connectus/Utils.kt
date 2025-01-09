@@ -18,7 +18,7 @@ import java.util.Date
 
 class Utils {
     companion object {
-
+        const val REQUEST_CODE_READ_EXTERNAL_STORAGE = 1001
         val supabase = createSupabaseClient(
             supabaseUrl = "https://cpozuctgjtujueilydrs.supabase.co",
             supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwb3p1Y3RnanR1anVlaWx5ZHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU1NTQ0ODIsImV4cCI6MjA1MTEzMDQ4Mn0.dPE0pHw8Daj3so6Ox03XTUwz6Eo5htet3K9P3GG-zN8"

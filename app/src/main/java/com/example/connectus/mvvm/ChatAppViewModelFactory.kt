@@ -1,14 +1,19 @@
-import android.app.Application
+package com.example.connectus.mvvm
+
 import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.connectus.mvvm.ChatAppViewModel
 
-class ChatAppViewModelFactory(private val application: Application) : ViewModelProvider.AndroidViewModelFactory(application) {
+class ChatAppViewModelFactory(
+    private val lifecycleOwner: LifecycleOwner
+) : ViewModelProvider.Factory {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChatAppViewModel::class.java)) {
             Log.d("ChatAppViewModelFactory", "Создание экземпляра ChatAppViewModel")
-            return ChatAppViewModel() as T
+            @Suppress("UNCHECKED_CAST")
+            return ChatAppViewModel(lifecycleOwner) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

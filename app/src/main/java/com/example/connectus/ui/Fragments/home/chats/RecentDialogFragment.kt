@@ -1,6 +1,7 @@
 package com.example.connectus.ui.Fragments.home.chats
 
-import ChatAppViewModelFactory
+import android.app.Dialog
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -18,11 +21,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.connectus.R
+import com.example.connectus.Utils.Companion.REQUEST_CODE_READ_EXTERNAL_STORAGE
 import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Messages
 import com.example.connectus.databinding.FragmentRecentDialogBinding
 import com.example.connectus.mvvm.ChatAppViewModel
-import com.example.connectus.ui.adapter.MessageAdapter
+import com.example.connectus.mvvm.ChatAppViewModelFactory
+import com.example.connectus.ui.adapter.message.MessageAdapter
 import de.hdodenhof.circleimageview.CircleImageView
 
 class RecentDialogFragment : Fragment() {
@@ -38,6 +43,25 @@ class RecentDialogFragment : Fragment() {
     private lateinit var backImageView: ImageView
     private lateinit var textView: TextView
 
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
+            if (imageUri == null) {
+                Log.e(
+                    "ChatDialogFragment",
+                    "Image URI is null: пользователь отменил выбор изображения"
+                )
+                return@registerForActivityResult
+            }
+            // Отправляем изображение
+            chatAppViewModel.sendImage(
+                requireContext(),
+                getUidLoggedIn(),
+                args.recentchats.friendid!!,
+                imageUri
+            )
+            Log.d("ImagePicker", "Image URI: $imageUri")
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,7 +75,11 @@ class RecentDialogFragment : Fragment() {
         chatToolbar = view.findViewById(R.id.recenttoolBarChat)
 
         // Инициализация ViewModel
-        chatAppViewModel = ViewModelProvider(this, ChatAppViewModelFactory(requireActivity().application)).get(ChatAppViewModel::class.java)
+
+        val factory = ChatAppViewModelFactory(
+            lifecycleOwner = viewLifecycleOwner
+        )
+        chatAppViewModel = ViewModelProvider(this, factory)[ChatAppViewModel::class.java]
 
         // Настройка UI
         setupUI()
@@ -61,6 +89,7 @@ class RecentDialogFragment : Fragment() {
 
         // Обработка нажатий
         setupClickListeners()
+
     }
 
     private fun setupUI() {
@@ -87,7 +116,10 @@ class RecentDialogFragment : Fragment() {
             initRecyclerView(it)
         })
     }
-
+    private fun pickFile() {
+        pickImageLauncher.launch("image/*")
+        //pickFileLauncher.launch("*/*")
+    }
     private fun setupClickListeners() {
         circleImageView.setOnClickListener {
             val action = RecentDialogFragmentDirections
@@ -101,6 +133,10 @@ class RecentDialogFragment : Fragment() {
 
         binding.sendBtn.setOnClickListener {
             sendMessage()
+        }
+
+        binding.addFileButton.setOnClickListener {
+            pickFile()
         }
     }
 
@@ -119,28 +155,55 @@ class RecentDialogFragment : Fragment() {
         )
     }
 
-    private fun showDeleteMessageDialog(message: Messages) {
-        // Проверяем, что сообщение принадлежит текущему пользователю
+    private fun showDeleteMessageDialog(message: Messages, isImage: Boolean) {
         if (message.sender == getUidLoggedIn()) {
             Log.d("ChatDialogFragment", "Показ диалога для удаления сообщения: ${message.id}")
 
-            AlertDialog.Builder(requireContext())
+            val dialogBuilder = AlertDialog.Builder(requireContext())
                 .setTitle("Что вы хотите сделать?")
-                .setPositiveButton("Удалить сообщение") { _, _ ->
-                    val uniqueId = listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
-                    chatAppViewModel.deleteMessage(uniqueId, message.id) // Используем реальный ID
+
+            // Если это изображение, добавляем действие "Посмотреть"
+            if (isImage) {
+                dialogBuilder.setNeutralButton("Посмотреть") { _, _ ->
+                    // Открываем изображение на полный экран
+                    showFullScreenImage(message.fileUrl)
                 }
-                .setNegativeButton("Отмена", null)
-                .show()
+            }
+
+            // Добавляем действие "Удалить"
+            dialogBuilder.setPositiveButton("Удалить") { _, _ ->
+                val uniqueId = listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
+                chatAppViewModel.deleteMessage(uniqueId, message.id)
+            }
+
+            // Добавляем действие "Отмена"
+            dialogBuilder.setNegativeButton("Отмена", null)
+
+            // Показываем диалог
+            dialogBuilder.show()
         } else {
-            // Сообщение не принадлежит пользователю, ничего не делаем
             Log.d("ChatDialogFragment", "Сообщение не принадлежит пользователю, удаление невозможно")
         }
     }
 
+    private fun showFullScreenImage(imageUrl: String?) {
+        if (imageUrl == null) return
+
+        val dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_fullscreen_image)
+
+        val imageView = dialog.findViewById<ImageView>(R.id.fullscreen_image)
+        Glide.with(this)
+            .load(imageUrl)
+            .into(imageView)
+
+        imageView.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
+
     private fun initRecyclerView(list: List<Messages>) {
-        adapter = MessageAdapter { message ->
-            showDeleteMessageDialog(message)
+        adapter = MessageAdapter { message, isImage ->
+            showDeleteMessageDialog(message, isImage)
         }
         val layoutManager = LinearLayoutManager(context)
         binding.recentRecyclerView.layoutManager = layoutManager
@@ -149,6 +212,32 @@ class RecentDialogFragment : Fragment() {
         binding.recentRecyclerView.adapter = adapter
 
         Log.d("ChatDialogFragment", "RecyclerView инициализирован")
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_READ_EXTERNAL_STORAGE -> {
+                // Проверяем, было ли предоставлено разрешение
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickImageLauncher.launch("image/*")
+                    // Если разрешение предоставлено, запускаем выбор файла
+                    // pickFileLauncher.launch("*/*")
+                } else {
+                    // Если разрешение не предоставлено, показываем сообщение пользователю
+                    Toast.makeText(
+                        requireContext(),
+                        "Разрешение на чтение файлов отклонено",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

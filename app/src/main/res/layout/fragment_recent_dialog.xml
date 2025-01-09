@@ -83,39 +83,52 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
             android:orientation="horizontal"
             android:padding="8dp">
 
+            <!-- Кнопка для выбора файла -->
+            <ImageView
+                android:id="@+id/addFileButton"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_attach_file"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="attach_file" />
+
+            <!-- Поле ввода сообщения -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 app:hintEnabled="false"
-
                 app:passwordToggleTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextPassword"
+                    android:id="@+id/editTextMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/back_edit_text"
                     android:hint="Введите сообщение..."
+                    android:layout_marginBottom="6dp"
                     android:text="@={viewModel.message}"
                     android:textColor="@color/black"
                     android:textColorHint="@color/grey" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
+            <!-- Кнопка отправки -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/sendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
+                android:layout_marginBottom="6dp"
                 android:src="@drawable/ic_send" />
         </LinearLayout>
     </LinearLayout>
