@@ -42,6 +42,7 @@ class FirebaseService : FirebaseMessagingService() {
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         token = newToken
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -77,7 +78,7 @@ class FirebaseService : FirebaseMessagingService() {
         // Create a NotificationCompat.Action object for the reply action
         val replyAction = NotificationCompat.Action.Builder(
             R.drawable.ic_sms,
-            "Reply",
+            "Ответить",
             replyPendingIntent
         ).addRemoteInput(remoteInput).build()
 

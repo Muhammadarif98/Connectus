@@ -57,7 +57,7 @@ class NotificationReply  : BroadcastReceiver(){
                 "message" to repliedText,
                 "friendsimage" to friendimage!!,
                 "name" to friendname!!,
-                "person" to "you",
+                "person" to "Вы",
             )
 
             firestor.collection("Conversation${Utils.getUidLoggedIn()}").document(friendid)
@@ -76,7 +76,7 @@ class NotificationReply  : BroadcastReceiver(){
                 NotificationCompat
                     .Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_sms)
-                    .setContentText("Reply Sent").build()
+                    .setContentText("Ответили на сообщение").build()
             notificationManager.notify(replyid, repliedNotification)
         }
     }

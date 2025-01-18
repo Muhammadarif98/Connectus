@@ -28,6 +28,7 @@
     <string name="age">Возраст</string>
     <string name="employee">Род занятий</string>
     <string name="text_send">Отправить</string>
+    <string name="msg_token_fmt">msg_token_fmt</string>
     <string name="resendtext">Повторить можно через 1 мин.</string>
     <string name="submit">Подтвердить</string>
     <string name="forgot_password"><u>Забыли пароль?</u></string>

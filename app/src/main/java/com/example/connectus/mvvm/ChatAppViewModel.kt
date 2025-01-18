@@ -22,8 +22,9 @@ import com.example.connectus.notifications.entity.NotificationData
 import com.example.connectus.notifications.entity.PushNotification
 import com.example.connectus.notifications.entity.Token
 import com.example.connectus.notifications.network.RetrofitInstance
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.FirebaseFirestore
-
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -418,6 +419,19 @@ class ChatAppViewModel @JvmOverloads constructor(
 
                         }
                 }
+                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("TAGToken", "Fetching FCM registration token failed", task.exception)
+                        return@OnCompleteListener
+                    }
+                    // Get new FCM registration token
+                    val token = task.result
+
+                    // Log and toast
+
+                   // Log.d("TAGToken", "$token")
+                    //Toast.makeText(context, "$token", Toast.LENGTH_SHORT).show()
+                })
             }
     }
 
