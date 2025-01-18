@@ -10,9 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.connectus.R
+import com.example.connectus.Utils
+import com.example.connectus.Utils.Companion.firestore
 import com.example.connectus.databinding.FragmentLoginInputFragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.installations.FirebaseInstallations
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginInputFragment : Fragment() {
     private var _binding: FragmentLoginInputFragmentBinding? = null
@@ -100,6 +104,7 @@ class LoginInputFragment : Fragment() {
 
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                generateToken()
                 val user = auth.currentUser
                 if (user != null && user.isEmailVerified) {
                     progressDialogSignIn.dismiss()
@@ -115,6 +120,19 @@ class LoginInputFragment : Fragment() {
                 Snackbar.make(binding.root, "Неверный логин или пароль", Snackbar.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun generateToken(){
+        var token: String = ""
+        val firebaseInstance = FirebaseInstallations.getInstance()
+        firebaseInstance.id.addOnSuccessListener{installationid->
+            FirebaseMessaging.getInstance().token.addOnSuccessListener { gettocken->
+                token = gettocken
+                val hashMap = hashMapOf<String, Any>("token" to token)
+                firestore.collection("Tokens").document(Utils.getUidLoggedIn()).set(hashMap).addOnSuccessListener {
+                }
+            }
+        }.addOnFailureListener {}
     }
 
     private fun isValidEmail(email: CharSequence): Boolean {

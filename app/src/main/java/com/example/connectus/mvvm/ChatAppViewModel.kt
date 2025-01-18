@@ -20,12 +20,16 @@ import com.example.connectus.data.model.RecentChats
 import com.example.connectus.data.model.Users
 import com.example.connectus.notifications.entity.NotificationData
 import com.example.connectus.notifications.entity.PushNotification
+import com.example.connectus.notifications.entity.Token
+import com.example.connectus.notifications.network.RetrofitInstance
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.Token
+
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
+import kotlin.coroutines.cancellation.CancellationException
 
 @SuppressLint("StaticFieldLeak")
 class ChatAppViewModel @JvmOverloads constructor(
@@ -382,32 +386,55 @@ class ChatAppViewModel @JvmOverloads constructor(
                             "friendAge", ageF,
                             "friendEmployee", emp
                         )
-                    message.value = ""
+
                     // Отправка уведомления
-                    firestore.collection("Tokens")
-                        .document(receiver)
+                    firestore.collection("Tokens").document(receiver)
                         .addSnapshotListener { value, error ->
                             if (value != null && value.exists()) {
                                 val tokenObject = value.toObject(Token::class.java)
+                                token = tokenObject?.token!!
                                 val loggedInUsername =
-                                    mysharedPrefs.getValue("username")!!.split("\\s".toRegex())[0]
+                                    mysharedPrefs.getValue("name")!!.split("\\s".toRegex())[0]
                                 if (message.value!!.isNotEmpty() && receiver.isNotEmpty()) {
                                     PushNotification(
                                         NotificationData(loggedInUsername, message.value!!), token!!
                                     ).also {
-                                        //sendNotification(it)
+                                        sendNotification(it)
+                                        Log.d("SendViewModel", "Notification sent successfully $it")
                                     }
                                 } else {
-                                    Log.e("ChatAppViewModel", "NO TOKEN, NO NOTIFICATION")
+                                    Log.e("ViewModelNoToken", "NO TOKEN, NO NOTIFICATION")
                                 }
+                            } else {
+                                Log.e(
+                                    "ChatAppViewModel",
+                                    "Ошибка отправки сообщения",
+                                    taskmessage.exception
+                                )
                             }
-                            Log.e("ViewModel", token.toString())
+                            if (taskmessage.isSuccessful) {
+                                message.value = ""
+                            }
+
                         }
-                } else {
-                    Log.e("ChatAppViewModel", "Ошибка отправки сообщения", taskmessage.exception)
                 }
             }
     }
+
+    private fun sendNotification(notification: PushNotification) = viewModelScope.launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            Log.d("SendNotification", "Notification sent successfully: $response")
+        } catch (e: CancellationException) {
+            Log.e("ViewModelError", "Coroutine was cancelled: ${e.message}")
+        } catch (e: Exception) {
+            Log.e("ViewModelError", e.toString())
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Ошибка отправки уведомления, ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     fun sendImage(
         context: Context,
         sender: String,
@@ -426,57 +453,51 @@ class ChatAppViewModel @JvmOverloads constructor(
                     time = Utils.getTime()
                 )
                 messageRepo.sendMessageWithFile(message)
-                Toast.makeText(context, "Изображение отправлено", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Изображение отправлено", Toast.LENGTH_SHORT)
+                    .show()
                 Log.d("SendImage", "Image sent successfully: $imageUrl")
             },
             onError = { e ->
                 Log.e("SendImageError", "Ошибка загрузки изображения", e)
-                Toast.makeText(context, "Ошибка отправки изображения", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Ошибка отправки изображения",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }
-    /*fun sendFile(
-        context: Context,
-        sender: String,
-        receiver: String,
-        fileUri: Uri,
-        fileType: String
-    ) = viewModelScope.launch {
-        messageRepo!!.uploadFile(
-            context,
-            fileUri,
-            onSuccess = { fileUrl ->
-                val message = Messages(
-                    sender = sender,
-                    receiver = receiver,
-                    fileUrl = fileUrl,
-                    fileType = fileType,
-                    time = Utils.getTime()
-                )
-                messageRepo.sendMessageWithFile(message)
-                Toast.makeText(context, "Файл отправлен", Toast.LENGTH_SHORT).show()
-                Log.d("SendFile", "File sent successfully: $fileUrl")
-            },
-            onError = { e ->
-                Log.e("SendFileError", "Ошибка загрузки файла", e)
-                Toast.makeText(context, "Ошибка отправки файла", Toast.LENGTH_SHORT).show()
-            }
-        )
-    }*/
-
-    fun sendNotification(notification: PushNotification) = viewModelScope.launch {
-        try {
-            // val response = RetrofitInstance.api.postNotification(notification)
-        } catch (e: Exception) {
-
-            Log.e("ViewModelError", e.toString())
-            // showToast(e.message.toString())
-        }
-    }
-
-
 }
 
+
+/*fun sendFile(
+       context: Context,
+       sender: String,
+       receiver: String,
+       fileUri: Uri,
+       fileType: String
+   ) = viewModelScope.launch {
+       messageRepo!!.uploadFile(
+           context,
+           fileUri,
+           onSuccess = { fileUrl ->
+               val message = Messages(
+                   sender = sender,
+                   receiver = receiver,
+                   fileUrl = fileUrl,
+                   fileType = fileType,
+                   time = Utils.getTime()
+               )
+               messageRepo.sendMessageWithFile(message)
+               Toast.makeText(context, "Файл отправлен", Toast.LENGTH_SHORT).show()
+               Log.d("SendFile", "File sent successfully: $fileUrl")
+           },
+           onError = { e ->
+               Log.e("SendFileError", "Ошибка загрузки файла", e)
+               Toast.makeText(context, "Ошибка отправки файла", Toast.LENGTH_SHORT).show()
+           }
+       )
+   }*/
 /*
 package com.example.connectus.mvvm
 

@@ -45,6 +45,8 @@ loggingInterceptor = "4.10.0"
 legacySupportV4 = "1.0.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseDatabase = "21.0.0"
+firebaseMessaging = "24.1.0"
+firebaseMessagingKtx = "24.1.0"
 
 
 [libraries]
@@ -92,6 +94,8 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 vicmikhailau-maskededittext = { module = "io.github.vicmikhailau:MaskedEditText", version.ref = "maskededittextVersion" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
