@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.2"
+agp = "8.4.1"
 androidxJunit = "1.2.1"
 appcompatVersion = "1.7.0"
 coreKtxVersion = "1.15.0"
