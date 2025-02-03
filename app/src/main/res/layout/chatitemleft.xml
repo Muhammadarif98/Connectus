@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:gravity="start"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_rectangle_white">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                app:cardCornerRadius="10dp"
+                android:visibility="gone"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/fileView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/downloadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="start"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/downloadImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:src="@drawable/ic_download_black">
+
+                </ImageView>
+                <TextView
+                    android:id="@+id/downloadText"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/download">
+                </TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/show_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:paddingRight="5dp"
+                android:text="Привет как твои дела"
+                android:fontFamily="@font/nunito_bold"
+                android:textSize="15sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/timeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_14_00"
+                android:textSize="10sp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/nunito"
+                android:layout_gravity="start"
+                android:textStyle="italic"
+                android:textColor="@android:color/black"
+                android:gravity="end" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -3,36 +3,211 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginInputFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/loginInputFragment"
-        android:name="com.example.connectus.LoginInputFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.LoginInputFragment"
         android:label="fragment_login_input_fragment"
-        tools:layout="@layout/fragment_login_input_fragment" >
+        tools:layout="@layout/fragment_login_input_fragment">
         <action
             android:id="@+id/action_loginInputFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_loginInputFragment_to_startFragment"
-            app:destination="@id/startFragment" />
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_loginInputFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            />
+        <action
+            android:id="@+id/action_loginInputFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+        <action
+            android:id="@+id/action_loginInputFragment_to_OTPVerificationFragment"
+            app:destination="@id/OTPVerificationFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.connectus.RegisterFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" >
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.connectus.StartFragment"
+        android:name="com.example.connectus.ui.Fragments.welcome.StartFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_startFragment_to_loginInputFragment"
+            app:destination="@id/loginInputFragment" />
+        <action
+            android:id="@+id/action_startFragment_self"
+            app:destination="@id/startFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.connectus.ui.Fragments.home.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_mainFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_usersFragment2"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_recentDialogFragment"
+            app:destination="@id/recentDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.connectus.ui.Fragments.settings.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.connectus.ui.Fragments.settings.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.UsersFragment"
+        android:label="fragment_users"
+        tools:layout="@layout/fragment_users">
+        <action
+            android:id="@+id/action_usersFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.connectus.ui.Fragments.welcome.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            />
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_splashFragment_to_OTPVerificationFragment"
+            app:destination="@id/OTPVerificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.RecentDialogFragment"
+        android:label="RecentDialogFragment" >
+        <action
+            android:id="@+id/action_recentDialogFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
+        <argument
+            android:name="recentchats"
+            app:argType="com.example.connectus.data.model.RecentChats" />
+        <action
+            android:id="@+id/action_recentDialogFragment_to_recentProfileDialogFragment"
+            app:destination="@id/recentProfileDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.ChatsFragment"
+        android:label="ChatsFragment" >
+        <action
+            android:id="@+id/action_chatsFragment_to_recentDialogFragment"
+            app:destination="@id/recentDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.ChatDialogFragment"
+        android:label="ChatDialogFragment" >
+        <action
+            android:id="@+id/action_chatDialogFragment_to_usersFragment"
+            app:destination="@id/usersFragment" />
+        <action
+            android:id="@+id/action_chatDialogFragment_to_friendProfileFragment"
+            app:destination="@id/friendProfileFragment" />
+        <argument
+            android:name="users"
+            app:argType="com.example.connectus.data.model.Users" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendProfileFragment"
+        android:name="com.example.connectus.ui.Fragments.home.users.FriendProfileFragment"
+        android:label="FriendProfileFragment" >
+        <action
+            android:id="@+id/action_friendProfileFragment_to_chatDialogFragment"
+            app:destination="@id/chatDialogFragment" />
+        <argument
+            android:name="usersProfile"
+            app:argType="com.example.connectus.data.model.Users" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentProfileDialogFragment"
+        android:name="com.example.connectus.ui.Fragments.home.chats.RecentProfileDialogFragment"
+        android:label="fragment_recent_profile_dialog"
+        tools:layout="@layout/fragment_recent_profile_dialog" >
+        <argument
+            android:name="recentProfile"
+            app:argType="com.example.connectus.data.model.RecentChats" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPVerificationFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.OTPVerificationFragment"
+        android:label="OTPVerificationFragment" >
+        <action
+            android:id="@+id/action_OTPVerificationFragment_to_loginInputFragment"
+            app:destination="@id/loginInputFragment" />
+        <action
+            android:id="@+id/action_OTPVerificationFragment_to_splashFragment"
+            app:destination="@id/splashFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.example.connectus.ui.Fragments.signin.ResetPasswordFragment"
+        android:label="ResetPasswordFragment" >
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginInputFragment"
             app:destination="@id/loginInputFragment" />
     </fragment>
 </navigation>

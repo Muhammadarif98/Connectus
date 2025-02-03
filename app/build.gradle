@@ -1,18 +1,24 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.google.gms.google.services)
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlinx-serialization'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
+    id 'com.google.dagger.hilt.android'
+    alias(libs.plugins.serialization) apply false
 }
+
 
 android {
     namespace 'com.example.connectus'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.connectus"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -35,8 +41,14 @@ android {
     viewBinding {
         enabled = true
     }
+    dataBinding {
+        //noinspection DataBindingWithoutKapt
+        enabled = true
+    }
     buildFeatures {
         viewBinding true
+        //noinspection DataBindingWithoutKapt
+        dataBinding true
     }
 
 }
@@ -56,19 +68,20 @@ dependencies {
     implementation libs.androidx.annotation
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.legacy.support.v4
+    implementation libs.firebase.database
+    implementation libs.firebase.messaging.ktx
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit.v115
     androidTestImplementation libs.androidx.espresso.core.v351
 
     //Dagger - Hilt
-    implementation libs.hilt.android
-    ksp libs.hilt.android.compiler
-    ksp libs.androidx.hilt.compiler
+    implementation(libs.hilt.android)
+    ksp (libs.hilt.compiler)
     implementation libs.androidx.fragment.ktx
 
     // Kotlin Extensions and Coroutines support for Room
     implementation libs.androidx.room.runtime
-    ksp libs.androidx.room.compiler.v250
+    kapt(libs.androidx.room.compiler)
     implementation libs.androidx.room.ktx
 
     // Coroutines
@@ -77,19 +90,43 @@ dependencies {
 
     // Retrofit
     implementation libs.retrofit
-    implementation libs.converter.moshi
+    implementation (libs.converter.gson)
     implementation libs.okhttp
     implementation libs.logging.interceptor
     implementation libs.gson
 
+
     implementation libs.glide
+    annotationProcessor(libs.compiler)
 
-    // Import the BoM for the Firebase platform
-    implementation(platform(libs.firebase.bom))
+  //   Import the BoM for the Firebase platform
+     implementation(platform(libs.firebase.bom))
 
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation(libs.firebase.auth)
+   //  Add the dependency for the Firebase Authentication library
+   //  When using the BoM, you don't specify versions in Firebase library dependencies
+   // implementation(libs.firebase.auth)
+    implementation (platform("com.google.firebase:firebase-bom:31.0.0"))
+    implementation ("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
+    implementation("com.google.firebase:firebase-storage-ktx:20.1.0")
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+    implementation 'com.google.firebase:firebase-installations:18.0.0'
     // Also add the dependency for the Google Play services library and specify its version
     implementation(libs.play.services.auth)
+
+    kapt(libs.compiler)
+    implementation(libs.vicmikhailau.maskededittext)
+    implementation ('jp.wasabeef:glide-transformations:4.3.0')
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    //SupaBase
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.3"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-android:3.0.3")
+    implementation("io.github.jan-tennert.supabase:auth-kt")
+    implementation("io.github.jan-tennert.supabase:realtime-kt")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+
+    implementation (libs.kotlinx.serialization.json)
 }

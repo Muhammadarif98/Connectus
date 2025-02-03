@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_rectangle_black"
+            android:orientation="vertical">
+
+            <!-- Элемент для отображения изображений -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:visibility="gone"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/fileView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:scaleType="center"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/show_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:fontFamily="@font/nunito_bold"
+                android:paddingRight="5dp"
+                android:text="@string/text_message"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <!-- Время отправки сообщения -->
+
+            <!-- Кнопка для скачивания файла -->
+            <LinearLayout
+                android:id="@+id/downloadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="end"
+                android:orientation="horizontal"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                >
+
+                <ImageView
+                    android:id="@+id/downloadIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:paddingStart="2dp"
+                    android:src="@drawable/ic_download_white">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/downloadText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="2dp"
+                    android:text="@string/download"
+                    android:textColor="@color/white" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/timeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/nunito"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/_14_00"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:textStyle="italic" />
+            <!-- Текстовое сообщение -->
+
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

@@ -20,5 +20,21 @@
     <string name="login_failed">"Login failed"</string>
     <string name="log_in"><u>Войти</u></string>
     <string name="privacy_text">Регистрируясь, вы соглашаетесь с нашими <u>Условиями</u> использования и <u>Политикой конфиденциальности</u></string>
+    <string name="_14_00">14:00</string>
+    <string name="_18_00">18:00</string>
+    <string name="image_desc">image_desc</string>
+    <string name="fullscreen_image">fullscreen_image</string>
+    <string name="adress">Адрес</string>
+    <string name="age">Возраст</string>
+    <string name="employee">Род занятий</string>
+    <string name="text_send">Отправить</string>
+    <string name="msg_token_fmt">msg_token_fmt</string>
+    <string name="resendtext">Повторить можно через 1 мин.</string>
+    <string name="submit">Подтвердить</string>
+    <string name="forgot_password"><u>Забыли пароль?</u></string>
+    <string name="instr">Инструкции по сбросу пароля отправлены на вашу почту</string>
+    <string name="verif"><u>Верификация</u></string>
+    <string name="download"><u>Скачать</u></string>
+    <string name="text_message">Привет как твои дела</string>
 
 </resources>
