@@ -57,7 +57,9 @@ class OTPVerificationFragment : Fragment() {
             email.isEmpty() -> emailError.value = "Введите email"
             !isValidEmail(email) -> emailError.value = "Неверный формат email адреса"
             password.isEmpty() -> passwordError.value = "Введите пароль"
-            password.length < 6 -> passwordError.value = "Пароль должен содержать не менее 6 символов"
+            password.length < 6 -> passwordError.value =
+                "Пароль должен содержать не менее 6 символов"
+
             else -> sendVerificationEmail(email, password)
         }
     }

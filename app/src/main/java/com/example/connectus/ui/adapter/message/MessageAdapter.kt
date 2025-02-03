@@ -45,10 +45,12 @@ class MessageAdapter(private val onItemClick: (Messages, Boolean) -> Unit) :
                 val view = inflater.inflate(R.layout.chatitemright, parent, false)
                 MessageHolder(view)
             }
+
             MESSAGE_LEFT -> {
                 val view = inflater.inflate(R.layout.chatitemleft, parent, false)
                 MessageHolder(view)
             }
+
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }

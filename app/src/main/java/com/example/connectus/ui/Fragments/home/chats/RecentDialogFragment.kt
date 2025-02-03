@@ -66,7 +66,8 @@ class RecentDialogFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_recent_dialog, container, false)
+        _binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_recent_dialog, container, false)
         return binding.root
     }
 
@@ -112,14 +113,17 @@ class RecentDialogFragment : Fragment() {
     }
 
     private fun observeMessages() {
-        chatAppViewModel.getMessages(args.recentchats.friendid!!).observe(viewLifecycleOwner, Observer {
-            initRecyclerView(it)
-        })
+        chatAppViewModel.getMessages(args.recentchats.friendid!!)
+            .observe(viewLifecycleOwner, Observer {
+                initRecyclerView(it)
+            })
     }
+
     private fun pickFile() {
         pickImageLauncher.launch("image/*")
         //pickFileLauncher.launch("*/*")
     }
+
     private fun setupClickListeners() {
         circleImageView.setOnClickListener {
             val action = RecentDialogFragmentDirections
@@ -156,7 +160,10 @@ class RecentDialogFragment : Fragment() {
     }
 
     private fun showDeleteMessageDialog(message: Messages, isImage: Boolean) {
-        Log.d("ChatDialogFragment", "showDeleteMessageDialog called: messageId=${message.id}, isImage=$isImage, fileUrl=${message.fileUrl}")
+        Log.d(
+            "ChatDialogFragment",
+            "showDeleteMessageDialog called: messageId=${message.id}, isImage=$isImage, fileUrl=${message.fileUrl}"
+        )
 
         if (message.sender == getUidLoggedIn()) {
             Log.d("ChatDialogFragment", "Показ диалога для удаления сообщения: ${message.id}")
@@ -171,7 +178,8 @@ class RecentDialogFragment : Fragment() {
             }
 
             dialogBuilder.setPositiveButton("Удалить") { _, _ ->
-                val uniqueId = listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
+                val uniqueId =
+                    listOf(getUidLoggedIn(), args.recentchats.friendid!!).sorted().joinToString("")
                 chatAppViewModel.deleteMessage(uniqueId, message.id)
             }
 
@@ -179,7 +187,10 @@ class RecentDialogFragment : Fragment() {
             dialogBuilder.show()
         } else {
             if (isImage) {
-                Log.d("ChatDialogFragment", "Показ диалога для просмотра изображения: ${message.id}")
+                Log.d(
+                    "ChatDialogFragment",
+                    "Показ диалога для просмотра изображения: ${message.id}"
+                )
 
                 val dialogBuilder = AlertDialog.Builder(requireContext())
                     .setTitle("Что вы хотите сделать?")

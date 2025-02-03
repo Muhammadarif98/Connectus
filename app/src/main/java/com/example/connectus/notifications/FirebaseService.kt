@@ -50,14 +50,15 @@ class FirebaseService : FirebaseMessagingService() {
         super.onMessageReceived(message)
 
         val intent = Intent(this, MainActivity::class.java)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
 
 
 
 
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
 
@@ -73,7 +74,8 @@ class FirebaseService : FirebaseMessagingService() {
         // Create a PendingIntent for the reply action
         val replyIntent = Intent(this, NotificationReply::class.java)
 
-        val replyPendingIntent = PendingIntent.getBroadcast(this, 0, replyIntent, PendingIntent.FLAG_MUTABLE)
+        val replyPendingIntent =
+            PendingIntent.getBroadcast(this, 0, replyIntent, PendingIntent.FLAG_MUTABLE)
 
         // Create a NotificationCompat.Action object for the reply action
         val replyAction = NotificationCompat.Action.Builder(
@@ -85,8 +87,6 @@ class FirebaseService : FirebaseMessagingService() {
 
         val sharedCustomPref = SharedPrefs(applicationContext)
         sharedCustomPref.setIntValue("values", notificationID)
-
-
 
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -104,7 +104,11 @@ class FirebaseService : FirebaseMessagingService() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channelName = "channelName"
-        val channel = NotificationChannel(CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_HIGH).apply {
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            channelName,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
             description = "My channel description"
             enableLights(true)
             lightColor = Color.GREEN

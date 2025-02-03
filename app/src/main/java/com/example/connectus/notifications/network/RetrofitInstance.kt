@@ -1,8 +1,5 @@
 package com.example.connectus.notifications.network
 
-
-
-
 import com.example.connectus.notifications.Constants.Companion.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

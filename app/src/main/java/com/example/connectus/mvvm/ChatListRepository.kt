@@ -7,18 +7,14 @@ import com.example.connectus.data.model.RecentChats
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-
 class ChatListRepository() {
 
-
     val firestore = FirebaseFirestore.getInstance()
-
 
     fun getAllChatList(): LiveData<List<RecentChats>> {
 
         val mainChatList = MutableLiveData<List<RecentChats>>()
 
-        // SHOWING THE RECENT MESSAGED PERSON ON TOP
         firestore.collection("Conversation${getUidLoggedIn()}")
             .orderBy("time", Query.Direction.DESCENDING)
             .addSnapshotListener { snapshot, exception ->

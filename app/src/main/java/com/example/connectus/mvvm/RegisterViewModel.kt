@@ -127,7 +127,10 @@ class RegisterViewModel : ViewModel() {
                         firestore.collection("users").document(userId).set(userData)
                             .addOnCompleteListener { firestoreTask ->
                                 if (firestoreTask.isSuccessful) {
-                                    Log.d("RegisterFragment", "User data saved successfully: $userData")
+                                    Log.d(
+                                        "RegisterFragment",
+                                        "User data saved successfully: $userData"
+                                    )
                                 } else {
                                     Log.e(
                                         "RegisterFragment",
@@ -138,7 +141,11 @@ class RegisterViewModel : ViewModel() {
                             }
                         _registrationStatus.value = "Регистрация прошла успешно"
                     } else {
-                        Log.e("RegisterFragment", "Error sending email verification", verificationTask.exception)
+                        Log.e(
+                            "RegisterFragment",
+                            "Error sending email verification",
+                            verificationTask.exception
+                        )
                         _registrationStatus.value = "Ошибка при отправке email для верификации"
                     }
                 }
@@ -147,11 +154,10 @@ class RegisterViewModel : ViewModel() {
                     _registrationStatus.value = "Пользователь с таким email уже существует"
                     return@addOnCompleteListener
                 }
-                Log.d( "RegisterFragment", "Registration failed: ${task.exception?.message}")
+                Log.d("RegisterFragment", "Registration failed: ${task.exception?.message}")
                 _registrationStatus.value = "Ошибка регистрации"
             }
         }
-
 
 
     }

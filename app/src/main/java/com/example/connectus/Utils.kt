@@ -29,7 +29,6 @@ class Utils {
             install(Postgrest)
         }
 
-
         @SuppressLint("StaticFieldLeak")
         val context = App.instance.applicationContext
 
@@ -89,10 +88,3 @@ class Utils {
     }
 
 }
-//@SuppressLint("SimpleDateFormat")
-//fun getTime(): String {
-//    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-//    val date: Date = Date(System.currentTimeMillis())
-//    val stringdate = formatter.format(date)
-//    return stringdate
-//}

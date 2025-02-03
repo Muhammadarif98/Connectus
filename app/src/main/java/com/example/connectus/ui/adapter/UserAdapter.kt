@@ -67,7 +67,7 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
             listOfUsers
         } else {
             listOfUsers.filter {
-                it.name?.contains(query, ignoreCase = true) ?:  false
+                it.name?.contains(query, ignoreCase = true) ?: false
             }
         }
         notifyDataSetChanged()
@@ -77,9 +77,9 @@ class UserAdapter : RecyclerView.Adapter<UserHolder>() {
 class UserHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     val profileName: TextView = itemView.findViewById(R.id.userName)
-    val imageProfile : ImageView = itemView.findViewById(R.id.imageViewUser)
-    val statusImageView : ImageView = itemView.findViewById(R.id.statusOnline)
-    val time : TextView = itemView.findViewById(R.id.recentUserTextTime)
+    val imageProfile: ImageView = itemView.findViewById(R.id.imageViewUser)
+    val statusImageView: ImageView = itemView.findViewById(R.id.statusOnline)
+    val time: TextView = itemView.findViewById(R.id.recentUserTextTime)
 }
 
 interface OnUserClickListener {

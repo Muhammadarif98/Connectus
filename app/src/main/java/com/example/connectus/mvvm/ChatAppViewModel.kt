@@ -429,7 +429,7 @@ class ChatAppViewModel @JvmOverloads constructor(
 
                     // Log and toast
 
-                   // Log.d("TAGToken", "$token")
+                    // Log.d("TAGToken", "$token")
                     //Toast.makeText(context, "$token", Toast.LENGTH_SHORT).show()
                 })
             }
@@ -444,7 +444,11 @@ class ChatAppViewModel @JvmOverloads constructor(
         } catch (e: Exception) {
             Log.e("ViewModelError", e.toString())
             withContext(Dispatchers.Main) {
-                Toast.makeText(context, "Ошибка отправки уведомления, ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Ошибка отправки уведомления, ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

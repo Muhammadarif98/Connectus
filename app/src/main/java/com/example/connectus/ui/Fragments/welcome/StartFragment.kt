@@ -20,8 +20,6 @@ class StartFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
-
         binding.buttonLogin.setOnClickListener {
             // Код для открытия следующего фlayout.рагмента
             findNavController().navigate(R.id.action_startFragment_to_loginInputFragment)

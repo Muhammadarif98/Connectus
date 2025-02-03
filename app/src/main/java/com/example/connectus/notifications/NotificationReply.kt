@@ -14,24 +14,19 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 private const val CHANNEL_ID = "my_channel"
 
-class NotificationReply  : BroadcastReceiver(){
+class NotificationReply : BroadcastReceiver() {
 
-
-    val firestor = FirebaseFirestore.getInstance()
-
+    val firestore = FirebaseFirestore.getInstance()
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
 
-        val notificationManager : NotificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager: NotificationManager =
+            context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val remoteInput = RemoteInput.getResultsFromIntent(intent)
 
-        if (remoteInput!=null){
-
+        if (remoteInput != null) {
             val repliedText = remoteInput.getString("KEY_REPLY_TEXT")
-
-
-
             val mysharedPrefs = SharedPrefs(context)
             val friendid = mysharedPrefs.getValue("friendid")
             val chatroomid = mysharedPrefs.getValue("chatroomid")
@@ -39,14 +34,16 @@ class NotificationReply  : BroadcastReceiver(){
             val friendimage = mysharedPrefs.getValue("friendimage")
 
 
-            val hashMap = hashMapOf<String, Any>("sender" to Utils.getUidLoggedIn(),
+            val hashMap = hashMapOf<String, Any>(
+                "sender" to Utils.getUidLoggedIn(),
                 "time" to Utils.getTime(),
                 "receiver" to friendid!!,
-                "message" to repliedText!!)
+                "message" to repliedText!!
+            )
 
-            firestor.collection("Messages").document(chatroomid!!)
+            firestore.collection("Messages").document(chatroomid!!)
                 .collection("chats").document(Utils.getTime()).set(hashMap).addOnCompleteListener {
-                    if (it.isSuccessful){
+                    if (it.isSuccessful) {
                     }
                 }
 
@@ -60,19 +57,23 @@ class NotificationReply  : BroadcastReceiver(){
                 "person" to "Вы",
             )
 
-            firestor.collection("Conversation${Utils.getUidLoggedIn()}").document(friendid)
+            firestore.collection("Conversation${Utils.getUidLoggedIn()}").document(friendid)
                 .set(setHashap)
 
             val updateHashMap =
-                hashMapOf<String, Any>("message" to repliedText, "time" to Utils.getTime(), "person" to friendname!!)
+                hashMapOf<String, Any>(
+                    "message" to repliedText,
+                    "time" to Utils.getTime(),
+                    "person" to friendname!!
+                )
 
-            firestor.collection("Conversation${friendid}").document(Utils.getUidLoggedIn())
+            firestore.collection("Conversation${friendid}").document(Utils.getUidLoggedIn())
                 .update(updateHashMap)
 
             val sharedCustomPref = SharedPrefs(context)
-            val replyid : Int = sharedCustomPref.getIntValue("values", 0)
+            val replyid: Int = sharedCustomPref.getIntValue("values", 0)
 
-            val repliedNotification  =
+            val repliedNotification =
                 NotificationCompat
                     .Builder(context, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_sms)

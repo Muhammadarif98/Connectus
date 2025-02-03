@@ -22,7 +22,6 @@ class MessageRepository(private val lifecycleOwner: LifecycleOwner) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Получение сообщений из Firestore
     fun getMessages(friendid: String): LiveData<List<Messages>> {
         val messages = MutableLiveData<List<Messages>>()
         val uniqueId = listOf(getUidLoggedIn(), friendid).sorted().joinToString(separator = "")
@@ -150,14 +149,16 @@ class MessageRepository(private val lifecycleOwner: LifecycleOwner) {
                 Toast.makeText(context, "Загрузка изображения...", Toast.LENGTH_SHORT).show()
 
                 // Чтение изображения в ByteArray
-                val byteArray = context.contentResolver.openInputStream(imageUri)?.use { it.readBytes() }
-                    ?: run {
-                        val errorMessage = "Не удалось открыть изображение: InputStream равен null"
-                        Log.e("UploadImage", errorMessage)
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                        onError(IllegalArgumentException(errorMessage))
-                        return@launch
-                    }
+                val byteArray =
+                    context.contentResolver.openInputStream(imageUri)?.use { it.readBytes() }
+                        ?: run {
+                            val errorMessage =
+                                "Не удалось открыть изображение: InputStream равен null"
+                            Log.e("UploadImage", errorMessage)
+                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                            onError(IllegalArgumentException(errorMessage))
+                            return@launch
+                        }
 
                 // Логирование успешного чтения изображения
                 Log.d("UploadImage", "Изображение успешно прочитано в ByteArray")
@@ -191,7 +192,11 @@ class MessageRepository(private val lifecycleOwner: LifecycleOwner) {
             } catch (e: Exception) {
                 // Логирование ошибки
                 Log.e("UploadImage", "Ошибка загрузки изображения", e)
-                Toast.makeText(context, "Ошибка загрузки изображения: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Ошибка загрузки изображения: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
 
                 // Возвращаем ошибку через колбэк
                 onError(e)
@@ -201,7 +206,8 @@ class MessageRepository(private val lifecycleOwner: LifecycleOwner) {
 
     // Отправка сообщения с файлом
     fun sendMessageWithFile(message: Messages) {
-        val uniqueId = listOf(message.sender ?: "", message.receiver ?: "").sorted().joinToString("")
+        val uniqueId =
+            listOf(message.sender ?: "", message.receiver ?: "").sorted().joinToString("")
         if (uniqueId.isEmpty()) {
             Log.e("FirestoreError", "Sender или Receiver равны null")
             return

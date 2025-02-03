@@ -147,7 +147,10 @@ class ChatDialogFragment : Fragment() {
 
     // Показ диалога удаления сообщения
     private fun showDeleteMessageDialog(message: Messages, isImage: Boolean) {
-        Log.d("ChatDialogFragment", "showDeleteMessageDialog called: messageId=${message.id}, isImage=$isImage, fileUrl=${message.fileUrl}")
+        Log.d(
+            "ChatDialogFragment",
+            "showDeleteMessageDialog called: messageId=${message.id}, isImage=$isImage, fileUrl=${message.fileUrl}"
+        )
 
         if (message.sender == getUidLoggedIn()) {
             Log.d("ChatDialogFragment", "Показ диалога для удаления сообщения: ${message.id}")
@@ -162,7 +165,8 @@ class ChatDialogFragment : Fragment() {
             }
 
             dialogBuilder.setPositiveButton("Удалить") { _, _ ->
-                val uniqueId = listOf(getUidLoggedIn(), args.users.userId!!).sorted().joinToString("")
+                val uniqueId =
+                    listOf(getUidLoggedIn(), args.users.userId!!).sorted().joinToString("")
                 chatAppViewModel.deleteMessage(uniqueId, message.id)
             }
 
@@ -170,7 +174,10 @@ class ChatDialogFragment : Fragment() {
             dialogBuilder.show()
         } else {
             if (isImage) {
-                Log.d("ChatDialogFragment", "Показ диалога для просмотра изображения: ${message.id}")
+                Log.d(
+                    "ChatDialogFragment",
+                    "Показ диалога для просмотра изображения: ${message.id}"
+                )
 
                 val dialogBuilder = AlertDialog.Builder(requireContext())
                     .setTitle("Что вы хотите сделать?")

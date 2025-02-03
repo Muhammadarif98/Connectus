@@ -46,7 +46,17 @@ class RegisterFragment : Fragment() {
             val age = binding.editTextAge.text.toString()
             val employee = binding.editTextEmployee.text.toString()
 
-            viewModel.signUpUser(name, lastName, phone, email, password, confirmPassword, adress, age, employee)
+            viewModel.signUpUser(
+                name,
+                lastName,
+                phone,
+                email,
+                password,
+                confirmPassword,
+                adress,
+                age,
+                employee
+            )
             signIn()
 
         }
@@ -65,7 +75,11 @@ class RegisterFragment : Fragment() {
             Snackbar.make(binding.root, status, Snackbar.LENGTH_SHORT).show()
             if (status == "Регистрация прошла успешно") {
                 progressDialogSignUp.dismiss()
-                Snackbar.make(binding.root, "Пожалуйста, проверьте вашу почту для верификации.", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.root,
+                    "Пожалуйста, проверьте вашу почту для верификации.",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 findNavController().navigate(R.id.action_registerFragment_to_loginInputFragment)
 
             }

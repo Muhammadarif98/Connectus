@@ -59,7 +59,7 @@ class FriendProfileFragment : Fragment() {
         binding.age.text = args.usersProfile.age
         binding.adress.text = args.usersProfile.adress
 
-        binding.chatBackBtn.setOnClickListener{
+        binding.chatBackBtn.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.btnCallFriend.setOnClickListener {
@@ -73,9 +73,18 @@ class FriendProfileFragment : Fragment() {
         profileViewModel = ViewModelProvider(this)[ChatAppViewModel::class.java]
 
     }
+
     private fun makeCall(phoneNumber: String) {
-        if (!Utils.PermissionsHelper.hasPermission(requireContext(), Manifest.permission.CALL_PHONE)) {
-            Utils.PermissionsHelper.requestPermission(requireActivity(), Manifest.permission.CALL_PHONE, 2)
+        if (!Utils.PermissionsHelper.hasPermission(
+                requireContext(),
+                Manifest.permission.CALL_PHONE
+            )
+        ) {
+            Utils.PermissionsHelper.requestPermission(
+                requireActivity(),
+                Manifest.permission.CALL_PHONE,
+                2
+            )
         } else {
             val callIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNumber"))
             startActivity(callIntent)
@@ -83,10 +92,18 @@ class FriendProfileFragment : Fragment() {
     }
 
     private fun sendMessage(phoneNumber: String) {
-        if (!Utils.PermissionsHelper.hasPermission(requireContext(), Manifest.permission.SEND_SMS)) {
-            Utils.PermissionsHelper.requestPermission(requireActivity(), Manifest.permission.SEND_SMS, 3)
+        if (!Utils.PermissionsHelper.hasPermission(
+                requireContext(),
+                Manifest.permission.SEND_SMS
+            )
+        ) {
+            Utils.PermissionsHelper.requestPermission(
+                requireActivity(),
+                Manifest.permission.SEND_SMS,
+                3
+            )
         } else {
-           sendSms(phoneNumber)
+            sendSms(phoneNumber)
         }
     }
 
@@ -94,8 +111,10 @@ class FriendProfileFragment : Fragment() {
         try {
             val uri = Uri.parse("smsto:$phoneNumber")
             val intent = Intent(Intent.ACTION_SENDTO, uri)
-            intent.putExtra("sms_body",
-                "Привет! Это сообщение отправлено через приложение Connectus.")
+            intent.putExtra(
+                "sms_body",
+                "Привет! Это сообщение отправлено через приложение Connectus."
+            )
             startActivity(intent)
         } catch (e: Exception) {
             Toast.makeText(
@@ -105,7 +124,6 @@ class FriendProfileFragment : Fragment() {
             ).show()
         }
     }
-
 
 
     private fun showImageDialog(imageUrl: String) {

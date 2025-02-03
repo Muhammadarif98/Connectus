@@ -83,10 +83,12 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
                 findNavController().navigate(R.id.action_mainFragment_to_profileFragment)
                 true
             }
+
             R.id.action_about -> {
                 findNavController().navigate(R.id.action_mainFragment_to_aboutFragment)
                 true
             }
+
             R.id.action_logout -> {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Выход")
@@ -99,6 +101,7 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
                     .show()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -112,10 +115,17 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
                     val userName = document.getString("name")
                     binding.toolbar.title = userName
                 } else {
-                    Log.d("com.example.connectus.ui.Fragments.home.MainFragment", "No such document")
+                    Log.d(
+                        "com.example.connectus.ui.Fragments.home.MainFragment",
+                        "No such document"
+                    )
                 }
             }.addOnFailureListener { exception ->
-                Log.d("com.example.connectus.ui.Fragments.home.MainFragment", "get failed with ", exception)
+                Log.d(
+                    "com.example.connectus.ui.Fragments.home.MainFragment",
+                    "get failed with ",
+                    exception
+                )
             }
 
         val viewPager: ViewPager2 = binding.viewPager
@@ -137,6 +147,7 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
         val action = MainFragmentDirections.actionMainFragmentToChatDialogFragment(users)
         findNavController().navigate(action)
     }
+
     override fun getOnChatCLickedItem(position: Int, chatList: RecentChats) {
         val action = MainFragmentDirections.actionMainFragmentToRecentDialogFragment(chatList)
         findNavController().navigate(action)
@@ -178,7 +189,8 @@ class MainFragment : Fragment(), OnUserClickListener, onChatClicked {
             menuBuilder.setOptionalIconsVisible(true)
             for (item in menuBuilder.visibleItems) {
                 val iconMarginPx = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics).toInt()
+                    TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics
+                ).toInt()
                 if (item.icon != null) {
                     item.icon = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                         InsetDrawable(item.icon, iconMarginPx, 0, iconMarginPx, 0)

@@ -53,6 +53,7 @@ class LoginInputFragment : Fragment() {
                     editTextLogin.error = null
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -66,6 +67,7 @@ class LoginInputFragment : Fragment() {
                     editTextPassword.error = null
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
 
@@ -112,25 +114,31 @@ class LoginInputFragment : Fragment() {
                     findNavController().navigate(R.id.action_loginInputFragment_to_mainFragment)
                 } else {
                     progressDialogSignIn.dismiss()
-                    Snackbar.make(binding.root, "Пожалуйста, подтвердите ваш email перед входом", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        "Пожалуйста, подтвердите ваш email перед входом",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     auth.signOut() // Выходим из аккаунта
                 }
             } else {
                 progressDialogSignIn.dismiss()
-                Snackbar.make(binding.root, "Неверный логин или пароль", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Неверный логин или пароль", Snackbar.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    private fun generateToken(){
+    private fun generateToken() {
         var token: String = ""
         val firebaseInstance = FirebaseInstallations.getInstance()
-        firebaseInstance.id.addOnSuccessListener{installationid->
-            FirebaseMessaging.getInstance().token.addOnSuccessListener { gettocken->
+        firebaseInstance.id.addOnSuccessListener { installationid ->
+            FirebaseMessaging.getInstance().token.addOnSuccessListener { gettocken ->
                 token = gettocken
                 val hashMap = hashMapOf<String, Any>("token" to token)
-                firestore.collection("Tokens").document(Utils.getUidLoggedIn()).set(hashMap).addOnSuccessListener {
-                }
+                firestore.collection("Tokens").document(Utils.getUidLoggedIn()).set(hashMap)
+                    .addOnSuccessListener {
+                    }
             }
         }.addOnFailureListener {}
     }

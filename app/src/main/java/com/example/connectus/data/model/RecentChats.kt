@@ -8,16 +8,16 @@ data class RecentChats(
     val friendsimage: String? = "",
     val lastname: String? = "",
     val phone: String? = "",
-    val email : String? = "",
+    val email: String? = "",
     val time: String? = "",
     val name: String? = "",
     val sender: String? = "",
     val message: String? = "",
     val person: String? = "",
     val status: String? = "",
-    val friendAdress : String? = "",
-    val friendAge : String? = "",
-    val friendEmployee : String? = "",
+    val friendAdress: String? = "",
+    val friendAge: String? = "",
+    val friendEmployee: String? = "",
 
 
     ) : Parcelable {

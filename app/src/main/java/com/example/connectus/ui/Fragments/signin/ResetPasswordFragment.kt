@@ -33,7 +33,8 @@ class ResetPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_reset_password, container, false)
         val view = binding.root
 
         binding.editTextLoginResetPassword.addTextChangedListener(object : TextWatcher {
@@ -59,7 +60,11 @@ class ResetPasswordFragment : Fragment() {
             val email = binding.editTextLoginResetPassword.text.toString()
             if (email.isEmpty()) {
                 binding.editTextLoginResetPassword.error = "Введите почту"
-                Toast.makeText(requireContext(), "Заполните поле электронной почты", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Заполните поле электронной почты",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             startResendTimer()
@@ -89,7 +94,11 @@ class ResetPasswordFragment : Fragment() {
             if (task.isSuccessful) {
                 showCustomToast()
             } else {
-                Toast.makeText(requireContext(), "Ошибка при отправке email для сброса пароля", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Ошибка при отправке email для сброса пароля",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -108,10 +117,12 @@ class ResetPasswordFragment : Fragment() {
             }
         }.start()
     }
+
     private fun isValidEmail(email: CharSequence): Boolean {
         val emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z]+\\.[a-zA-Z]+"
         return email.matches(emailPattern.toRegex())
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         resendTimer?.cancel()

@@ -8,7 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.connectus.R
 
-class HorizontalAdapter(private val items: Array<String>, private val clickListener: (String) -> Unit) : RecyclerView.Adapter<HorizontalAdapter.ViewHolder>() {
+class HorizontalAdapter(
+    private val items: Array<String>,
+    private val clickListener: (String) -> Unit
+) : RecyclerView.Adapter<HorizontalAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.findViewById(R.id.icon)
@@ -32,6 +35,7 @@ class HorizontalAdapter(private val items: Array<String>, private val clickListe
                 holder.icon.setImageResource(R.drawable.ic_camera)
                 holder.title.text = "КАМЕРЫ"
             }
+
             1 -> {
                 holder.icon.setImageResource(R.drawable.ic_gallery)
                 holder.title.text = "ГАЛЕРЕИ"

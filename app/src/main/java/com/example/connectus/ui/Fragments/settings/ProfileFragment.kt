@@ -129,7 +129,15 @@ class ProfileFragment : Fragment() {
                         liveData.value = s.toString()
                     }
                 }
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
         }
@@ -166,6 +174,7 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
     private fun showImageDialog(imageUrl: String) {
         val dialog = Dialog(
             requireContext(),
@@ -179,18 +188,21 @@ class ProfileFragment : Fragment() {
         imageView.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
+
     @SuppressLint("SetTextI18n")
     private fun setupProfileImageClick() {
         binding.statusOnlineProfile.setOnClickListener {
             val items = arrayOf("Камера", "Галерея")
-            val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_dialog, null)
+            val dialogView =
+                LayoutInflater.from(requireContext()).inflate(R.layout.custom_dialog, null)
             val titleTextView = dialogView.findViewById<TextView>(R.id.dialog_title)
             val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recycler_view)
 
             titleTextView.text = "Выбрать / Сделать\n" +
                     "изображение из"
 
-            recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            recyclerView.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             recyclerView.isNestedScrollingEnabled = false
             val dialogBuilder = AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -212,12 +224,6 @@ class ProfileFragment : Fragment() {
     }
 
 
-
-
-
-
-
-
     private fun loadImage(imageUrl: String) {
         Glide.with(requireContext())
             .load(imageUrl)
@@ -228,7 +234,8 @@ class ProfileFragment : Fragment() {
 
     @SuppressLint("QueryPermissionsNeeded")
     private fun pickImageFromGallery() {
-        val pickPictureIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val pickPictureIntent =
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         if (pickPictureIntent.resolveActivity(requireActivity().packageManager) != null) {
             startActivityForResult(pickPictureIntent, Utils.REQUEST_IMAGE_PICK)
         }
@@ -249,9 +256,11 @@ class ProfileFragment : Fragment() {
                     val imageBitmap = data?.extras?.get("data") as Bitmap
                     uploadImageToSupabase(imageBitmap)
                 }
+
                 Utils.REQUEST_IMAGE_PICK -> {
                     val imageUri = data?.data
-                    val imageBitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, imageUri)
+                    val imageBitmap =
+                        MediaStore.Images.Media.getBitmap(context?.contentResolver, imageUri)
                     uploadImageToSupabase(imageBitmap)
                 }
             }
