@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
 
-class ChatListRepo() {
+class ChatListRepository() {
 
 
     val firestore = FirebaseFirestore.getInstance()

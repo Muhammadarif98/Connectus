@@ -7,7 +7,7 @@ import com.example.connectus.Utils.Companion.getUidLoggedIn
 import com.example.connectus.data.model.Users
 import com.google.firebase.firestore.FirebaseFirestore
 
-class UsersRepo {
+class UsersRepository {
     private var fireStore = FirebaseFirestore.getInstance()
 
     fun getUsers(): LiveData<List<Users>> {

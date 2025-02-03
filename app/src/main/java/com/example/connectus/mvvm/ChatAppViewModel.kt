@@ -74,14 +74,14 @@ class ChatAppViewModel @JvmOverloads constructor(
     val message = MutableLiveData<String>()
     private var token: String? = null
     private val firestore = FirebaseFirestore.getInstance()
-    val messageRepo = lifecycleOwner?.let { MessageRepo(it) }
-    val chatlistRepo = ChatListRepo()
+    val messageRepository = lifecycleOwner?.let { MessageRepository(it) }
+    val chatlistRepository = ChatListRepository()
 
     val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
 
-    val usersRepo = UsersRepo()
+    val usersRepository = UsersRepository()
 
     init {
         getFriendUser()
@@ -90,27 +90,27 @@ class ChatAppViewModel @JvmOverloads constructor(
     }
 
     fun getMessages(friend: String): LiveData<List<Messages>> {
-        return messageRepo!!.getMessages(friend)
+        return messageRepository!!.getMessages(friend)
     }
 
     fun deleteMessage(uniqueId: String, messageId: String) {
-        messageRepo!!.deleteMessage(uniqueId, messageId) {
+        messageRepository!!.deleteMessage(uniqueId, messageId) {
             // После успешного удаления обновляем данные
             refreshMessages(uniqueId.split("").sorted().joinToString(""))
         }
     }
 
     fun refreshMessages(friendId: String) {
-        _messages.value = messageRepo!!.getMessages(friendId).value
+        _messages.value = messageRepository!!.getMessages(friendId).value
     }
 
 
     fun getUsers(): LiveData<List<Users>> {
-        return usersRepo.getUsers()
+        return usersRepository.getUsers()
     }
 
     fun getRecentUsers(): LiveData<List<RecentChats>> {
-        return chatlistRepo.getAllChatList()
+        return chatlistRepository.getAllChatList()
     }
 
     fun getCurrentUser() = viewModelScope.launch(Dispatchers.IO) {
@@ -455,7 +455,7 @@ class ChatAppViewModel @JvmOverloads constructor(
         receiver: String,
         imageUri: Uri
     ) = viewModelScope.launch {
-        messageRepo?.uploadImage(
+        messageRepository?.uploadImage(
             context,
             imageUri,
             onSuccess = { imageUrl ->
@@ -466,7 +466,7 @@ class ChatAppViewModel @JvmOverloads constructor(
                     fileType = "image", // Указываем тип файла как изображение
                     time = Utils.getTime()
                 )
-                messageRepo.sendMessageWithFile(message)
+                messageRepository.sendMessageWithFile(message)
                 Toast.makeText(context, "Изображение отправлено", Toast.LENGTH_SHORT)
                     .show()
                 Log.d("SendImage", "Image sent successfully: $imageUrl")

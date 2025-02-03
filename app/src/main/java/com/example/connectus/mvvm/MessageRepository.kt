@@ -18,7 +18,7 @@ import io.ktor.http.ContentType
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class MessageRepo(private val lifecycleOwner: LifecycleOwner) {
+class MessageRepository(private val lifecycleOwner: LifecycleOwner) {
 
     private val firestore = FirebaseFirestore.getInstance()
 
